@@ -785,7 +785,7 @@ function SeekerUploadPage() {
   const [projectLive, setProjectLive] = useState('');
 
   // Live GitHub Profile Sync state
-  const [githubSyncUser, setGithubSyncUser] = useState(learner.githubUsername || 'vasudev196006');
+  const [githubSyncUser, setGithubSyncUser] = useState(learner.githubUsername || '');
   const [isSyncingGithub, setIsSyncingGithub] = useState(false);
 
   const handleSyncGithub = async () => {
@@ -817,7 +817,7 @@ function SeekerUploadPage() {
         });
         notify(`Synced live GitHub profile @${res.profile.login}! (${res.profile.public_repos} repos, ${res.profile.followers} followers)`);
       } else {
-        notify(`Loaded cached developer profile for @${githubSyncUser}.`);
+        notify(`Could not fetch GitHub API for @${githubSyncUser}.`);
       }
     } catch {
       notify(`GitHub sync finished.`);
@@ -977,16 +977,16 @@ function SeekerUploadPage() {
                 <span className="pill pill-green" style={{ fontSize: 10 }}>Live API Connected</span>
               </div>
               <div style={{ fontSize: 12, color: '#8b949e', marginTop: 3 }}>
-                Connected as <strong style={{ color: '#58a6ff' }}>@{learner.githubUsername || 'vasudev196006'}</strong> · {learner.publicRepos ?? 18} Public Repositories · {learner.followers ?? 42} Followers
+                Connected as <strong style={{ color: '#58a6ff' }}>@{learner.githubUsername || 'alexrivera-dev'}</strong> · {learner.publicRepos ?? 14} Public Repositories · {learner.followers ?? 28} Followers
               </div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <input
               className="input"
-              style={{ background: '#0d1117', color: '#f0f6fc', borderColor: '#30363d', fontSize: 12, padding: '7px 12px', width: 170 }}
+              style={{ background: '#0d1117', color: '#f0f6fc', borderColor: '#30363d', fontSize: 12, padding: '7px 12px', width: 180 }}
               value={githubSyncUser}
-              placeholder="e.g. vasudev196006"
+              placeholder="e.g. your-github-username"
               onChange={(e) => setGithubSyncUser(e.target.value)}
             />
             <button

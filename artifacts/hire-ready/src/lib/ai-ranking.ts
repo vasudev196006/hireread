@@ -36,13 +36,15 @@ function findSemanticMatch(candidateSkill: string, jobSkill: string): { matches:
   const normCandidate = normalize(candidateSkill);
   const normJob = normalize(jobSkill);
 
+  if (!normCandidate || !normJob) return { matches: false, similarity: 0, concept: "" };
+
   if (normCandidate === normJob) {
     return { matches: true, similarity: 1.0, concept: "Exact Match" };
   }
 
   for (const group of semanticEquivalents) {
-    const hasCandidate = group.terms.some((t) => normCandidate.includes(t) || t.includes(normCandidate));
-    const hasJob = group.terms.some((t) => normJob.includes(t) || t.includes(normJob));
+    const hasCandidate = group.terms.includes(normCandidate);
+    const hasJob = group.terms.includes(normJob);
 
     if (hasCandidate && hasJob) {
       return { matches: true, similarity: group.similarity, concept: group.concept };
@@ -69,53 +71,57 @@ export function calculateAIEnhancedMatch(
 
   const adjustments: AISemanticAdjustment[] = [];
 
-  // Check required job skills that lack an exact match
-  requiredJobSkills.forEach((reqSkill) => {
-    const normReq = normalize(reqSkill.name);
-    if (!candidateSkillNames.has(normReq)) {
-      // Look for semantic cousin
-      for (const candSkill of candidateSkills) {
-        const match = findSemanticMatch(candSkill.name, reqSkill.name);
-        if (match.matches && match.similarity > 0.8) {
-          const bonus = Math.round(match.similarity * 2.5); // bounded partial credit
-          adjustments.push({
-            candidateSkill: candSkill.name,
-            jobSkill: reqSkill.name,
-            similarity: match.similarity,
-            bonusPoints: bonus,
-            reason: `Near-match: Candidate's ${candSkill.name} relates to ${reqSkill.name} under ${match.concept} (${Math.round(match.similarity * 100)}% similarity).`,
-          });
-          break;
+  // Only consider semantic bonus if candidate already has a solid foundational match (> 25 pts)
+  if (baseScore.total > 25) {
+    // Check required job skills that lack an exact match
+    requiredJobSkills.forEach((reqSkill) => {
+      const normReq = normalize(reqSkill.name);
+      if (!candidateSkillNames.has(normReq)) {
+        // Look for semantic cousin
+        for (const candSkill of candidateSkills) {
+          const match = findSemanticMatch(candSkill.name, reqSkill.name);
+          if (match.matches && match.similarity > 0.8) {
+            const bonus = Math.round(match.similarity * 2); // bounded partial credit
+            adjustments.push({
+              candidateSkill: candSkill.name,
+              jobSkill: reqSkill.name,
+              similarity: match.similarity,
+              bonusPoints: bonus,
+              reason: `Near-match: Candidate's ${candSkill.name} relates to ${reqSkill.name} under ${match.concept} (${Math.round(match.similarity * 100)}% similarity).`,
+            });
+            break;
+          }
         }
       }
-    }
-  });
+    });
 
-  // Check preferred job skills
-  preferredJobSkills.forEach((prefSkill) => {
-    const normPref = normalize(prefSkill.name);
-    if (!candidateSkillNames.has(normPref)) {
-      for (const candSkill of candidateSkills) {
-        const match = findSemanticMatch(candSkill.name, prefSkill.name);
-        if (match.matches && match.similarity > 0.8) {
-          const bonus = Math.round(match.similarity * 1.5);
-          adjustments.push({
-            candidateSkill: candSkill.name,
-            jobSkill: prefSkill.name,
-            similarity: match.similarity,
-            bonusPoints: bonus,
-            reason: `Preferred near-match: ${candSkill.name} maps to ${prefSkill.name}.`,
-          });
-          break;
+    // Check preferred job skills
+    preferredJobSkills.forEach((prefSkill) => {
+      const normPref = normalize(prefSkill.name);
+      if (!candidateSkillNames.has(normPref)) {
+        for (const candSkill of candidateSkills) {
+          const match = findSemanticMatch(candSkill.name, prefSkill.name);
+          if (match.matches && match.similarity > 0.8) {
+            const bonus = 1;
+            adjustments.push({
+              candidateSkill: candSkill.name,
+              jobSkill: prefSkill.name,
+              similarity: match.similarity,
+              bonusPoints: bonus,
+              reason: `Preferred near-match: ${candSkill.name} maps to ${prefSkill.name}.`,
+            });
+            break;
+          }
         }
       }
-    }
-  });
+    });
+  }
 
-  // Semantic adjustment is bounded strictly to +5 maximum (never overrides base scoring)
+  // Semantic adjustment is bounded strictly to +4 maximum
   const rawBonus = adjustments.reduce((sum, a) => sum + a.bonusPoints, 0);
-  const boundedBonus = Math.min(5, rawBonus);
+  const boundedBonus = Math.min(4, rawBonus);
   const totalScore = Math.min(100, baseScore.total + boundedBonus);
+
 
   // Generate natural language justification
   const verifiedReqCount = candidateSkills.filter(
