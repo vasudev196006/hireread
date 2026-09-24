@@ -500,10 +500,10 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
     <div className="card section-card" style={{ marginTop: 24 }}>
       <div className="section-title">
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Globe size={18} color="#28776c" />
+          <Globe size={18} color="var(--apple-accent)" />
           <h2>Live Market Job Openings (Powered by Adzuna API)</h2>
         </div>
-        <span className="pill pill-green">API Key: d35267... Active</span>
+        <span className="pill pill-green">Live API Connected</span>
       </div>
       <p className="bio" style={{ marginBottom: 16 }}>
         Real-time live postings fetched directly via Adzuna API. Click any job to redirect immediately to the live application portal.
@@ -522,7 +522,7 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: 'center', padding: '24px 0', color: '#64748b' }}>
+        <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--apple-secondary-text)' }}>
           <RefreshCw size={18} className="animate-spin" style={{ display: 'inline', marginRight: 8 }} />
           Fetching live Adzuna listings...
         </div>
@@ -538,27 +538,24 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
                   padding: 18,
                   display: 'flex',
                   flexDirection: 'column',
-                  border: '1px solid rgba(255, 255, 255, 0.14)',
-                  background: 'rgba(10, 18, 30, 0.7)',
-                  backdropFilter: 'blur(16px)',
-                  borderRadius: 18,
+                  borderRadius: 16,
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 13.5, color: '#ffffff' }}>{job.title}</strong>
+                  <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{job.title}</strong>
                   <span className="pill pill-green" style={{ flexShrink: 0 }}>
                     {matchScore}% Match
                   </span>
                 </div>
-                <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 8 }}>
+                <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', marginBottom: 8 }}>
                   {job.company} · {job.location} · {job.contractType}
                 </div>
                 {job.salaryMin && (
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#43c1aa', marginBottom: 8 }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--apple-accent)', marginBottom: 8 }}>
                     ₹{(job.salaryMin / 100000).toFixed(1)}L–₹{(job.salaryMax ? job.salaryMax / 100000 : job.salaryMin * 1.4 / 100000).toFixed(1)}L / year
                   </div>
                 )}
-                <p style={{ fontSize: 11.5, color: '#cbd5e1', lineHeight: 1.55, margin: '0 0 10px', flex: 1 }}>
+                <p style={{ fontSize: 11.5, color: 'var(--apple-secondary-text)', lineHeight: 1.55, margin: '0 0 10px', flex: 1 }}>
                   {job.description.slice(0, 140)}...
                 </p>
                 <div className="skill-list" style={{ margin: '0 0 12px' }}>
@@ -608,7 +605,6 @@ function LandingPage() {
         <div style={{ display: 'flex', gap: 12 }}>
           <button
             className="button button-ghost"
-            style={{ color: '#cad5e2' }}
             onClick={() => handleSelectRole('seeker')}
           >
             Job Seeker Demo
@@ -653,15 +649,15 @@ function LandingPage() {
             </p>
             <div className="landing-features-list">
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#43c1aa" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>Upload certs with SHA-256 validation & file review</span>
               </div>
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#43c1aa" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>AI Career Roadmap with topological gap analysis</span>
               </div>
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#43c1aa" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>Verified GitHub project evidence & live Adzuna apply links</span>
               </div>
             </div>
@@ -676,7 +672,7 @@ function LandingPage() {
             onClick={() => handleSelectRole('recruiter')}
             data-testid="card-role-recruiter"
           >
-            <div className="landing-role-icon" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
+            <div className="landing-role-icon" style={{ background: 'var(--apple-accent-subtle)', color: 'var(--apple-accent)' }}>
               <Radar size={26} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -688,19 +684,19 @@ function LandingPage() {
             </p>
             <div className="landing-features-list">
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#38bdf8" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>Job wizard with AI skill matrices & proficiency floors</span>
               </div>
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#38bdf8" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>Deterministic base score + bounded AI semantic layer</span>
               </div>
               <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="#38bdf8" />
+                <CheckCircle2 size={16} color="var(--apple-accent)" />
                 <span>One-click candidate GitHub code inspection & market signal</span>
               </div>
             </div>
-            <button className="button button-primary" style={{ width: '100%', background: '#2563eb', marginTop: 'auto' }}>
+            <button className="button button-primary" style={{ width: '100%', marginTop: 'auto' }}>
               Enter as Recruiter <ArrowRight size={15} />
             </button>
           </div>
@@ -1561,31 +1557,31 @@ function SeekerRoadmapPage() {
       <div className="card section-card" style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
           <div>
-            <div className="eyebrow" style={{ color: '#38bdf8', marginBottom: 6 }}>Target Track</div>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', margin: '0 0 6px', letterSpacing: '-0.03em' }}>{selectedRole}</h1>
-            <p style={{ color: '#94a3b8', fontSize: 13, margin: 0 }}>
+            <div className="eyebrow" style={{ color: 'var(--apple-accent)', marginBottom: 6 }}>Target Track</div>
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--apple-primary-text)', margin: '0 0 6px', letterSpacing: '-0.03em' }}>{selectedRole}</h1>
+            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13, margin: 0 }}>
               {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 44, fontWeight: 800, color: 'hsl(var(--accent))', lineHeight: 1 }}>
+            <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 44, fontWeight: 800, color: 'var(--apple-accent)', lineHeight: 1 }}>
               {roadmap.overallReadiness}%
             </div>
-            <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+            <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
           </div>
         </div>
       </div>
 
       {/* AI Personalized Narrative */}
-      <div className="card section-card" style={{ marginBottom: 24, borderLeft: '4px solid hsl(var(--accent))' }}>
+      <div className="card section-card" style={{ marginBottom: 24, borderLeft: '4px solid var(--apple-accent)' }}>
         <div className="section-title">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Bot size={18} color="#43c1aa" />
+            <Bot size={18} color="var(--apple-accent)" />
             <h2>AI Learning Advisor Insight</h2>
           </div>
-          <span className="pill pill-green">Deterministic Graph + LLM Layer</span>
+          <span className="pill pill-green">Topological Sequence + Reasoning</span>
         </div>
-        <p className="bio" style={{ fontSize: 13.5, color: '#cbd5e1', lineHeight: 1.65 }}>
+        <p className="bio" style={{ fontSize: 13.5, color: 'var(--apple-primary-text)', lineHeight: 1.65 }}>
           {roadmap.narrative}
         </p>
       </div>
@@ -1598,13 +1594,13 @@ function SeekerRoadmapPage() {
         </div>
         <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', margin: 0 }}>
           {roadmap.milestones.map((milestone) => (
-            <div key={milestone.title} className="card stat" style={{ border: '1px solid #e2e8f0', padding: 16 }}>
+            <div key={milestone.title} className="card stat" style={{ padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                 <span className="pill pill-slate" style={{ fontSize: 10 }}>{milestone.timeframe}</span>
                 <span className="pill pill-green">Tier {milestone.tier}</span>
               </div>
-              <strong style={{ fontSize: 14, display: 'block', margin: '4px 0' }}>{milestone.title}</strong>
-              <p style={{ fontSize: 11, color: '#64748b', margin: '6px 0 10px' }}>{milestone.description}</p>
+              <strong style={{ fontSize: 14, display: 'block', margin: '4px 0', color: 'var(--apple-primary-text)' }}>{milestone.title}</strong>
+              <p style={{ fontSize: 11, color: 'var(--apple-secondary-text)', margin: '6px 0 10px' }}>{milestone.description}</p>
               <div className="skill-list">
                 {milestone.skills.map((s) => (
                   <span className="skill-tag" key={s}>
@@ -1639,9 +1635,9 @@ function SeekerRoadmapPage() {
             <div className="tier-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span className={`tier-tag tier-${tierNum}-tag`}>Tier {tierNum}</span>
-                <strong style={{ fontSize: 15 }}>{tierNames[tierNum - 1]}</strong>
+                <strong style={{ fontSize: 15, color: 'var(--apple-primary-text)' }}>{tierNames[tierNum - 1]}</strong>
               </div>
-              <span style={{ fontSize: 12, color: '#718096' }}>
+              <span style={{ fontSize: 12, color: 'var(--apple-secondary-text)' }}>
                 {tierGaps.filter((g) => g.status === 'mastered').length} / {tierGaps.length} Mastered
               </span>
             </div>
@@ -2340,10 +2336,10 @@ function AIJustificationModal({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Bot size={22} color="#28776c" />
+            <Bot size={22} color="var(--apple-accent)" />
             <div>
               <h2 style={{ fontSize: 18 }}>AI Ranking Justification</h2>
-              <div style={{ fontSize: 11, color: '#64748b' }}>
+              <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)' }}>
                 Auditable breakdown for {candidate.name} ({job.title})
               </div>
             </div>
@@ -2354,18 +2350,18 @@ function AIJustificationModal({
         </div>
 
         {/* Score Pill Summary */}
-        <div style={{ background: 'rgba(8, 14, 26, 0.7)', border: '1px solid rgba(255, 255, 255, 0.14)', padding: 16, borderRadius: 14, marginBottom: 18 }}>
+        <div className="card" style={{ padding: 16, marginBottom: 18, background: 'rgba(0, 0, 0, 0.45)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>Total Transparent Score</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--apple-primary-text)' }}>Total Transparent Score</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span className="pill pill-slate">Base: {enhancedScore.deterministicTotal}%</span>
               {(enhancedScore.aiSemanticBonus ?? 0) > 0 && (
                 <span className="pill pill-green">AI Semantic: +{enhancedScore.aiSemanticBonus} pts</span>
               )}
-              <strong style={{ fontSize: 17, color: '#43c1aa' }}>{enhancedScore.total}%</strong>
+              <strong style={{ fontSize: 17, color: 'var(--apple-accent)' }}>{enhancedScore.total}%</strong>
             </div>
           </div>
-          <p style={{ margin: '8px 0 0', fontSize: 12, color: '#cbd5e1', lineHeight: 1.6 }}>
+          <p style={{ margin: '8px 0 0', fontSize: 12, color: 'var(--apple-secondary-text)', lineHeight: 1.6 }}>
             {justification?.summary}
           </p>
         </div>
@@ -2375,8 +2371,8 @@ function AIJustificationModal({
           <div className="eyebrow" style={{ marginBottom: 8 }}>Key Scoring Drivers</div>
           <div style={{ display: 'grid', gap: 8 }}>
             {justification?.keyDrivers.map((driver, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#e2e8f0' }}>
-                <CheckCircle size={14} color="#43c1aa" />
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--apple-primary-text)' }}>
+                <CheckCircle size={14} color="var(--apple-accent)" />
                 <span>{driver}</span>
               </div>
             ))}
@@ -2385,13 +2381,13 @@ function AIJustificationModal({
 
         {/* AI Semantic Adjustments */}
         {(justification?.semanticAdjustments.length ?? 0) > 0 && (
-          <div style={{ marginBottom: 18, borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: 14 }}>
-            <div className="eyebrow" style={{ marginBottom: 8 }}>Semantic Near-Matches (Bounded Partial Credit)</div>
+          <div style={{ marginBottom: 18, borderTop: '1px solid var(--apple-separator)', paddingTop: 14 }}>
+            <div className="eyebrow" style={{ marginBottom: 8 }}>Semantic Near Matches (Bounded Partial Credit)</div>
             <div style={{ display: 'grid', gap: 8 }}>
               {justification?.semanticAdjustments.map((adj, i) => (
-                <div key={i} style={{ background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 10, padding: 12, fontSize: 11.5 }}>
-                  <strong style={{ color: '#ffffff' }}>{adj.candidateSkill} ↔ {adj.jobSkill}</strong> <span style={{ color: '#38bdf8' }}>(+{adj.bonusPoints} pts)</span>
-                  <p style={{ margin: '4px 0 0', color: '#bae6fd' }}>{adj.reason}</p>
+                <div key={i} className="card" style={{ background: 'var(--apple-accent-subtle)', borderColor: 'var(--apple-accent-border)', padding: 12, fontSize: 11.5 }}>
+                  <strong style={{ color: 'var(--apple-primary-text)' }}>{adj.candidateSkill} ↔ {adj.jobSkill}</strong> <span style={{ color: 'var(--apple-accent)' }}>(+{adj.bonusPoints} pts)</span>
+                  <p style={{ margin: '4px 0 0', color: 'var(--apple-secondary-text)' }}>{adj.reason}</p>
                 </div>
               ))}
             </div>
@@ -2400,12 +2396,12 @@ function AIJustificationModal({
 
         {/* Development Areas */}
         {(justification?.developmentAreas.length ?? 0) > 0 && (
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: 14 }}>
+          <div style={{ borderTop: '1px solid var(--apple-separator)', paddingTop: 14 }}>
             <div className="eyebrow" style={{ marginBottom: 8 }}>Development Considerations</div>
             <div style={{ display: 'grid', gap: 8 }}>
               {justification?.developmentAreas.map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#cbd5e1' }}>
-                  <AlertCircle size={14} color="#f87171" />
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--apple-secondary-text)' }}>
+                  <AlertCircle size={14} color="var(--apple-danger)" />
                   <span>{item}</span>
                 </div>
               ))}
@@ -2610,7 +2606,7 @@ function CandidateProfilePage() {
             src={candidate.avatarUrl || `https://github.com/${candidate.githubUsername || 'vasudev196006'}.png`}
             alt={candidate.name}
             className="profile-avatar"
-            style={{ width: 68, height: 68, borderRadius: '50%', objectFit: 'cover', border: '2px solid #28776c' }}
+            style={{ width: 68, height: 68, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--apple-accent)' }}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://github.com/github.png';
             }}
@@ -2675,7 +2671,7 @@ function CandidateProfilePage() {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#28776c', fontWeight: 600, fontSize: 12, textDecoration: 'none', marginTop: 4 }}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: 'var(--apple-accent)', fontWeight: 600, fontSize: 12, textDecoration: 'none', marginTop: 4 }}
                     >
                       <Github size={13} /> View Source Code on GitHub <ExternalLink size={11} />
                     </a>
@@ -2720,7 +2716,7 @@ function CandidateProfilePage() {
                       {cert.issuer} · {cert.issueDate}
                     </div>
                   </div>
-                  {cert.verified && <ShieldCheck size={17} color="#28776c" />}
+                  {cert.verified && <ShieldCheck size={17} color="var(--apple-accent)" />}
                 </div>
               ))
             ) : (
