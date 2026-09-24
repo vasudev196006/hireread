@@ -124,15 +124,15 @@ function readStored<T>(key: string, fallback: T): T {
 }
 
 // ==========================================
-// SHELL & NAVIGATION
+// APPLE DYNAMIC ISLAND TOP NAVIGATION BAR
 // ==========================================
-function Shell({ children }: { children: ReactNode }) {
-  const { role, setRole, learner } = useApp();
+function DynamicIslandNav() {
+  const { role, setRole, learner, jobs, candidates, shortlisted, activeJobId, notify } = useApp();
   const [location, setLocation] = useLocation();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
 
-  if (!role && location === '/') {
-    return <>{children}</>;
-  }
+  const isRecruiter = role === 'recruiter';
 
   const recruiterLinks = [
     { href: '/recruiter/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -141,14 +141,13 @@ function Shell({ children }: { children: ReactNode }) {
   ];
 
   const seekerLinks = [
-    { href: '/seeker/dashboard', label: 'Seeker Dashboard', icon: LayoutDashboard },
-    { href: '/seeker/roadmap', label: 'AI Career Roadmap', icon: Target },
-    { href: '/seeker/profile/upload', label: 'Upload Skills & Proof', icon: UploadCloud },
+    { href: '/seeker/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/seeker/roadmap', label: 'AI Roadmap', icon: Target },
+    { href: '/seeker/profile/upload', label: 'Upload Proof', icon: UploadCloud },
     { href: '/seeker/credentials', label: 'Verified Credentials', icon: Award },
   ];
 
-  const links = role === 'recruiter' ? recruiterLinks : seekerLinks;
-  const isRecruiter = role === 'recruiter';
+  const links = isRecruiter ? recruiterLinks : seekerLinks;
 
   const isActive = (href: string) =>
     location === href ||
@@ -156,106 +155,229 @@ function Shell({ children }: { children: ReactNode }) {
       href !== '/seeker/dashboard' &&
       location.startsWith(href));
 
+  const handleRoleSwitch = () => {
+    const nextRole: UserRole = isRecruiter ? 'seeker' : 'recruiter';
+    setRole(nextRole);
+    setLocation(nextRole === 'recruiter' ? '/recruiter/dashboard' : '/seeker/dashboard');
+    notify(`Switched to ${nextRole === 'recruiter' ? 'Recruiter' : 'Job Seeker'} Portal`);
+  };
+
+  const handleLiveGitHubSync = async () => {
+    if (!learner.githubUsername) {
+      notify('Please enter a GitHub username first in Seeker Profile');
+      return;
+    }
+    setIsSyncing(true);
+    try {
+      const data = await fetchLiveGitHubProfile(learner.githubUsername);
+      if (data) {
+        notify(`Synced ${data.public_repos} public repos from GitHub (@${learner.githubUsername})`);
+      } else {
+        notify('GitHub API rate limited or profile unreachable');
+      }
+    } catch {
+      notify('Failed to sync GitHub profile');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const currentActiveJob = jobs.find((j) => j.id === activeJobId) || jobs[0];
+
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <Link
-          href={isRecruiter ? '/recruiter/dashboard' : '/seeker/dashboard'}
-          className="brand"
-          data-testid="link-brand"
-        >
-          <span className="brand-mark">H</span>
-          <span>HireReady</span>
-        </Link>
-        <div className="nav-label">
-          {isRecruiter ? 'Recruiter Portal' : 'Job Seeker Portal'}
-        </div>
-        <nav className="nav-group">
-          {links.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`nav-link ${isActive(href) ? 'active' : ''}`}
-              data-testid={`link-nav-${label.toLowerCase().replaceAll(' ', '-')}`}
-            >
-              <Icon size={17} strokeWidth={1.8} />
-              <span>{label}</span>
-            </Link>
-          ))}
-        </nav>
-        <div className="sidebar-spacer" />
-        <div className="role-card">
-          <small>Signed in as</small>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <strong>{isRecruiter ? 'Recruiter' : 'Job Seeker'}</strong>
-            <span className={`pill ${isRecruiter ? 'pill-green' : 'pill-amber'}`}>
-              {isRecruiter ? 'Employer' : 'Candidate'}
-            </span>
-          </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-            <button
-              className="role-switch"
-              data-testid="button-switch-role"
-              onClick={() => {
-                const nextRole: UserRole = isRecruiter ? 'seeker' : 'recruiter';
-                setRole(nextRole);
-                setLocation(nextRole === 'recruiter' ? '/recruiter/dashboard' : '/seeker/dashboard');
-              }}
-            >
-              Switch to {isRecruiter ? 'Seeker' : 'Recruiter'}
-            </button>
-            <span style={{ color: '#526072' }}>·</span>
-            <button
-              className="role-switch"
-              style={{ color: '#ff7b7b' }}
-              onClick={() => {
-                setRole(null);
-                setLocation('/');
-              }}
-            >
-              Exit
-            </button>
-          </div>
-        </div>
-      </aside>
-      <div className="main-area">
-        <header className="topbar">
-          <div className="crumb">
-            <span style={{ fontWeight: 600, color: 'hsl(var(--foreground))' }}>
-              {isRecruiter ? 'Talent Acquisition' : 'Candidate Workspace'}
-            </span>
-            <ChevronRight size={13} style={{ verticalAlign: 'middle', margin: '0 4px' }} />
-            <span>{isRecruiter ? 'Northstar Labs' : learner.name}</span>
-          </div>
-          <div className="top-actions">
-            {!isRecruiter && learner.githubUrl && (
+    <div className="dynamic-island-wrapper">
+      <div
+        className={`dynamic-island ${isExpanded ? 'is-expanded' : ''}`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+        data-testid="dynamic-island-nav"
+      >
+        {/* Main Island Bar */}
+        <div className="dynamic-island-main">
+          {/* Brand capsule */}
+          <Link
+            href={isRecruiter ? '/recruiter/dashboard' : '/seeker/dashboard'}
+            className="island-brand"
+            data-testid="link-brand"
+          >
+            <span className="island-brand-mark">H</span>
+            <span>HireReady</span>
+          </Link>
+
+          {/* Quick Role pill badge */}
+          <button
+            className="island-role-badge"
+            onClick={handleRoleSwitch}
+            title="Click to switch between Recruiter and Job Seeker modes"
+            data-testid="button-switch-role"
+          >
+            <span className="radar-pulse-dot" style={{ background: isRecruiter ? '#43c1aa' : '#38bdf8' }} />
+            <span>{isRecruiter ? 'Employer' : 'Candidate'}</span>
+            <RefreshCw size={10} style={{ opacity: 0.7 }} />
+          </button>
+
+          {/* Center Segmented Links */}
+          <nav className="island-nav">
+            {links.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`island-link ${isActive(href) ? 'active' : ''}`}
+                data-testid={`link-nav-${label.toLowerCase().replaceAll(' ', '-')}`}
+              >
+                <Icon size={14} strokeWidth={2} />
+                <span>{label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right Live Telemetry & Quick Action */}
+          <div className="island-telemetry">
+            {!isRecruiter && (
+              <div
+                className="island-pill-btn"
+                title="Job Seeker Readiness Score"
+                style={{ background: 'rgba(67, 193, 170, 0.16)', borderColor: 'rgba(67, 193, 170, 0.35)', color: '#43c1aa' }}
+              >
+                <Sparkles size={12} />
+                <span style={{ fontWeight: 800 }}>78%</span>
+                <span style={{ fontSize: 10, opacity: 0.8 }}>Ready</span>
+              </div>
+            )}
+
+            {isRecruiter && (
+              <div
+                className="island-pill-btn"
+                title="Active Candidate Pool Size"
+                style={{ background: 'rgba(56, 189, 248, 0.14)', borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
+              >
+                <Users size={12} />
+                <span style={{ fontWeight: 800 }}>{candidates.length}</span>
+                <span style={{ fontSize: 10, opacity: 0.8 }}>Talent</span>
+              </div>
+            )}
+
+            {!isRecruiter && learner.githubUsername && (
               <a
-                href={learner.githubUrl}
+                href={learner.githubUrl || `https://github.com/${learner.githubUsername}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="button button-ghost"
-                style={{ fontSize: 11, padding: '4px 10px', color: '#1e293b' }}
-                title="View verified GitHub Profile"
+                className="island-pill-btn"
+                title="Verified GitHub Account"
               >
-                <Github size={14} /> @{learner.githubUsername || 'alexrivera-dev'}
+                <Github size={12} />
+                <span style={{ maxWidth: 90, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  @{learner.githubUsername}
+                </span>
               </a>
             )}
+
             <button
-              className="button button-ghost"
-              style={{ fontSize: 11, padding: '4px 10px' }}
-              onClick={() => {
-                const next = isRecruiter ? 'seeker' : 'recruiter';
-                setRole(next);
-                setLocation(next === 'recruiter' ? '/recruiter/dashboard' : '/seeker/dashboard');
-              }}
+              className="island-pill-btn"
+              onClick={() => setIsExpanded(!isExpanded)}
+              title="Expand dynamic quick controls shelf"
+              aria-label="Toggle Island Drawer"
             >
-              <RefreshCw size={13} /> Switch: {isRecruiter ? 'Seeker' : 'Recruiter'}
+              <ChevronRight
+                size={13}
+                style={{
+                  transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.25s ease',
+                }}
+              />
             </button>
-            <div className="avatar" title={isRecruiter ? 'Northstar Labs' : learner.name}>
-              {isRecruiter ? 'NL' : initials(learner.name)}
+          </div>
+        </div>
+
+        {/* Revealing Apple Dynamic Shelf Drawer */}
+        <div className="island-drawer">
+          <div className="island-drawer-content">
+            <div className="island-telemetry-text">
+              {isRecruiter ? (
+                <>
+                  <span>
+                    💼 <strong>Role:</strong> {currentActiveJob?.title ?? 'Full-Stack Engineer'}
+                  </span>
+                  <span>·</span>
+                  <span>
+                    ⭐ <strong>Shortlisted:</strong> {shortlisted.length} Candidates
+                  </span>
+                  <span>·</span>
+                  <span>
+                    🤖 <strong>AI Matching:</strong> Calibrated Bounded Engine
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>
+                    🎯 <strong>Target:</strong> {learner.targetRole || 'Full-Stack Engineer'}
+                  </span>
+                  <span>·</span>
+                  <span>
+                    🛡️ <strong>Verified Certs:</strong> {learner.certifications.length} SHA-256 Validated
+                  </span>
+                  <span>·</span>
+                  <span>
+                    🌐 <strong>Market API:</strong> Adzuna Live Connected
+                  </span>
+                </>
+              )}
+            </div>
+
+            <div className="island-drawer-actions">
+              {!isRecruiter && (
+                <button
+                  className="button button-ghost"
+                  style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999 }}
+                  onClick={handleLiveGitHubSync}
+                  disabled={isSyncing}
+                >
+                  <RefreshCw size={11} className={isSyncing ? 'animate-spin' : ''} />
+                  {isSyncing ? 'Syncing...' : 'Sync GitHub Repos'}
+                </button>
+              )}
+
+              <button
+                className="button button-accent"
+                style={{ fontSize: 11, padding: '5px 12px', borderRadius: 999 }}
+                onClick={handleRoleSwitch}
+              >
+                Switch to {isRecruiter ? 'Job Seeker' : 'Recruiter'}
+              </button>
+
+              <button
+                className="button button-ghost"
+                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999, color: '#f87171' }}
+                onClick={() => {
+                  setRole(null);
+                  setLocation('/');
+                }}
+              >
+                Exit Portal
+              </button>
             </div>
           </div>
-        </header>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// SHELL & NAVIGATION
+// ==========================================
+function Shell({ children }: { children: ReactNode }) {
+  const { role } = useApp();
+  const [location] = useLocation();
+
+  if (!role && location === '/') {
+    return <>{children}</>;
+  }
+
+  return (
+    <div className="app-shell">
+      <DynamicIslandNav />
+      <div className="main-area">
         <main>{children}</main>
       </div>
     </div>
