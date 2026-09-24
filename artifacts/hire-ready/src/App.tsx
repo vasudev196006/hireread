@@ -237,11 +237,10 @@ function DynamicIslandNav() {
               <div
                 className="island-pill-btn"
                 title="Job Seeker Readiness Score"
-                style={{ background: 'rgba(48, 209, 88, 0.16)', borderColor: 'rgba(48, 209, 88, 0.35)', color: 'var(--apple-success)' }}
               >
                 <Sparkles size={12} />
                 <span style={{ fontWeight: 800 }}>78%</span>
-                <span style={{ fontSize: 10, opacity: 0.8 }}>Ready</span>
+                <span style={{ fontSize: 10, color: 'var(--apple-secondary-text)' }}>Ready</span>
               </div>
             )}
 
@@ -249,11 +248,10 @@ function DynamicIslandNav() {
               <div
                 className="island-pill-btn"
                 title="Active Candidate Pool Size"
-                style={{ background: 'rgba(10, 132, 255, 0.16)', borderColor: 'rgba(10, 132, 255, 0.35)', color: 'var(--apple-accent)' }}
               >
                 <Users size={12} />
                 <span style={{ fontWeight: 800 }}>{candidates.length}</span>
-                <span style={{ fontSize: 10, opacity: 0.8 }}>Talent</span>
+                <span style={{ fontSize: 10, color: 'var(--apple-secondary-text)' }}>Talent</span>
               </div>
             )}
 
@@ -295,30 +293,30 @@ function DynamicIslandNav() {
             <div className="island-telemetry-text">
               {isRecruiter ? (
                 <>
-                  <span>
-                    💼 <strong>Role:</strong> {currentActiveJob?.title ?? 'Full-Stack Engineer'}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <BriefcaseBusiness size={12} /> <strong>Role:</strong> {currentActiveJob?.title ?? 'Full-Stack Engineer'}
                   </span>
                   <span>·</span>
-                  <span>
-                    ⭐ <strong>Shortlisted:</strong> {shortlisted.length} Candidates
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Users size={12} /> <strong>Shortlisted:</strong> {shortlisted.length} Candidates
                   </span>
                   <span>·</span>
-                  <span>
-                    🤖 <strong>AI Matching:</strong> Calibrated Bounded Engine
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Bot size={12} /> <strong>AI Matching:</strong> Calibrated Bounded Engine
                   </span>
                 </>
               ) : (
                 <>
-                  <span>
-                    🎯 <strong>Target:</strong> {learner.targetRole || 'Full-Stack Engineer'}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Target size={12} /> <strong>Target:</strong> {learner.targetRole || 'Full-Stack Engineer'}
                   </span>
                   <span>·</span>
-                  <span>
-                    🛡️ <strong>Verified Certs:</strong> {learner.certifications.length} SHA-256 Validated
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <ShieldCheck size={12} /> <strong>Verified Certs:</strong> {learner.certifications.length} SHA-256 Validated
                   </span>
                   <span>·</span>
-                  <span>
-                    🌐 <strong>Market API:</strong> Adzuna Live Connected
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Globe size={12} /> <strong>Market API:</strong> Adzuna Live Connected
                   </span>
                 </>
               )}
@@ -328,7 +326,7 @@ function DynamicIslandNav() {
               {!isRecruiter && (
                 <button
                   className="button button-ghost"
-                  style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999 }}
+                  style={{ height: 30, fontSize: 11, padding: '0 12px' }}
                   onClick={handleLiveGitHubSync}
                   disabled={isSyncing}
                 >
@@ -339,7 +337,7 @@ function DynamicIslandNav() {
 
               <button
                 className="button button-accent"
-                style={{ fontSize: 11, padding: '5px 12px', borderRadius: 999 }}
+                style={{ height: 30, fontSize: 11, padding: '0 14px' }}
                 onClick={handleRoleSwitch}
               >
                 Switch to {isRecruiter ? 'Job Seeker' : 'Recruiter'}
@@ -347,7 +345,7 @@ function DynamicIslandNav() {
 
               <button
                 className="button button-ghost"
-                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999, color: 'var(--apple-danger)' }}
+                style={{ height: 30, fontSize: 11, padding: '0 12px', color: 'var(--apple-danger)' }}
                 onClick={() => {
                   setRole(null);
                   setLocation('/');
@@ -497,19 +495,19 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
   }, [query]);
 
   return (
-    <div className="card section-card" style={{ marginTop: 24 }}>
+    <div className="card section-card" style={{ marginTop: 28 }}>
       <div className="section-title">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Globe size={18} color="var(--apple-accent)" />
           <h2>Live Market Job Openings (Powered by Adzuna API)</h2>
         </div>
         <span className="pill pill-green">Live API Connected</span>
       </div>
-      <p className="bio" style={{ marginBottom: 16 }}>
+      <p className="bio" style={{ marginBottom: 20 }}>
         Real-time live postings fetched directly via Adzuna API. Click any job to redirect immediately to the live application portal.
       </p>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 22 }}>
         <div className="search-wrap" style={{ flex: 1 }}>
           <Search size={15} />
           <input
@@ -522,12 +520,12 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--apple-secondary-text)' }}>
+        <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--apple-secondary-text)' }}>
           <RefreshCw size={18} className="animate-spin" style={{ display: 'inline', marginRight: 8 }} />
           Fetching live Adzuna listings...
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
           {jobs.map((job) => {
             const matchScore = scoreAdzunaJobMatch(candidate, job);
             return (
@@ -535,30 +533,30 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
                 key={job.id}
                 className="card"
                 style={{
-                  padding: 18,
+                  padding: 22,
                   display: 'flex',
                   flexDirection: 'column',
                   borderRadius: 16,
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{job.title}</strong>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
+                  <strong style={{ fontSize: 14.5, color: 'var(--apple-primary-text)', lineHeight: 1.3 }}>{job.title}</strong>
                   <span className="pill pill-green" style={{ flexShrink: 0 }}>
                     {matchScore}% Match
                   </span>
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', marginBottom: 8 }}>
+                <div style={{ fontSize: 12, color: 'var(--apple-secondary-text)', marginBottom: 8 }}>
                   {job.company} · {job.location} · {job.contractType}
                 </div>
                 {job.salaryMin && (
-                  <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--apple-accent)', marginBottom: 8 }}>
+                  <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--apple-accent)', marginBottom: 10, fontVariantNumeric: 'tabular-nums' }}>
                     ₹{(job.salaryMin / 100000).toFixed(1)}L–₹{(job.salaryMax ? job.salaryMax / 100000 : job.salaryMin * 1.4 / 100000).toFixed(1)}L / year
                   </div>
                 )}
-                <p style={{ fontSize: 11.5, color: 'var(--apple-secondary-text)', lineHeight: 1.55, margin: '0 0 10px', flex: 1 }}>
+                <p style={{ fontSize: 12.5, color: 'var(--apple-secondary-text)', lineHeight: 1.6, margin: '0 0 12px', flex: 1 }}>
                   {job.description.slice(0, 140)}...
                 </p>
-                <div className="skill-list" style={{ margin: '0 0 12px' }}>
+                <div className="skill-list" style={{ margin: '0 0 16px' }}>
                   {job.inferredSkills?.slice(0, 3).map((s) => (
                     <span className="skill-tag" key={s}>
                       {s}
@@ -570,7 +568,7 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="button button-accent"
-                  style={{ width: '100%', fontSize: 11, padding: '8px 12px', textDecoration: 'none' }}
+                  style={{ width: '100%', textDecoration: 'none' }}
                 >
                   Apply on Adzuna <ExternalLink size={12} />
                 </a>
@@ -598,8 +596,8 @@ function LandingPage() {
   return (
     <div className="landing-wrap">
       <header className="landing-nav">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 20 }}>
-          <span className="brand-mark">H</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 18 }}>
+          <span className="island-brand-mark">H</span>
           <span>HireReady</span>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
@@ -640,7 +638,7 @@ function LandingPage() {
             <div className="landing-role-icon">
               <Target size={26} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <h3>I'm a Job Seeker</h3>
               <span className="pill pill-green">Candidate Portal</span>
             </div>
@@ -672,10 +670,10 @@ function LandingPage() {
             onClick={() => handleSelectRole('recruiter')}
             data-testid="card-role-recruiter"
           >
-            <div className="landing-role-icon" style={{ background: 'var(--apple-accent-subtle)', color: 'var(--apple-accent)' }}>
+            <div className="landing-role-icon">
               <Radar size={26} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <h3>I'm a Recruiter</h3>
               <span className="pill pill-amber">Employer Portal</span>
             </div>
@@ -733,13 +731,11 @@ function SeekerDashboard() {
   return (
     <div className="page">
       {/* Clean Apple Hero Header */}
-      <div className="page-head" style={{ marginBottom: 28 }}>
+      <div className="page-head">
         <div>
-          <div className="eyebrow" style={{ color: 'var(--apple-accent)', letterSpacing: '0.14em' }}>Candidate Workspace</div>
-          <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--apple-primary-text)', letterSpacing: '-0.04em', margin: '6px 0 8px' }}>
-            Welcome back, {learner.name.split(' ')[0]}.
-          </h1>
-          <p style={{ color: 'var(--apple-secondary-text)', fontSize: 14, margin: 0, maxWidth: 680, lineHeight: 1.6 }}>
+          <div className="eyebrow">Candidate Workspace</div>
+          <h1>Welcome back, {learner.name.split(' ')[0]}.</h1>
+          <p>
             Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles.
           </p>
         </div>
@@ -755,10 +751,10 @@ function SeekerDashboard() {
 
       {/* 1. Target Career Track & Role Readiness (Apple Frosted Glass Card) */}
       <div className="card section-card" style={{ marginBottom: 24 }} data-testid="card-target-track">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
           <div style={{ flex: 1, minWidth: 280 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span className="eyebrow" style={{ color: 'var(--apple-accent)' }}>Target Career Track</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+              <span className="eyebrow" style={{ margin: 0 }}>Target Career Track</span>
               <select
                 className="select"
                 style={{ width: 'auto', padding: '4px 12px', fontSize: 12, borderRadius: 999, background: 'rgba(0, 0, 0, 0.45)' }}
@@ -773,10 +769,10 @@ function SeekerDashboard() {
                 ))}
               </select>
             </div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--apple-primary-text)', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: 26, fontWeight: 800, color: 'var(--apple-primary-text)', margin: '0 0 6px', letterSpacing: '-0.03em' }}>
               {selectedTargetRole}
             </h2>
-            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13, margin: '0 0 14px' }}>
+            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13.5, margin: '0 0 16px' }}>
               {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
             </p>
             <div className="progress-line" style={{ height: 6, maxWidth: 380 }}>
@@ -786,12 +782,12 @@ function SeekerDashboard() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 40, fontWeight: 800, color: 'var(--apple-success)', lineHeight: 1 }}>
+              <div style={{ fontFamily: 'var(--app-font-sans)', fontSize: 44, fontWeight: 800, color: '#FFFFFF', lineHeight: 1, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.04em' }}>
                 {roadmap.overallReadiness}%
               </div>
-              <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+              <div style={{ fontSize: 11.5, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
             </div>
-            <Link href="/seeker/roadmap" className="button button-accent" style={{ padding: '10px 20px' }}>
+            <Link href="/seeker/roadmap" className="button button-accent">
               Open Roadmap <ArrowRight size={14} />
             </Link>
           </div>
@@ -808,20 +804,20 @@ function SeekerDashboard() {
               <Sparkles size={16} color="var(--apple-accent)" />
             </div>
             <div style={{ display: 'grid', gap: 14 }}>
-              <div className="card" style={{ padding: 18, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+              <div className="card" style={{ padding: 20, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
                 <div>
-                  <h3 style={{ fontSize: 14, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Explore AI Career Roadmap</h3>
-                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12, margin: 0 }}>View sequenced milestone sprints and unblock higher-tier competencies.</p>
+                  <h3 style={{ fontSize: 14.5, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Explore AI Career Roadmap</h3>
+                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12.5, margin: 0 }}>View sequenced milestone sprints and unblock higher-tier competencies.</p>
                 </div>
                 <Link href="/seeker/roadmap" className="button button-primary" style={{ flexShrink: 0 }}>
                   Open Roadmap <ArrowRight size={14} />
                 </Link>
               </div>
 
-              <div className="card" style={{ padding: 18, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+              <div className="card" style={{ padding: 20, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
                 <div>
-                  <h3 style={{ fontSize: 14, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Upload Certifications & Projects</h3>
-                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12, margin: 0 }}>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
+                  <h3 style={{ fontSize: 14.5, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Upload Certifications & Projects</h3>
+                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12.5, margin: 0 }}>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
                 </div>
                 <Link href="/seeker/profile/upload" className="button button-secondary" style={{ flexShrink: 0 }}>
                   Upload Proof <ArrowRight size={14} />
@@ -834,7 +830,7 @@ function SeekerDashboard() {
           <section className="card section-card">
             <div className="section-title">
               <h2>Evidence at a Glance</h2>
-              <Link href="/seeker/credentials" className="button button-ghost" style={{ fontSize: 11 }}>
+              <Link href="/seeker/credentials" className="button button-ghost" style={{ fontSize: 11.5 }}>
                 View Credentials <ChevronRight size={12} />
               </Link>
             </div>
@@ -859,20 +855,20 @@ function SeekerDashboard() {
         <section className="card section-card">
           <div className="section-title">
             <h2>Recommended Open Roles ({recommendedJobs.length})</h2>
-            <span style={{ color: 'var(--apple-secondary-text)', fontSize: 11 }}>Transparent scoring</span>
+            <span style={{ color: 'var(--apple-secondary-text)', fontSize: 11.5 }}>Transparent scoring</span>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             {recommendedJobs.slice(0, 4).map(({ job, score }) => (
               <div key={job.id} className="job-row" style={{ padding: '14px 0' }}>
                 <div>
-                  <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{job.title}</strong>
+                  <strong style={{ fontSize: 14, color: 'var(--apple-primary-text)' }}>{job.title}</strong>
                   <div className="job-meta" style={{ color: 'var(--apple-secondary-text)' }}>
                     {job.company} · {job.location} · {job.workMode}
                   </div>
                 </div>
                 <div className="row-right">
-                  <div className="score" style={{ color: 'var(--apple-success)' }}>{score.total}%</div>
-                  <div className="score-caption" style={{ color: 'var(--apple-secondary-text)' }}>
+                  <div className="score">{score.total}%</div>
+                  <div className="score-caption">
                     {(score.aiSemanticBonus ?? 0) > 0 ? `+${score.aiSemanticBonus} AI` : 'match'}
                   </div>
                 </div>
@@ -1223,7 +1219,7 @@ function SeekerUploadPage() {
                   <div key={skill.name} className="job-row">
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <strong style={{ fontSize: 13 }}>{skill.name}</strong>
+                        <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{skill.name}</strong>
                         <span className={`pill ${skill.verified ? 'pill-green' : 'pill-slate'}`}>
                           {skill.verified ? '✓ Verified' : 'Self-Reported'}
                         </span>
@@ -1250,23 +1246,23 @@ function SeekerUploadPage() {
             <div className="card section-card">
               <div className="section-title">
                 <h2>How Skill Verification Works</h2>
-                <ShieldCheck size={16} color="#28776c" />
+                <ShieldCheck size={18} color="var(--apple-accent)" />
               </div>
-              <p className="bio" style={{ marginBottom: 14 }}>
+              <p className="bio" style={{ marginBottom: 16 }}>
                 HireReady never relies solely on self-reported checkmarks. Your skills gain real verification weight when backed by:
               </p>
-              <div style={{ display: 'grid', gap: 10, fontSize: 12, color: '#526072' }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <div className="path-index">1</div>
-                  <span><strong>Verified Certifications:</strong> Matching credentials from AWS, Google, Meta, or Coursera automatically boost verification confidence.</span>
+              <div style={{ display: 'grid', gap: 12, fontSize: 12.5, color: 'var(--apple-secondary-text)' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div className="step-num" style={{ flexShrink: 0, width: 24, height: 24, fontSize: 11 }}>1</div>
+                  <span><strong style={{ color: 'var(--apple-primary-text)' }}>Verified Certifications:</strong> Matching credentials from AWS, Google, Meta, or Coursera automatically boost verification confidence.</span>
                 </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <div className="path-index">2</div>
-                  <span><strong>Project Evidence:</strong> Technologies tagged in your GitHub/live projects provide practical proof.</span>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div className="step-num" style={{ flexShrink: 0, width: 24, height: 24, fontSize: 11 }}>2</div>
+                  <span><strong style={{ color: 'var(--apple-primary-text)' }}>Project Evidence:</strong> Technologies tagged in your GitHub/live projects provide practical proof.</span>
                 </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <div className="path-index">3</div>
-                  <span><strong>Deterministic Score:</strong> Verified skills receive up to +5% score multipliers in recruiter matching.</span>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div className="step-num" style={{ flexShrink: 0, width: 24, height: 24, fontSize: 11 }}>3</div>
+                  <span><strong style={{ color: 'var(--apple-primary-text)' }}>Deterministic Score:</strong> Verified skills receive up to +5% score multipliers in recruiter matching.</span>
                 </div>
               </div>
             </div>
@@ -1333,8 +1329,8 @@ function SeekerUploadPage() {
                     <div className="dropzone-icon">
                       <UploadCloud size={24} />
                     </div>
-                    <strong>{uploadedFileName ? uploadedFileName : 'Click to select or drag & drop certificate'}</strong>
-                    <p style={{ margin: '4px 0 0', fontSize: 11, color: '#718096' }}>
+                    <strong style={{ color: 'var(--apple-primary-text)' }}>{uploadedFileName ? uploadedFileName : 'Click to select or drag & drop certificate'}</strong>
+                    <p style={{ margin: '6px 0 0', fontSize: 11.5, color: 'var(--apple-secondary-text)' }}>
                       Files are cryptographically hashed and queued for verification.
                     </p>
                   </label>
@@ -1360,17 +1356,17 @@ function SeekerUploadPage() {
                   const isVerified = cert.verified;
                   const isPending = cert.reviewStatus === 'pending_review';
                   return (
-                    <div key={cert.credentialId} className="card credential-card" style={{ padding: 15 }}>
+                    <div key={cert.credentialId} className="card credential-card" style={{ padding: 18 }}>
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                          <strong style={{ fontSize: 13 }}>{cert.name}</strong>
+                          <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{cert.name}</strong>
                           <span
-                            className={`status-pill ${
+                            className={`pill ${
                               isVerified
-                                ? 'status-pill-verified'
+                                ? 'pill-green'
                                 : isPending
-                                ? 'status-pill-pending'
-                                : 'status-pill-rejected'
+                                ? 'pill-amber'
+                                : 'pill-slate'
                             }`}
                           >
                             {isVerified ? '✓ Auto-Verified' : isPending ? '⏳ Pending Audit' : 'Rejected'}
@@ -1380,7 +1376,7 @@ function SeekerUploadPage() {
                           {cert.issuer} · Issued {cert.issueDate} · ID: {cert.credentialId}
                         </div>
                         {cert.fileName && (
-                          <div style={{ fontSize: 10, color: '#64748b', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                             <FileText size={12} /> File: {cert.fileName}
                           </div>
                         )}
@@ -1388,7 +1384,7 @@ function SeekerUploadPage() {
                       <Link
                         href={`/verify/${cert.credentialId}`}
                         className="button button-ghost"
-                        style={{ fontSize: 11 }}
+                        style={{ fontSize: 11.5 }}
                       >
                         Inspect Hash <ChevronRight size={13} />
                       </Link>
@@ -1464,14 +1460,14 @@ function SeekerUploadPage() {
                 <h2>Project Showcase ({learner.projects.length})</h2>
                 <span>Evidence for recruiters</span>
               </div>
-              <div style={{ display: 'grid', gap: 14 }}>
+              <div style={{ display: 'grid', gap: 16 }}>
                 {learner.projects.map((proj) => (
                   <div key={proj.title} className="project">
                     <div className="project-title">
                       <span>{proj.title}</span>
                     </div>
                     <p>{proj.description}</p>
-                    <div className="skill-list" style={{ margin: '8px 0' }}>
+                    <div className="skill-list" style={{ margin: '8px 0 10px' }}>
                       {proj.technologies.map((t) => (
                         <span className="skill-tag" key={t}>
                           {t}
@@ -1484,7 +1480,7 @@ function SeekerUploadPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="project-link"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#28776c', fontWeight: 600, fontSize: 12, textDecoration: 'none' }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: 'var(--apple-accent)', fontWeight: 600, fontSize: 12, textDecoration: 'none' }}
                       >
                         <Github size={13} /> View on GitHub <ExternalLink size={11} />
                       </a>
@@ -1557,23 +1553,23 @@ function SeekerRoadmapPage() {
       <div className="card section-card" style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
           <div>
-            <div className="eyebrow" style={{ color: 'var(--apple-accent)', marginBottom: 6 }}>Target Track</div>
+            <div className="eyebrow" style={{ color: 'var(--apple-secondary-text)', marginBottom: 6 }}>Target Track</div>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--apple-primary-text)', margin: '0 0 6px', letterSpacing: '-0.03em' }}>{selectedRole}</h1>
-            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13, margin: 0 }}>
+            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13.5, margin: 0 }}>
               {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 44, fontWeight: 800, color: 'var(--apple-accent)', lineHeight: 1 }}>
+            <div style={{ fontFamily: 'var(--app-font-sans)', fontSize: 44, fontWeight: 800, color: '#FFFFFF', lineHeight: 1, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.04em' }}>
               {roadmap.overallReadiness}%
             </div>
-            <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+            <div style={{ fontSize: 11.5, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
           </div>
         </div>
       </div>
 
       {/* AI Personalized Narrative */}
-      <div className="card section-card" style={{ marginBottom: 24, borderLeft: '4px solid var(--apple-accent)' }}>
+      <div className="card section-card" style={{ marginBottom: 24, borderLeft: '3px solid var(--apple-accent)' }}>
         <div className="section-title">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Bot size={18} color="var(--apple-accent)" />
@@ -1592,15 +1588,15 @@ function SeekerRoadmapPage() {
           <h2>Milestone Execution Plan</h2>
           <span>Sequenced by topological dependency</span>
         </div>
-        <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', margin: 0 }}>
+        <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', margin: 0, gap: 16 }}>
           {roadmap.milestones.map((milestone) => (
-            <div key={milestone.title} className="card stat" style={{ padding: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span className="pill pill-slate" style={{ fontSize: 10 }}>{milestone.timeframe}</span>
+            <div key={milestone.title} className="card stat" style={{ padding: 18 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                <span className="pill pill-slate" style={{ fontSize: 10.5 }}>{milestone.timeframe}</span>
                 <span className="pill pill-green">Tier {milestone.tier}</span>
               </div>
-              <strong style={{ fontSize: 14, display: 'block', margin: '4px 0', color: 'var(--apple-primary-text)' }}>{milestone.title}</strong>
-              <p style={{ fontSize: 11, color: 'var(--apple-secondary-text)', margin: '6px 0 10px' }}>{milestone.description}</p>
+              <strong style={{ fontSize: 14.5, display: 'block', margin: '4px 0', color: 'var(--apple-primary-text)' }}>{milestone.title}</strong>
+              <p style={{ fontSize: 12, color: 'var(--apple-secondary-text)', margin: '6px 0 12px', lineHeight: 1.5 }}>{milestone.description}</p>
               <div className="skill-list">
                 {milestone.skills.map((s) => (
                   <span className="skill-tag" key={s}>
@@ -1614,7 +1610,7 @@ function SeekerRoadmapPage() {
       </div>
 
       {/* Tiered Role Skill Graph */}
-      <div className="section-title" style={{ marginBottom: 14 }}>
+      <div className="section-title" style={{ marginBottom: 16 }}>
         <h2>Role Skill Graph ({selectedRole})</h2>
         <span>Tier 1 (Foundational) to Tier 4 (Specialized)</span>
       </div>
@@ -1653,8 +1649,8 @@ function SeekerRoadmapPage() {
                     className={`roadmap-card status-${status}`}
                     data-testid={`card-roadmap-${node.skillName.toLowerCase().replaceAll(' ', '-')}`}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                      <strong style={{ fontSize: 14 }}>{node.skillName}</strong>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
+                      <strong style={{ fontSize: 14.5 }}>{node.skillName}</strong>
                       <span
                         className={`pill ${
                           isMastered
@@ -1668,38 +1664,38 @@ function SeekerRoadmapPage() {
                       </span>
                     </div>
 
-                    <div style={{ fontSize: 11, color: '#64748b', marginBottom: 10 }}>
-                      Expected: <strong>{node.expectedProficiency}</strong>
+                    <div style={{ fontSize: 12, color: 'var(--apple-secondary-text)', marginBottom: 10 }}>
+                      Expected: <strong style={{ color: 'var(--apple-primary-text)' }}>{node.expectedProficiency}</strong>
                       {currentProficiency && ` · Current: ${currentProficiency}`}
                     </div>
 
                     {node.prerequisites.length > 0 && (
-                      <div style={{ fontSize: 10, color: '#718096', marginBottom: 10 }}>
+                      <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', marginBottom: 10 }}>
                         Prerequisites: {node.prerequisites.join(', ')}
                       </div>
                     )}
 
                     {node.recommendedCertifications.length > 0 && (
-                      <div style={{ fontSize: 11, background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: 10, borderRadius: 10, marginBottom: 12 }}>
-                        <Award size={13} style={{ verticalAlign: 'middle', marginRight: 5, color: '#43c1aa' }} />
-                        <span style={{ fontWeight: 700, color: '#ffffff' }}>{node.recommendedCertifications[0]?.name}</span>
-                        <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{node.recommendedCertifications[0]?.issuer}</div>
+                      <div style={{ fontSize: 11.5, background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: 10, borderRadius: 10, marginBottom: 12 }}>
+                        <Award size={13} style={{ verticalAlign: 'middle', marginRight: 5, color: 'var(--apple-accent)' }} />
+                        <span style={{ fontWeight: 700, color: '#FFFFFF' }}>{node.recommendedCertifications[0]?.name}</span>
+                        <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', marginTop: 2 }}>{node.recommendedCertifications[0]?.issuer}</div>
                       </div>
                     )}
 
                     <div style={{ marginTop: 'auto', paddingTop: 6 }}>
                       {isMastered ? (
-                        <span style={{ fontSize: 11, color: '#28776c', fontWeight: 600 }}>
+                        <span style={{ fontSize: 11.5, color: 'var(--apple-success)', fontWeight: 600 }}>
                           ✓ Evidence on profile
                         </span>
                       ) : isLocked ? (
-                        <span style={{ fontSize: 11, color: '#94a3b8' }}>
+                        <span style={{ fontSize: 11.5, color: 'var(--apple-secondary-text)' }}>
                           Unlock prerequisites first
                         </span>
                       ) : (
                         <button
                           className="button button-secondary"
-                          style={{ width: '100%', fontSize: 11, padding: '6px 10px' }}
+                          style={{ width: '100%', height: 32, fontSize: 11.5, padding: '0 10px' }}
                           onClick={() => handleSimulateLearnSkill(node.skillName)}
                           data-testid={`button-learn-${node.skillName.toLowerCase().replaceAll(' ', '-')}`}
                         >
@@ -2130,10 +2126,10 @@ function RecruiterMatchesPage() {
       {/* Recruiter Skill Gap / Scarcity Flagging */}
       <div className="scarcity-container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <strong style={{ fontSize: 13, color: '#1e293b' }}>
+          <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>
             Applicant Pool Scarcity & Coverage Analysis ({candidates.length} candidates)
           </strong>
-          <span className="pill pill-slate" style={{ fontSize: 10 }}>Market Signal</span>
+          <span className="pill pill-slate" style={{ fontSize: 10.5 }}>Market Signal</span>
         </div>
         <div className="scarcity-grid">
           {scarcityMetrics.map((metric) => (
@@ -2141,9 +2137,9 @@ function RecruiterMatchesPage() {
               key={metric.skillName}
               className={`scarcity-item ${metric.isScarce ? 'alert-scarcity' : ''}`}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                <strong>{metric.skillName}</strong>
-                <span style={{ color: metric.isScarce ? '#c05621' : '#28776c', fontWeight: 700 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
+                <strong style={{ color: 'var(--apple-primary-text)' }}>{metric.skillName}</strong>
+                <span style={{ color: metric.isScarce ? 'var(--apple-warning)' : 'var(--apple-success)', fontWeight: 700 }}>
                   {metric.coveragePercentage}%
                 </span>
               </div>
@@ -2151,11 +2147,11 @@ function RecruiterMatchesPage() {
                 <span
                   style={{
                     width: `${metric.coveragePercentage}%`,
-                    background: metric.isScarce ? '#dd6b20' : 'hsl(var(--accent))',
+                    background: metric.isScarce ? 'var(--apple-warning)' : 'var(--apple-success)',
                   }}
                 />
               </div>
-              <div style={{ fontSize: 10, color: '#64748b' }}>
+              <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)' }}>
                 {metric.matchedCandidatesCount} matches ({metric.verifiedCandidatesCount} verified)
                 {metric.isScarce && ' · High Scarcity'}
               </div>
@@ -2243,7 +2239,7 @@ function RecruiterMatchesPage() {
                   <img
                     src={candidate.avatarUrl || `https://github.com/${candidate.githubUsername || 'vasudev196006'}.png`}
                     alt={candidate.name}
-                    style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', border: '1px solid #cbd5e1' }}
+                    style={{ width: 46, height: 46, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--apple-border)' }}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = 'https://github.com/github.png';
                     }}
@@ -2260,7 +2256,7 @@ function RecruiterMatchesPage() {
                           rel="noopener noreferrer"
                           title={`View @${candidate.githubUsername} on GitHub`}
                           className="pill pill-slate"
-                          style={{ fontSize: 11, padding: '2px 8px', display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', color: '#0f172a' }}
+                          style={{ fontSize: 11, padding: '2px 8px', display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none' }}
                         >
                           <Github size={12} /> @{candidate.githubUsername} <ExternalLink size={10} />
                         </a>
@@ -2277,7 +2273,7 @@ function RecruiterMatchesPage() {
                       {s.name} {s.verified && '✓'}
                     </span>
                   ))}
-                  <span className="skill-tag" style={{ background: '#e0f2fe', color: '#0369a1' }}>
+                  <span className="skill-tag" style={{ background: 'rgba(255, 255, 255, 0.14)', color: '#FFFFFF', fontWeight: 700 }}>
                     #{index + 1} Ranked
                   </span>
                 </div>
@@ -2539,7 +2535,7 @@ function RecruiterDashboard() {
                         href={candidate.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: '#64748b' }}
+                        style={{ color: 'var(--apple-secondary-text)' }}
                         title="View candidate GitHub profile"
                       >
                         <Github size={12} />
@@ -3093,7 +3089,7 @@ function App() {
           <Toaster />
           {notice && (
             <div className="toast-note" data-testid="status-toast">
-              <Sparkles size={15} color="#43c1aa" />
+              <Sparkles size={15} color="var(--apple-accent)" />
               <span>{notice}</span>
             </div>
           )}
