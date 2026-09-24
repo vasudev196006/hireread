@@ -6,7 +6,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  useRef,
 } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
@@ -41,7 +40,6 @@ import {
   Award,
   BarChart3,
   Bot,
-  BrainCircuit,
   BriefcaseBusiness,
   Check,
   CheckCircle,
@@ -50,30 +48,23 @@ import {
   CircleHelp,
   ClipboardCheck,
   ExternalLink,
-  File,
   FileCheck2,
   FileText,
   Filter,
   Github,
   Layers,
   LayoutDashboard,
-  ListChecks,
-  Lock,
-  LogOut,
   Plus,
   Radar,
   RefreshCw,
   Search,
   ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   Target,
-  TrendingUp,
   UploadCloud,
   UserRound,
   Users,
   X,
-  Eye,
 } from 'lucide-react';
 import { Link, Route, Switch, useLocation, useParams, Router as WouterRouter } from 'wouter';
 
@@ -159,12 +150,19 @@ function Shell({ children }: { children: ReactNode }) {
   const isRecruiter = role === 'recruiter';
 
   const isActive = (href: string) =>
-    location === href || (href !== '/recruiter/dashboard' && href !== '/seeker/dashboard' && location.startsWith(href));
+    location === href ||
+    (href !== '/recruiter/dashboard' &&
+      href !== '/seeker/dashboard' &&
+      location.startsWith(href));
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <Link href={isRecruiter ? '/recruiter/dashboard' : '/seeker/dashboard'} className="brand" data-testid="link-brand">
+        <Link
+          href={isRecruiter ? '/recruiter/dashboard' : '/seeker/dashboard'}
+          className="brand"
+          data-testid="link-brand"
+        >
           <span className="brand-mark">H</span>
           <span>HireReady</span>
         </Link>
@@ -190,7 +188,7 @@ function Shell({ children }: { children: ReactNode }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
             <strong>{isRecruiter ? 'Recruiter' : 'Job Seeker'}</strong>
             <span className={`pill ${isRecruiter ? 'pill-green' : 'pill-amber'}`}>
-              {isRecruiter ? 'Enterprise' : 'Verified'}
+              {isRecruiter ? 'Employer' : 'Candidate'}
             </span>
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
@@ -338,7 +336,7 @@ function EmptyState({
 }
 
 // ==========================================
-// 1. PUBLIC LANDING & ROLE-BASED LOGIN
+// 1. PUBLIC LANDING & ROLE ENTRY
 // ==========================================
 function LandingPage() {
   const { setRole } = useApp();
@@ -462,7 +460,175 @@ function LandingPage() {
 }
 
 // ==========================================
-// 2. JOB SEEKER: PROFILE, UPLOAD & EVIDENCE
+// 2. JOB SEEKER: OVERVIEW DASHBOARD
+// ==========================================
+function SeekerDashboard() {
+  const { jobs, learner, updateLearner } = useApp();
+  const selectedTargetRole = learner.targetRole || 'Data Scientist';
+
+  const roadmap = useMemo(
+    () => generateCareerRoadmap(learner, selectedTargetRole),
+    [learner, selectedTargetRole]
+  );
+
+  const verifiedCount = learner.skills.filter((skill) => skill.verified).length;
+
+  // Compute job matches across all active recruiter postings
+  const recommendedJobs = useMemo(() => {
+    return jobs
+      .filter((j) => j.status === 'active')
+      .map((job) => ({
+        job,
+        score: calculateAIEnhancedMatch(learner, job),
+      }))
+      .sort((a, b) => b.score.total - a.score.total);
+  }, [jobs, learner]);
+
+  return (
+    <div className="page">
+      <SectionHeader
+        eyebrow="Job Seeker Workspace"
+        title={`Welcome back, ${learner.name.split(' ')[0]}.`}
+        description="Track your career roadmap progression, verify credentials, and view top job matches."
+        action={
+          <div style={{ display: 'flex', gap: 10 }}>
+            <Link href="/seeker/profile/upload" className="button button-secondary">
+              <UploadCloud size={14} /> Upload Evidence
+            </Link>
+            <Link href="/seeker/roadmap" className="button button-accent">
+              <Target size={14} /> AI Career Roadmap
+            </Link>
+          </div>
+        }
+      />
+
+      {/* Target Role Readiness Hero */}
+      <div className="learner-hero">
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="eyebrow" style={{ color: '#a9bac9' }}>Target Career Track</div>
+            <select
+              style={{
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                color: 'white',
+                padding: '3px 8px',
+                borderRadius: 6,
+                fontSize: 12,
+              }}
+              value={selectedTargetRole}
+              onChange={(e) => updateLearner((p) => ({ ...p, targetRole: e.target.value }))}
+            >
+              {availableTargetRoles.map((role) => (
+                <option key={role} value={role} style={{ color: '#1e293b' }}>
+                  {role}
+                </option>
+              ))}
+            </select>
+          </div>
+          <h1>{selectedTargetRole}</h1>
+          <p>
+            {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
+          </p>
+        </div>
+        <div className="hero-score">
+          <strong>{roadmap.overallReadiness}%</strong>
+          <span>Role Readiness</span>
+        </div>
+      </div>
+
+      <div className="grid-2">
+        <div>
+          {/* Quick Actions */}
+          <section className="card section-card">
+            <div className="section-title">
+              <h2>Career Progression Tools</h2>
+              <Sparkles size={15} color="#28776c" />
+            </div>
+            <div className="goal-card" style={{ padding: 0, marginBottom: 12 }}>
+              <div>
+                <h3>Explore AI Career Roadmap</h3>
+                <p>View sequenced milestone sprints and unblock higher-tier competencies.</p>
+              </div>
+              <Link href="/seeker/roadmap" className="button button-primary">
+                Open Roadmap <ArrowRight size={14} />
+              </Link>
+            </div>
+            <div className="goal-card" style={{ padding: 0 }}>
+              <div>
+                <h3>Upload Certifications & Projects</h3>
+                <p>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
+              </div>
+              <Link href="/seeker/profile/upload" className="button button-secondary">
+                Upload Proof <ArrowRight size={14} />
+              </Link>
+            </div>
+          </section>
+
+          {/* Evidence Stats */}
+          <section className="card section-card" style={{ marginTop: 18 }}>
+            <div className="section-title">
+              <h2>Evidence at a Glance</h2>
+              <Link href="/seeker/credentials" className="button button-ghost">
+                View Credentials
+              </Link>
+            </div>
+            <div className="stat-grid" style={{ margin: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
+              <div>
+                <div className="eyebrow">Skills</div>
+                <div className="stat-value">{learner.skills.length}</div>
+              </div>
+              <div>
+                <div className="eyebrow">Verified</div>
+                <div className="stat-value" style={{ color: '#28776c' }}>{verifiedCount}</div>
+              </div>
+              <div>
+                <div className="eyebrow">Projects</div>
+                <div className="stat-value">{learner.projects.length}</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Recommended Open Roles */}
+        <section className="card section-card">
+          <div className="section-title">
+            <h2>Recommended Job Matches ({recommendedJobs.length})</h2>
+            <span>Transparent scoring</span>
+          </div>
+          <div style={{ display: 'grid', gap: 12 }}>
+            {recommendedJobs.slice(0, 4).map(({ job, score }) => (
+              <div key={job.id} className="job-row">
+                <div>
+                  <strong style={{ fontSize: 13, color: 'hsl(var(--foreground))' }}>{job.title}</strong>
+                  <div className="job-meta">
+                    {job.company} · {job.location} · {job.workMode}
+                  </div>
+                </div>
+                <div className="row-right">
+                  <div className="score">{score.total}%</div>
+                  <div className="score-caption">
+                    {(score.aiSemanticBonus ?? 0) > 0 ? `+${score.aiSemanticBonus} AI` : 'match'}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/seeker/roadmap"
+            className="button button-secondary"
+            style={{ marginTop: 20, width: '100%' }}
+          >
+            Level Up with AI Roadmap <ArrowRight size={14} />
+          </Link>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// 3. JOB SEEKER: EVIDENCE & UPLOAD
 // ==========================================
 function SeekerUploadPage() {
   const { learner, updateLearner, notify } = useApp();
@@ -540,15 +706,9 @@ function SeekerUploadPage() {
       certIssuer.toLowerCase().includes(k)
     );
 
-    // Auto verification rule from Spec Section 2.2
     const isAutoVerified = hasVerifiableUrl || (isKnownIssuer && certCredId.trim().length > 4);
-    const reviewStatus: ReviewStatus = isAutoVerified
-      ? 'auto_verified'
-      : uploadedFileName
-      ? 'pending_review'
-      : 'pending_review';
+    const reviewStatus: ReviewStatus = isAutoVerified ? 'auto_verified' : 'pending_review';
 
-    // Generate SHA-256 fingerprint
     const payload = `${certName}|${certIssuer}|${certCredId || Date.now()}|${certDate}|${learner.name}`;
     const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload));
     const hash = Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
@@ -971,11 +1131,11 @@ function SeekerUploadPage() {
 }
 
 // ==========================================
-// 3. JOB SEEKER: CAREER ROADMAP & GAPS
+// 4. JOB SEEKER: CAREER ROADMAP & GAP GRAPH
 // ==========================================
 function SeekerRoadmapPage() {
   const { learner, updateLearner, notify } = useApp();
-  const [selectedRole, setSelectedRole] = useState(learner.targetRole || 'Data Scientist');
+  const selectedRole = learner.targetRole || 'Data Scientist';
 
   const roadmap = useMemo(
     () => generateCareerRoadmap(learner, selectedRole),
@@ -1009,7 +1169,6 @@ function SeekerRoadmapPage() {
               className="select filter"
               value={selectedRole}
               onChange={(e) => {
-                setSelectedRole(e.target.value);
                 updateLearner((p) => ({ ...p, targetRole: e.target.value }));
               }}
               data-testid="select-target-role"
@@ -1060,7 +1219,7 @@ function SeekerRoadmapPage() {
           <span>Sequenced by topological dependency</span>
         </div>
         <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', margin: 0 }}>
-          {roadmap.milestones.map((milestone, i) => (
+          {roadmap.milestones.map((milestone) => (
             <div key={milestone.title} className="card stat" style={{ border: '1px solid #e2e8f0', padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                 <span className="pill pill-slate" style={{ fontSize: 10 }}>{milestone.timeframe}</span>
@@ -1110,7 +1269,7 @@ function SeekerRoadmapPage() {
             </div>
 
             <div className="roadmap-grid">
-              {tierGaps.map(({ node, status, currentProficiency, prerequisitesMet }) => {
+              {tierGaps.map(({ node, status, currentProficiency }) => {
                 const isMastered = status === 'mastered';
                 const isLocked = status === 'locked';
 
@@ -1186,7 +1345,7 @@ function SeekerRoadmapPage() {
 }
 
 // ==========================================
-// 4. RECRUITER: CREATE JOB & AI SUGGESTIONS
+// 5. RECRUITER: POST A ROLE & AI MATRIX
 // ==========================================
 function RecruiterCreateJobPage() {
   const { addJob, notify, setActiveJobId } = useApp();
@@ -1258,7 +1417,7 @@ function RecruiterCreateJobPage() {
     };
     addJob(job);
     setActiveJobId(job.id);
-    notify('Role published! Hybrid AI candidate ranking is ready.');
+    notify('Role published! Candidate rankings are ready.');
     setLocation('/recruiter/matches');
   };
 
@@ -1550,7 +1709,7 @@ function RecruiterCreateJobPage() {
 }
 
 // ==========================================
-// 5. RECRUITER: AI-ASSISTED MATCHES & RANKING
+// 6. RECRUITER: AI-ASSISTED MATCHES & SCARCITY
 // ==========================================
 function RecruiterMatchesPage() {
   const { jobs, candidates, shortlisted, toggleShortlist, activeJobId, setActiveJobId } = useApp();
@@ -1562,7 +1721,6 @@ function RecruiterMatchesPage() {
 
   const job = jobs.find((j) => j.id === jobId) ?? currentJob(jobs, activeJobId);
 
-  // Hybrid AI ranking calculation
   const ranked = useMemo(() => {
     return candidates
       .map((candidate) => ({
@@ -1580,7 +1738,6 @@ function RecruiterMatchesPage() {
       .sort((a, b) => b.score.total - a.score.total);
   }, [candidates, job, query, minScore, shortlistOnly, shortlisted]);
 
-  // Pool scarcity metrics from Spec Section 5.3
   const scarcityMetrics = useMemo(() => analyzePoolScarcity(candidates, job), [candidates, job]);
 
   return (
@@ -1704,7 +1861,6 @@ function RecruiterMatchesPage() {
       ) : (
         ranked.map(({ candidate, score }, index) => {
           const isShortlisted = shortlisted.includes(candidate.id);
-          const hasAIBonus = (score.aiSemanticBonus ?? 0) > 0;
 
           return (
             <div className="card match-card" key={candidate.id} data-testid={`card-match-${candidate.id}`}>
@@ -1869,7 +2025,7 @@ function AIJustificationModal({
 }
 
 // ==========================================
-// 6. RECRUITER: OVERVIEW DASHBOARD
+// 7. RECRUITER: OVERVIEW DASHBOARD
 // ==========================================
 function RecruiterDashboard() {
   const { jobs, candidates, shortlisted, activeJobId, setActiveJobId } = useApp();
@@ -2000,118 +2156,7 @@ function RecruiterDashboard() {
 }
 
 // ==========================================
-// 7. JOB SEEKER: OVERVIEW DASHBOARD
-// ==========================================
-function SeekerDashboard() {
-  const { jobs, activeJobId, learner } = useApp();
-  const job = currentJob(jobs, activeJobId);
-  const score = calculateAIEnhancedMatch(learner, job);
-  const verifiedCount = learner.skills.filter((skill) => skill.verified).length;
-
-  return (
-    <div className="page">
-      <SectionHeader
-        eyebrow="Job Seeker Workspace"
-        title={`Welcome back, ${learner.name.split(' ')[0]}.`}
-        description="Inspect your verifiable skill evidence and track your AI career progression."
-        action={
-          <div style={{ display: 'flex', gap: 10 }}>
-            <Link href="/seeker/profile/upload" className="button button-secondary">
-              <UploadCloud size={14} /> Upload Evidence
-            </Link>
-            <Link href="/seeker/roadmap" className="button button-accent">
-              <Target size={14} /> AI Career Roadmap
-            </Link>
-          </div>
-        }
-      />
-
-      <div className="learner-hero">
-        <div>
-          <div className="eyebrow" style={{ color: '#a9bac9' }}>Target Track</div>
-          <h1>{learner.targetRole || 'Data Scientist'}</h1>
-          <p>
-            {job.company} · {job.location} · Evaluated against {job.skills.length} role competencies
-          </p>
-        </div>
-        <div className="hero-score">
-          <strong>{score.total}%</strong>
-          <span>Target Match</span>
-        </div>
-      </div>
-
-      <div className="grid-2">
-        <div>
-          <section className="card section-card">
-            <div className="section-title">
-              <h2>Quick Actions</h2>
-              <Sparkles size={15} color="#28776c" />
-            </div>
-            <div className="goal-card" style={{ padding: 0, marginBottom: 12 }}>
-              <div>
-                <h3>Explore AI Career Roadmap</h3>
-                <p>See your step-by-step milestone sequencing and priority skill levers.</p>
-              </div>
-              <Link href="/seeker/roadmap" className="button button-primary">
-                Open Roadmap <ArrowRight size={14} />
-              </Link>
-            </div>
-            <div className="goal-card" style={{ padding: 0 }}>
-              <div>
-                <h3>Upload Certifications & Projects</h3>
-                <p>Add cryptographic certificates or GitHub repos to boost your verification score.</p>
-              </div>
-              <Link href="/seeker/profile/upload" className="button button-secondary">
-                Add Proof <ArrowRight size={14} />
-              </Link>
-            </div>
-          </section>
-
-          <section className="card section-card" style={{ marginTop: 18 }}>
-            <div className="section-title">
-              <h2>Verified Evidence Summary</h2>
-              <Link href="/seeker/credentials" className="button button-ghost">
-                View Proofs
-              </Link>
-            </div>
-            <div className="stat-grid" style={{ margin: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
-              <div>
-                <div className="eyebrow">Skills</div>
-                <div className="stat-value">{learner.skills.length}</div>
-              </div>
-              <div>
-                <div className="eyebrow">Verified</div>
-                <div className="stat-value" style={{ color: '#28776c' }}>{verifiedCount}</div>
-              </div>
-              <div>
-                <div className="eyebrow">Projects</div>
-                <div className="stat-value">{learner.projects.length}</div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <section className="card section-card">
-          <div className="section-title">
-            <h2>Match Breakdown ({job.title})</h2>
-            <span className="pill pill-green">{score.total}%</span>
-          </div>
-          <ScoreBreakdown score={score} compact />
-          <Link
-            href="/seeker/roadmap"
-            className="button button-secondary"
-            style={{ marginTop: 22, width: '100%' }}
-          >
-            Bridge Gaps with AI Roadmap <ArrowRight size={14} />
-          </Link>
-        </section>
-      </div>
-    </div>
-  );
-}
-
-// ==========================================
-// 8. CANDIDATE PROFILE PAGE (SHARED)
+// 8. CANDIDATE PROFILE PAGE
 // ==========================================
 function CandidateProfilePage() {
   const { candidateId } = useParams<{ candidateId: string }>();
@@ -2237,7 +2282,7 @@ function CandidateProfilePage() {
                       {cert.issuer} · {cert.issueDate}
                     </div>
                   </div>
-                  {cert.verified && <ShieldCheck size={17} color="#287e70" />}
+                  {cert.verified && <ShieldCheck size={17} color="#28776c" />}
                 </div>
               ))
             ) : (
@@ -2251,7 +2296,7 @@ function CandidateProfilePage() {
 }
 
 // ==========================================
-// 9. CREDENTIALS & VERIFICATION (SHARED)
+// 9. CREDENTIALS & SHA-256 PROOFS
 // ==========================================
 function CredentialsPage() {
   const { learner } = useApp();
@@ -2456,7 +2501,6 @@ function SelectField({
 // ==========================================
 function Router() {
   const { role } = useApp();
-  const [location, setLocation] = useLocation();
 
   return (
     <Shell>
@@ -2519,7 +2563,7 @@ function Router() {
 // ==========================================
 function App() {
   const [role, setRoleState] = useState<UserRole | null>(() => {
-    return readStored<UserRole | null>('hireready-user-role', 'recruiter');
+    return readStored<UserRole | null>('hireready-user-role', 'seeker');
   });
 
   const [jobs, setJobs] = useState<Job[]>(() => {
@@ -2527,7 +2571,7 @@ function App() {
     return [...seedJobs, ...custom.filter((c) => !seedJobs.some((s) => s.id === c.id))];
   });
 
-  const [candidates, setCandidates] = useState<Candidate[]>(seedCandidates);
+  const [candidates] = useState<Candidate[]>(seedCandidates);
 
   const [learner, setLearner] = useState<Candidate>(() => {
     return readStored<Candidate>('hireready-current-learner', initialLearner);
