@@ -535,28 +535,30 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
                 key={job.id}
                 className="card"
                 style={{
-                  padding: 16,
+                  padding: 18,
                   display: 'flex',
                   flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  background: '#fafbfc',
+                  border: '1px solid rgba(255, 255, 255, 0.14)',
+                  background: 'rgba(10, 18, 30, 0.7)',
+                  backdropFilter: 'blur(16px)',
+                  borderRadius: 18,
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 13, color: '#0f172a' }}>{job.title}</strong>
+                  <strong style={{ fontSize: 13.5, color: '#ffffff' }}>{job.title}</strong>
                   <span className="pill pill-green" style={{ flexShrink: 0 }}>
                     {matchScore}% Match
                   </span>
                 </div>
-                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
+                <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 8 }}>
                   {job.company} · {job.location} · {job.contractType}
                 </div>
                 {job.salaryMin && (
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#166534', marginBottom: 8 }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#43c1aa', marginBottom: 8 }}>
                     ₹{(job.salaryMin / 100000).toFixed(1)}L–₹{(job.salaryMax ? job.salaryMax / 100000 : job.salaryMin * 1.4 / 100000).toFixed(1)}L / year
                   </div>
                 )}
-                <p style={{ fontSize: 11, color: '#475569', lineHeight: 1.5, margin: '0 0 10px', flex: 1 }}>
+                <p style={{ fontSize: 11.5, color: '#cbd5e1', lineHeight: 1.55, margin: '0 0 10px', flex: 1 }}>
                   {job.description.slice(0, 140)}...
                 </p>
                 <div className="skill-list" style={{ margin: '0 0 12px' }}>
@@ -571,7 +573,7 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="button button-accent"
-                  style={{ width: '100%', fontSize: 11, padding: '7px 10px', textDecoration: 'none' }}
+                  style={{ width: '100%', fontSize: 11, padding: '8px 12px', textDecoration: 'none' }}
                 >
                   Apply on Adzuna <ExternalLink size={12} />
                 </a>
@@ -1659,10 +1661,10 @@ function SeekerRoadmapPage() {
                     )}
 
                     {node.recommendedCertifications.length > 0 && (
-                      <div style={{ fontSize: 11, background: '#f8fafc', padding: 8, borderRadius: 6, marginBottom: 10 }}>
-                        <Award size={12} style={{ verticalAlign: 'middle', marginRight: 4, color: '#28776c' }} />
-                        <span style={{ fontWeight: 600 }}>{node.recommendedCertifications[0]?.name}</span>
-                        <div style={{ fontSize: 9, color: '#94a3b8' }}>{node.recommendedCertifications[0]?.issuer}</div>
+                      <div style={{ fontSize: 11, background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', padding: 10, borderRadius: 10, marginBottom: 12 }}>
+                        <Award size={13} style={{ verticalAlign: 'middle', marginRight: 5, color: '#43c1aa' }} />
+                        <span style={{ fontWeight: 700, color: '#ffffff' }}>{node.recommendedCertifications[0]?.name}</span>
+                        <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{node.recommendedCertifications[0]?.issuer}</div>
                       </div>
                     )}
 
@@ -2329,29 +2331,29 @@ function AIJustificationModal({
         </div>
 
         {/* Score Pill Summary */}
-        <div style={{ background: '#f8fafc', padding: 14, borderRadius: 10, marginBottom: 16 }}>
+        <div style={{ background: 'rgba(8, 14, 26, 0.7)', border: '1px solid rgba(255, 255, 255, 0.14)', padding: 16, borderRadius: 14, marginBottom: 18 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 13, fontWeight: 700 }}>Total Transparent Score</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>Total Transparent Score</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span className="pill pill-slate">Base: {enhancedScore.deterministicTotal}%</span>
               {(enhancedScore.aiSemanticBonus ?? 0) > 0 && (
                 <span className="pill pill-green">AI Semantic: +{enhancedScore.aiSemanticBonus} pts</span>
               )}
-              <strong style={{ fontSize: 16, color: '#28776c' }}>{enhancedScore.total}%</strong>
+              <strong style={{ fontSize: 17, color: '#43c1aa' }}>{enhancedScore.total}%</strong>
             </div>
           </div>
-          <p style={{ margin: '8px 0 0', fontSize: 12, color: '#475569' }}>
+          <p style={{ margin: '8px 0 0', fontSize: 12, color: '#cbd5e1', lineHeight: 1.6 }}>
             {justification?.summary}
           </p>
         </div>
 
         {/* Key Drivers */}
-        <div style={{ marginBottom: 16 }}>
-          <div className="eyebrow" style={{ marginBottom: 6 }}>Key Scoring Drivers</div>
-          <div style={{ display: 'grid', gap: 6 }}>
+        <div style={{ marginBottom: 18 }}>
+          <div className="eyebrow" style={{ marginBottom: 8 }}>Key Scoring Drivers</div>
+          <div style={{ display: 'grid', gap: 8 }}>
             {justification?.keyDrivers.map((driver, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#334155' }}>
-                <CheckCircle size={14} color="#28776c" />
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#e2e8f0' }}>
+                <CheckCircle size={14} color="#43c1aa" />
                 <span>{driver}</span>
               </div>
             ))}
@@ -2360,13 +2362,13 @@ function AIJustificationModal({
 
         {/* AI Semantic Adjustments */}
         {(justification?.semanticAdjustments.length ?? 0) > 0 && (
-          <div style={{ marginBottom: 16, borderTop: '1px solid #e2e8f0', paddingTop: 14 }}>
-            <div className="eyebrow" style={{ marginBottom: 6 }}>Semantic Near-Matches (Bounded Partial Credit)</div>
+          <div style={{ marginBottom: 18, borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: 14 }}>
+            <div className="eyebrow" style={{ marginBottom: 8 }}>Semantic Near-Matches (Bounded Partial Credit)</div>
             <div style={{ display: 'grid', gap: 8 }}>
               {justification?.semanticAdjustments.map((adj, i) => (
-                <div key={i} style={{ background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 8, padding: 10, fontSize: 11 }}>
-                  <strong>{adj.candidateSkill} ↔ {adj.jobSkill}</strong> (+{adj.bonusPoints} pts)
-                  <p style={{ margin: '4px 0 0', color: '#0369a1' }}>{adj.reason}</p>
+                <div key={i} style={{ background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 10, padding: 12, fontSize: 11.5 }}>
+                  <strong style={{ color: '#ffffff' }}>{adj.candidateSkill} ↔ {adj.jobSkill}</strong> <span style={{ color: '#38bdf8' }}>(+{adj.bonusPoints} pts)</span>
+                  <p style={{ margin: '4px 0 0', color: '#bae6fd' }}>{adj.reason}</p>
                 </div>
               ))}
             </div>
@@ -2375,12 +2377,12 @@ function AIJustificationModal({
 
         {/* Development Areas */}
         {(justification?.developmentAreas.length ?? 0) > 0 && (
-          <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 14 }}>
-            <div className="eyebrow" style={{ marginBottom: 6 }}>Development Considerations</div>
-            <div style={{ display: 'grid', gap: 6 }}>
+          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: 14 }}>
+            <div className="eyebrow" style={{ marginBottom: 8 }}>Development Considerations</div>
+            <div style={{ display: 'grid', gap: 8 }}>
               {justification?.developmentAreas.map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
-                  <AlertCircle size={14} color="#e53e3e" />
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#cbd5e1' }}>
+                  <AlertCircle size={14} color="#f87171" />
                   <span>{item}</span>
                 </div>
               ))}
