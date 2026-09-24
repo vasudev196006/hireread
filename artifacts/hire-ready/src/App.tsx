@@ -237,7 +237,7 @@ function Shell({ children }: { children: ReactNode }) {
                 style={{ fontSize: 11, padding: '4px 10px', color: '#1e293b' }}
                 title="View verified GitHub Profile"
               >
-                <Github size={14} /> @{learner.githubUsername || 'vasudev196006'}
+                <Github size={14} /> @{learner.githubUsername || 'alexrivera-dev'}
               </a>
             )}
             <button
