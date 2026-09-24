@@ -7,28 +7,28 @@
 
 :root {
   /* =========================================================
-     APPLE DESIGN SYSTEM COLOR PALETTE (EMERALD MINT ACCENT)
+     UNDERSTATED COLD LUXURY & TITANIUM SLATE PALETTE
      ========================================================= */
   --apple-bg: #000000;
-  --apple-surface: #1C1C1E;
-  --apple-glass: rgba(28, 28, 30, 0.65);
+  --apple-surface: #18181B;
+  --apple-glass: rgba(24, 24, 27, 0.65);
   --apple-glass-light: rgba(255, 255, 255, 0.6);
-  --apple-glass-elevated: rgba(44, 44, 46, 0.75);
-  --apple-primary-text: #F5F5F7;
-  --apple-secondary-text: #98989D;
-  --apple-separator: rgba(84, 84, 88, 0.65);
+  --apple-glass-elevated: rgba(39, 39, 42, 0.75);
+  --apple-primary-text: #F4F4F5;
+  --apple-secondary-text: #A1A1AA;
+  --apple-separator: rgba(255, 255, 255, 0.12);
   --apple-border: rgba(255, 255, 255, 0.12);
-  --apple-specular-top: rgba(255, 255, 255, 0.4);
+  --apple-specular-top: rgba(255, 255, 255, 0.35);
   
-  /* Vibrant Apple Emerald / Mint Accent (Replaced Blue) */
-  --apple-accent: #30D158;
-  --apple-accent-hover: #28b84d;
-  --apple-accent-subtle: rgba(48, 209, 88, 0.16);
-  --apple-accent-border: rgba(48, 209, 88, 0.35);
+  /* Understated Titanium Silver Accent (Zero aggressive / loud neon colors) */
+  --apple-accent: #E4E4E7;
+  --apple-accent-hover: #FFFFFF;
+  --apple-accent-subtle: rgba(255, 255, 255, 0.1);
+  --apple-accent-border: rgba(255, 255, 255, 0.22);
   
-  --apple-success: #30D158;
-  --apple-warning: #FF9F0A;
-  --apple-danger: #FF453A;
+  --apple-success: #D4D4D8;
+  --apple-warning: #D97706;
+  --apple-danger: #EF4444;
   
   --app-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --app-font-mono: 'Space Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -69,7 +69,7 @@
     margin: 0;
     min-height: 100vh;
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.88) 100%),
+      radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.9) 100%),
       url('/hero.jpg') center top / cover no-repeat fixed;
     color: var(--apple-primary-text);
     font-family: var(--app-font-sans);
@@ -141,7 +141,7 @@
   .match-card,
   .stat,
   .dynamic-island {
-    background: rgba(20, 20, 22, 0.96) !important;
+    background: rgba(24, 24, 27, 0.96) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -227,7 +227,7 @@
 .dynamic-island.is-expanded {
   border-radius: 24px;
   background: var(--apple-glass-elevated);
-  border-color: var(--apple-accent-border);
+  border-color: rgba(255, 255, 255, 0.25);
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
@@ -263,14 +263,14 @@
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: var(--apple-accent);
+  background: #FFFFFF;
   color: #000000;
   display: grid;
   place-items: center;
   font-family: var(--app-font-mono);
   font-size: 12px;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(48, 209, 88, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
 }
 
 /* Role Indicator Capsule */
@@ -291,9 +291,9 @@
   transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .island-role-badge:hover {
-  background: var(--apple-accent-subtle);
-  border-color: var(--apple-accent-border);
-  color: var(--apple-accent);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
 }
 
 /* Segmented Fluid Nav Links */
@@ -328,8 +328,8 @@
 }
 
 .island-link.active {
-  color: var(--apple-primary-text);
-  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.16);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   font-weight: 700;
 }
@@ -343,7 +343,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--apple-accent);
+  background: #FFFFFF;
 }
 
 /* Right Telemetry Capsule */
@@ -376,13 +376,13 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--apple-accent);
-  box-shadow: 0 0 8px rgba(48, 209, 88, 0.6);
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
   animation: pulseDot 2s infinite ease-in-out;
 }
 @keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.3); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
 }
 
 /* Dynamic Shelf Drawer */
@@ -478,7 +478,7 @@
 }
 
 /* =========================================================
-   ALL BOXES USE APPLE FROSTED GLASS SPEC
+   ALL BOXES USE FROSTED GLASS SPEC
    ========================================================= */
 .card,
 .section-card,
@@ -544,8 +544,8 @@
 }
 .stat-note {
   font-size: 11px;
-  color: var(--apple-accent);
-  font-weight: 700;
+  color: var(--apple-secondary-text);
+  font-weight: 600;
   margin-top: 6px;
 }
 
@@ -580,7 +580,7 @@
 }
 
 /* =========================================================
-   FORM & INPUTS (APPLE HIGH-CONTRAST FROSTED INPUTS)
+   FORM & INPUTS (TITANIUM SLATE INPUTS)
    ========================================================= */
 .wizard {
   max-width: 920px;
@@ -605,7 +605,7 @@
   color: var(--apple-primary-text);
 }
 .step.done {
-  color: var(--apple-accent);
+  color: #FFFFFF;
 }
 .step-num {
   border: 1px solid var(--apple-border);
@@ -620,16 +620,16 @@
   color: var(--apple-secondary-text);
 }
 .step.active .step-num {
-  background: var(--apple-accent);
+  background: #FFFFFF;
   color: #000000;
-  border-color: var(--apple-accent);
+  border-color: #FFFFFF;
   font-weight: 800;
-  box-shadow: 0 0 12px rgba(48, 209, 88, 0.4);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
 }
 .step.done .step-num {
-  background: rgba(48, 209, 88, 0.2);
-  color: var(--apple-accent);
-  border-color: rgba(48, 209, 88, 0.45);
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .step-line {
   height: 2px;
@@ -702,13 +702,13 @@
   transition: all 0.22s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .input::placeholder, .textarea::placeholder {
-  color: #6e6e73;
+  color: #71717A;
   opacity: 1;
 }
 .input:focus, .select:focus, .textarea:focus {
-  border-color: var(--apple-accent);
+  border-color: rgba(255, 255, 255, 0.4);
   box-shadow:
-    0 0 0 3.5px rgba(48, 209, 88, 0.25),
+    0 0 0 3px rgba(255, 255, 255, 0.15),
     inset 0 1px 2px rgba(0, 0, 0, 0.3);
   background: rgba(0, 0, 0, 0.7);
 }
@@ -764,7 +764,7 @@
 }
 
 /* =========================================================
-   APPLE FLUID BUTTONS
+   REFINED TITANIUM FLUID BUTTONS
    ========================================================= */
 .button {
   display: inline-flex;
@@ -790,25 +790,25 @@
 }
 
 .button-primary {
-  background: var(--apple-primary-text);
+  background: #FFFFFF;
   color: #000000;
   font-weight: 700;
   box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
 }
 .button-primary:hover {
-  background: #ffffff;
+  background: #F4F4F5;
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 
 .button-accent {
-  background: var(--apple-accent);
+  background: #FFFFFF;
   color: #000000;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(48, 209, 88, 0.35);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
 }
 .button-accent:hover {
-  background: var(--apple-accent-hover);
-  box-shadow: 0 6px 20px rgba(48, 209, 88, 0.45);
+  background: #E4E4E7;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 
 .button-secondary {
@@ -836,8 +836,8 @@
 
 .button-danger {
   color: var(--apple-danger);
-  border-color: rgba(255, 69, 58, 0.35);
-  background: rgba(255, 69, 58, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .button:disabled {
@@ -884,7 +884,7 @@
   font-family: var(--app-font-mono);
   font-size: 20px;
   font-weight: 800;
-  color: var(--apple-accent);
+  color: #FFFFFF;
   text-shadow: none !important;
 }
 .score-caption {
@@ -902,8 +902,8 @@
   font-size: 11px;
   font-weight: 700;
 }
-.pill-green { background: rgba(48, 209, 88, 0.18); color: var(--apple-accent); border: 1px solid rgba(48, 209, 88, 0.35); }
-.pill-amber { background: rgba(255, 159, 10, 0.18); color: var(--apple-warning); border: 1px solid rgba(255, 159, 10, 0.35); }
+.pill-green { background: rgba(255, 255, 255, 0.12); color: #F4F4F5; border: 1px solid rgba(255, 255, 255, 0.2); }
+.pill-amber { background: rgba(217, 119, 6, 0.18); color: var(--apple-warning); border: 1px solid rgba(217, 119, 6, 0.35); }
 .pill-slate { background: rgba(255, 255, 255, 0.08); color: var(--apple-secondary-text); border: 1px solid var(--apple-border); }
 
 /* Match Cards */
@@ -924,15 +924,15 @@
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(48, 209, 88, 0.18);
-  color: var(--apple-accent);
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: 15px;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(48, 209, 88, 0.2);
-  border: 1px solid rgba(48, 209, 88, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .skill-list {
   display: flex;
@@ -962,7 +962,7 @@
   display: grid;
   place-items: center;
   margin: 0 auto 6px;
-  background: conic-gradient(var(--apple-accent) calc(var(--score) * 1%), rgba(255, 255, 255, 0.08) 0);
+  background: conic-gradient(#FFFFFF calc(var(--score) * 1%), rgba(255, 255, 255, 0.1) 0);
   position: relative;
 }
 .score-ring:after {
@@ -979,7 +979,7 @@
   font-family: var(--app-font-mono);
   font-size: 16px;
   font-weight: 800;
-  color: var(--apple-accent);
+  color: #FFFFFF;
   text-shadow: none !important;
 }
 .score-label {
@@ -998,7 +998,7 @@
 
 .progress-line {
   height: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
   border-radius: 999px;
 }
@@ -1006,7 +1006,7 @@
   height: 100%;
   display: block;
   border-radius: 999px;
-  background: var(--apple-accent);
+  background: #FFFFFF;
   transition: width 0.4s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .breakdown {
@@ -1029,7 +1029,7 @@
   font-family: var(--app-font-mono);
   font-size: 11px;
   text-align: right;
-  color: var(--apple-accent);
+  color: #FFFFFF;
   font-weight: 700;
   text-shadow: none !important;
 }
@@ -1047,10 +1047,10 @@
 .tier-section { margin-bottom: 28px; }
 .tier-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .tier-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 8px; }
-.tier-1-tag { background: rgba(48, 209, 88, 0.2); color: #86efac; border: 1px solid rgba(48, 209, 88, 0.35); }
-.tier-2-tag { background: rgba(0, 199, 190, 0.2); color: #5eead4; border: 1px solid rgba(0, 199, 190, 0.35); }
-.tier-3-tag { background: rgba(175, 82, 222, 0.2); color: #da8fff; border: 1px solid rgba(175, 82, 222, 0.35); }
-.tier-4-tag { background: rgba(255, 159, 10, 0.2); color: #ffbf66; border: 1px solid rgba(255, 159, 10, 0.35); }
+.tier-1-tag { background: rgba(255, 255, 255, 0.12); color: #F4F4F5; border: 1px solid rgba(255, 255, 255, 0.25); }
+.tier-2-tag { background: rgba(212, 212, 216, 0.12); color: #E4E4E7; border: 1px solid rgba(212, 212, 216, 0.25); }
+.tier-3-tag { background: rgba(161, 161, 170, 0.12); color: #D4D4D8; border: 1px solid rgba(161, 161, 170, 0.25); }
+.tier-4-tag { background: rgba(217, 119, 6, 0.18); color: #FBBF24; border: 1px solid rgba(217, 119, 6, 0.35); }
 
 .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
 .roadmap-card {
@@ -1071,8 +1071,8 @@
   transform: translateY(-2px);
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
 }
-.roadmap-card.status-mastered { border-color: rgba(48, 209, 88, 0.45); background: rgba(48, 209, 88, 0.12); }
-.roadmap-card.status-in_progress { border-color: rgba(0, 199, 190, 0.45); background: rgba(0, 199, 190, 0.12); }
+.roadmap-card.status-mastered { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.1); }
+.roadmap-card.status-in_progress { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.06); }
 .roadmap-card.status-gap { border-color: var(--apple-border); }
 .roadmap-card.status-locked { border-color: rgba(255, 255, 255, 0.06); background: rgba(0, 0, 0, 0.45); opacity: 0.65; }
 
@@ -1109,10 +1109,10 @@
 }
 .tab-btn.active {
   color: #000000;
-  background: var(--apple-accent);
-  border-color: var(--apple-accent);
+  background: #FFFFFF;
+  border-color: #FFFFFF;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(48, 209, 88, 0.35);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
 }
 
 /* AI Justification Pill */
@@ -1120,9 +1120,9 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(48, 209, 88, 0.18);
-  color: var(--apple-accent);
-  border: 1px solid rgba(48, 209, 88, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
   padding: 2px 8px;
   font-size: 10px;
@@ -1141,15 +1141,15 @@
   cursor: pointer;
 }
 .dropzone:hover, .dropzone.dragover {
-  border-color: var(--apple-accent);
-  background: var(--apple-accent-subtle);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
 }
 .dropzone-icon {
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: var(--apple-accent-subtle);
-  color: var(--apple-accent);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
   display: grid;
   place-items: center;
   margin: 0 auto 14px;
@@ -1168,16 +1168,16 @@
   word-break: break-all;
 }
 .verify-banner {
-  background: rgba(48, 209, 88, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.35);
-  border-left: 1px solid rgba(48, 209, 88, 0.35);
-  border-right: 1px solid rgba(48, 209, 88, 0.35);
-  border-bottom: 1px solid rgba(48, 209, 88, 0.35);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   border-radius: 14px;
   padding: 18px;
   display: flex;
   gap: 12px;
-  color: #bbf7d0;
+  color: #F4F4F5;
   margin-bottom: 20px;
 }
 .verify-banner strong {
@@ -1224,8 +1224,8 @@
   color: var(--apple-primary-text);
 }
 .scarcity-item.alert-scarcity {
-  border-color: rgba(255, 159, 10, 0.5);
-  background: rgba(255, 159, 10, 0.12);
+  border-color: rgba(217, 119, 6, 0.5);
+  background: rgba(217, 119, 6, 0.12);
 }
 
 /* Profile Hero */
@@ -1248,11 +1248,11 @@
   display: grid;
   place-items: center;
   border-radius: 18px;
-  background: var(--apple-accent-subtle);
-  color: var(--apple-accent);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
   font-weight: 800;
   font-size: 22px;
-  border: 1px solid var(--apple-accent-border);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .profile-hero h1 {
   margin: 0;
@@ -1298,7 +1298,7 @@
   text-shadow: none !important;
 }
 .project a {
-  color: var(--apple-accent);
+  color: #FFFFFF;
   font-size: 12px;
   text-decoration: none;
 }
@@ -1356,7 +1356,7 @@
   color: var(--apple-secondary-text);
 }
 .empty svg {
-  color: var(--apple-accent);
+  color: var(--apple-secondary-text);
   margin-bottom: 14px;
 }
 .empty h3 {
@@ -1432,9 +1432,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--apple-accent-subtle);
-  color: var(--apple-accent);
-  border: 1px solid var(--apple-accent-border);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   padding: 6px 18px;
   font-size: 12px;
@@ -1494,7 +1494,7 @@
 
 .landing-role-card:hover {
   transform: translateY(-4px);
-  border-color: var(--apple-accent);
+  border-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
   background: var(--apple-glass-elevated);
 }
@@ -1503,8 +1503,8 @@
   width: 54px;
   height: 54px;
   border-radius: 16px;
-  background: var(--apple-accent-subtle);
-  color: var(--apple-accent);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
   display: grid;
   place-items: center;
   margin-bottom: 22px;
