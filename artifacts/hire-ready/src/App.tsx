@@ -211,7 +211,7 @@ function DynamicIslandNav() {
             title="Click to switch between Recruiter and Job Seeker modes"
             data-testid="button-switch-role"
           >
-            <span className="radar-pulse-dot" style={{ background: isRecruiter ? '#43c1aa' : '#38bdf8' }} />
+            <span className="radar-pulse-dot" style={{ background: isRecruiter ? 'var(--apple-accent)' : 'var(--apple-success)' }} />
             <span>{isRecruiter ? 'Employer' : 'Candidate'}</span>
             <RefreshCw size={10} style={{ opacity: 0.7 }} />
           </button>
@@ -237,7 +237,7 @@ function DynamicIslandNav() {
               <div
                 className="island-pill-btn"
                 title="Job Seeker Readiness Score"
-                style={{ background: 'rgba(67, 193, 170, 0.16)', borderColor: 'rgba(67, 193, 170, 0.35)', color: '#43c1aa' }}
+                style={{ background: 'rgba(48, 209, 88, 0.16)', borderColor: 'rgba(48, 209, 88, 0.35)', color: 'var(--apple-success)' }}
               >
                 <Sparkles size={12} />
                 <span style={{ fontWeight: 800 }}>78%</span>
@@ -249,7 +249,7 @@ function DynamicIslandNav() {
               <div
                 className="island-pill-btn"
                 title="Active Candidate Pool Size"
-                style={{ background: 'rgba(56, 189, 248, 0.14)', borderColor: 'rgba(56, 189, 248, 0.3)', color: '#38bdf8' }}
+                style={{ background: 'rgba(10, 132, 255, 0.16)', borderColor: 'rgba(10, 132, 255, 0.35)', color: 'var(--apple-accent)' }}
               >
                 <Users size={12} />
                 <span style={{ fontWeight: 800 }}>{candidates.length}</span>
@@ -347,7 +347,7 @@ function DynamicIslandNav() {
 
               <button
                 className="button button-ghost"
-                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999, color: '#f87171' }}
+                style={{ fontSize: 11, padding: '5px 10px', borderRadius: 999, color: 'var(--apple-danger)' }}
                 onClick={() => {
                   setRole(null);
                   setLocation('/');
@@ -737,13 +737,13 @@ function SeekerDashboard() {
   return (
     <div className="page">
       {/* Clean Apple Hero Header */}
-      <div className="page-head" style={{ marginBottom: 30 }}>
+      <div className="page-head" style={{ marginBottom: 28 }}>
         <div>
-          <div className="eyebrow" style={{ color: '#34d399', letterSpacing: '0.14em' }}>Job Seeker Workspace</div>
-          <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.04em', margin: '6px 0 8px' }}>
+          <div className="eyebrow" style={{ color: 'var(--apple-accent)', letterSpacing: '0.14em' }}>Candidate Workspace</div>
+          <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--apple-primary-text)', letterSpacing: '-0.04em', margin: '6px 0 8px' }}>
             Welcome back, {learner.name.split(' ')[0]}.
           </h1>
-          <p style={{ color: '#cbd5e1', fontSize: 14, margin: 0, maxWidth: 680, lineHeight: 1.6 }}>
+          <p style={{ color: 'var(--apple-secondary-text)', fontSize: 14, margin: 0, maxWidth: 680, lineHeight: 1.6 }}>
             Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles.
           </p>
         </div>
@@ -762,10 +762,10 @@ function SeekerDashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
           <div style={{ flex: 1, minWidth: 280 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span className="eyebrow" style={{ color: '#38bdf8' }}>Target Career Track</span>
+              <span className="eyebrow" style={{ color: 'var(--apple-accent)' }}>Target Career Track</span>
               <select
                 className="select"
-                style={{ width: 'auto', padding: '4px 12px', fontSize: 12, borderRadius: 8, background: 'rgba(8, 14, 26, 0.75)' }}
+                style={{ width: 'auto', padding: '4px 12px', fontSize: 12, borderRadius: 999, background: 'rgba(0, 0, 0, 0.45)' }}
                 value={selectedTargetRole}
                 onChange={(e) => updateLearner((p) => ({ ...p, targetRole: e.target.value }))}
                 data-testid="select-dashboard-target-role"
@@ -777,10 +777,10 @@ function SeekerDashboard() {
                 ))}
               </select>
             </div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, color: '#ffffff', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--apple-primary-text)', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
               {selectedTargetRole}
             </h2>
-            <p style={{ color: '#94a3b8', fontSize: 13, margin: '0 0 14px' }}>
+            <p style={{ color: 'var(--apple-secondary-text)', fontSize: 13, margin: '0 0 14px' }}>
               {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
             </p>
             <div className="progress-line" style={{ height: 6, maxWidth: 380 }}>
@@ -790,12 +790,12 @@ function SeekerDashboard() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 40, fontWeight: 800, color: 'hsl(var(--accent))', lineHeight: 1 }}>
+              <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 40, fontWeight: 800, color: 'var(--apple-success)', lineHeight: 1 }}>
                 {roadmap.overallReadiness}%
               </div>
-              <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+              <div style={{ fontSize: 11, color: 'var(--apple-secondary-text)', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
             </div>
-            <Link href="/seeker/roadmap" className="button button-accent" style={{ padding: '12px 20px' }}>
+            <Link href="/seeker/roadmap" className="button button-accent" style={{ padding: '10px 20px' }}>
               Open Roadmap <ArrowRight size={14} />
             </Link>
           </div>
@@ -809,25 +809,25 @@ function SeekerDashboard() {
           <section className="card section-card">
             <div className="section-title">
               <h2>Career Progression Tools</h2>
-              <Sparkles size={16} color="#43c1aa" />
+              <Sparkles size={16} color="var(--apple-accent)" />
             </div>
             <div style={{ display: 'grid', gap: 14 }}>
-              <div className="goal-card" style={{ padding: 16, background: 'rgba(8, 14, 26, 0.5)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <div className="card" style={{ padding: 18, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
                 <div>
-                  <h3 style={{ fontSize: 14, color: '#ffffff', margin: '0 0 4px' }}>Explore AI Career Roadmap</h3>
-                  <p style={{ color: '#94a3b8', fontSize: 12, margin: 0 }}>View sequenced milestone sprints and unblock higher-tier competencies.</p>
+                  <h3 style={{ fontSize: 14, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Explore AI Career Roadmap</h3>
+                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12, margin: 0 }}>View sequenced milestone sprints and unblock higher-tier competencies.</p>
                 </div>
-                <Link href="/seeker/roadmap" className="button button-primary">
+                <Link href="/seeker/roadmap" className="button button-primary" style={{ flexShrink: 0 }}>
                   Open Roadmap <ArrowRight size={14} />
                 </Link>
               </div>
 
-              <div className="goal-card" style={{ padding: 16, background: 'rgba(8, 14, 26, 0.5)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <div className="card" style={{ padding: 18, background: 'rgba(0, 0, 0, 0.35)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
                 <div>
-                  <h3 style={{ fontSize: 14, color: '#ffffff', margin: '0 0 4px' }}>Upload Certifications & Projects</h3>
-                  <p style={{ color: '#94a3b8', fontSize: 12, margin: 0 }}>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
+                  <h3 style={{ fontSize: 14, color: 'var(--apple-primary-text)', margin: '0 0 4px', fontWeight: 700 }}>Upload Certifications & Projects</h3>
+                  <p style={{ color: 'var(--apple-secondary-text)', fontSize: 12, margin: 0 }}>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
                 </div>
-                <Link href="/seeker/profile/upload" className="button button-secondary">
+                <Link href="/seeker/profile/upload" className="button button-secondary" style={{ flexShrink: 0 }}>
                   Upload Proof <ArrowRight size={14} />
                 </Link>
               </div>
@@ -844,15 +844,15 @@ function SeekerDashboard() {
             </div>
             <div className="stat-grid" style={{ margin: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
               <div>
-                <div className="eyebrow" style={{ color: '#94a3b8' }}>Skills</div>
+                <div className="eyebrow" style={{ color: 'var(--apple-secondary-text)' }}>Skills</div>
                 <div className="stat-value">{learner.skills.length}</div>
               </div>
               <div>
-                <div className="eyebrow" style={{ color: '#43c1aa' }}>Verified</div>
-                <div className="stat-value" style={{ color: '#43c1aa' }}>{verifiedCount}</div>
+                <div className="eyebrow" style={{ color: 'var(--apple-success)' }}>Verified</div>
+                <div className="stat-value" style={{ color: 'var(--apple-success)' }}>{verifiedCount}</div>
               </div>
               <div>
-                <div className="eyebrow" style={{ color: '#38bdf8' }}>Projects</div>
+                <div className="eyebrow" style={{ color: 'var(--apple-accent)' }}>Projects</div>
                 <div className="stat-value">{learner.projects.length}</div>
               </div>
             </div>
@@ -863,20 +863,20 @@ function SeekerDashboard() {
         <section className="card section-card">
           <div className="section-title">
             <h2>Recommended Open Roles ({recommendedJobs.length})</h2>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>Transparent scoring</span>
+            <span style={{ color: 'var(--apple-secondary-text)', fontSize: 11 }}>Transparent scoring</span>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             {recommendedJobs.slice(0, 4).map(({ job, score }) => (
               <div key={job.id} className="job-row" style={{ padding: '14px 0' }}>
                 <div>
-                  <strong style={{ fontSize: 13.5, color: '#ffffff' }}>{job.title}</strong>
-                  <div className="job-meta" style={{ color: '#94a3b8' }}>
+                  <strong style={{ fontSize: 13.5, color: 'var(--apple-primary-text)' }}>{job.title}</strong>
+                  <div className="job-meta" style={{ color: 'var(--apple-secondary-text)' }}>
                     {job.company} · {job.location} · {job.workMode}
                   </div>
                 </div>
                 <div className="row-right">
-                  <div className="score" style={{ color: '#43c1aa' }}>{score.total}%</div>
-                  <div className="score-caption" style={{ color: '#94a3b8' }}>
+                  <div className="score" style={{ color: 'var(--apple-success)' }}>{score.total}%</div>
+                  <div className="score-caption" style={{ color: 'var(--apple-secondary-text)' }}>
                     {(score.aiSemanticBonus ?? 0) > 0 ? `+${score.aiSemanticBonus} AI` : 'match'}
                   </div>
                 </div>
@@ -1101,33 +1101,33 @@ function SeekerUploadPage() {
         }
       />
 
-      {/* Real GitHub Sync Box */}
-      <div className="card" style={{ padding: '18px 24px', marginBottom: 20, background: 'linear-gradient(135deg, #0d1117 0%, #161b22 100%)', color: '#f0f6fc', border: '1px solid #30363d', borderRadius: 12 }}>
+      {/* Real GitHub Sync Box (Apple Frosted Glass) */}
+      <div className="card" style={{ padding: '18px 24px', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <img
               src={learner.avatarUrl || `https://github.com/${learner.githubUsername || 'vasudev196006'}.png`}
               alt={learner.name}
-              style={{ width: 50, height: 50, borderRadius: '50%', border: '2px solid #238636' }}
+              style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid var(--apple-success)' }}
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'https://github.com/github.png';
               }}
             />
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Github size={18} color="#58a6ff" />
-                <h3 style={{ margin: 0, fontSize: 16, color: '#f0f6fc' }}>Real GitHub Profile Integration</h3>
+                <Github size={18} color="var(--apple-accent)" />
+                <h3 style={{ margin: 0, fontSize: 16, color: 'var(--apple-primary-text)', fontWeight: 700 }}>Real GitHub Profile Integration</h3>
                 <span className="pill pill-green" style={{ fontSize: 10 }}>Live API Connected</span>
               </div>
-              <div style={{ fontSize: 12, color: '#8b949e', marginTop: 3 }}>
-                Connected as <strong style={{ color: '#58a6ff' }}>@{learner.githubUsername || 'alexrivera-dev'}</strong> · {learner.publicRepos ?? 14} Public Repositories · {learner.followers ?? 28} Followers
+              <div style={{ fontSize: 12, color: 'var(--apple-secondary-text)', marginTop: 3 }}>
+                Connected as <strong style={{ color: 'var(--apple-accent)' }}>@{learner.githubUsername || 'alexrivera-dev'}</strong> · {learner.publicRepos ?? 14} Public Repositories · {learner.followers ?? 28} Followers
               </div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <input
               className="input"
-              style={{ background: '#0d1117', color: '#f0f6fc', borderColor: '#30363d', fontSize: 12, padding: '7px 12px', width: 180 }}
+              style={{ fontSize: 12, padding: '7px 12px', width: 180 }}
               value={githubSyncUser}
               placeholder="e.g. your-github-username"
               onChange={(e) => setGithubSyncUser(e.target.value)}
@@ -1146,7 +1146,7 @@ function SeekerUploadPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button button-secondary"
-                style={{ fontSize: 12, padding: '7px 12px', background: '#21262d', color: '#c9d1d9', borderColor: '#30363d' }}
+                style={{ fontSize: 12, padding: '7px 12px' }}
               >
                 <ExternalLink size={13} /> View on GitHub
               </a>
