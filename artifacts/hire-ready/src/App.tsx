@@ -736,104 +736,123 @@ function SeekerDashboard() {
 
   return (
     <div className="page">
-      <SectionHeader
-        eyebrow="Job Seeker Workspace"
-        title={`Welcome back, ${learner.name.split(' ')[0]}.`}
-        description="Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles."
-        action={
-          <div style={{ display: 'flex', gap: 10 }}>
-            <Link href="/seeker/profile/upload" className="button button-secondary">
-              <UploadCloud size={14} /> Upload Evidence
-            </Link>
-            <Link href="/seeker/roadmap" className="button button-accent">
-              <Target size={14} /> AI Career Roadmap
-            </Link>
-          </div>
-        }
-      />
-
-      {/* Target Role Readiness Hero */}
-      <div className="learner-hero">
+      {/* Clean Apple Hero Header */}
+      <div className="page-head" style={{ marginBottom: 30 }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="eyebrow" style={{ color: '#a9bac9' }}>Target Career Track</div>
-            <select
-              style={{
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                color: 'white',
-                padding: '3px 8px',
-                borderRadius: 6,
-                fontSize: 12,
-              }}
-              value={selectedTargetRole}
-              onChange={(e) => updateLearner((p) => ({ ...p, targetRole: e.target.value }))}
-            >
-              {availableTargetRoles.map((role) => (
-                <option key={role} value={role} style={{ color: '#1e293b' }}>
-                  {role}
-                </option>
-              ))}
-            </select>
-          </div>
-          <h1>{selectedTargetRole}</h1>
-          <p>
-            {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
+          <div className="eyebrow" style={{ color: '#34d399', letterSpacing: '0.14em' }}>Job Seeker Workspace</div>
+          <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.04em', margin: '6px 0 8px' }}>
+            Welcome back, {learner.name.split(' ')[0]}.
+          </h1>
+          <p style={{ color: '#cbd5e1', fontSize: 14, margin: 0, maxWidth: 680, lineHeight: 1.6 }}>
+            Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles.
           </p>
         </div>
-        <div className="hero-score">
-          <strong>{roadmap.overallReadiness}%</strong>
-          <span>Role Readiness</span>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link href="/seeker/profile/upload" className="button button-secondary">
+            <UploadCloud size={14} /> Upload Evidence
+          </Link>
+          <Link href="/seeker/roadmap" className="button button-accent">
+            <Target size={14} /> AI Career Roadmap
+          </Link>
         </div>
       </div>
 
+      {/* 1. Target Career Track & Role Readiness (Apple Frosted Glass Card) */}
+      <div className="card section-card" style={{ marginBottom: 24 }} data-testid="card-target-track">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+          <div style={{ flex: 1, minWidth: 280 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <span className="eyebrow" style={{ color: '#38bdf8' }}>Target Career Track</span>
+              <select
+                className="select"
+                style={{ width: 'auto', padding: '4px 12px', fontSize: 12, borderRadius: 8, background: 'rgba(8, 14, 26, 0.75)' }}
+                value={selectedTargetRole}
+                onChange={(e) => updateLearner((p) => ({ ...p, targetRole: e.target.value }))}
+                data-testid="select-dashboard-target-role"
+              >
+                {availableTargetRoles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <h2 style={{ fontSize: 24, fontWeight: 800, color: '#ffffff', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+              {selectedTargetRole}
+            </h2>
+            <p style={{ color: '#94a3b8', fontSize: 13, margin: '0 0 14px' }}>
+              {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
+            </p>
+            <div className="progress-line" style={{ height: 6, maxWidth: 380 }}>
+              <span style={{ width: `${roadmap.overallReadiness}%` }} />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 40, fontWeight: 800, color: 'hsl(var(--accent))', lineHeight: 1 }}>
+                {roadmap.overallReadiness}%
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+            </div>
+            <Link href="/seeker/roadmap" className="button button-accent" style={{ padding: '12px 20px' }}>
+              Open Roadmap <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Sorted Grid for Tools, Evidence & Recommendations */}
       <div className="grid-2">
-        <div>
-          {/* Quick Actions */}
+        <div style={{ display: 'grid', gap: 20 }}>
+          {/* Quick Progression Tools */}
           <section className="card section-card">
             <div className="section-title">
               <h2>Career Progression Tools</h2>
-              <Sparkles size={15} color="#28776c" />
+              <Sparkles size={16} color="#43c1aa" />
             </div>
-            <div className="goal-card" style={{ padding: 0, marginBottom: 12 }}>
-              <div>
-                <h3>Explore AI Career Roadmap</h3>
-                <p>View sequenced milestone sprints and unblock higher-tier competencies.</p>
+            <div style={{ display: 'grid', gap: 14 }}>
+              <div className="goal-card" style={{ padding: 16, background: 'rgba(8, 14, 26, 0.5)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <h3 style={{ fontSize: 14, color: '#ffffff', margin: '0 0 4px' }}>Explore AI Career Roadmap</h3>
+                  <p style={{ color: '#94a3b8', fontSize: 12, margin: 0 }}>View sequenced milestone sprints and unblock higher-tier competencies.</p>
+                </div>
+                <Link href="/seeker/roadmap" className="button button-primary">
+                  Open Roadmap <ArrowRight size={14} />
+                </Link>
               </div>
-              <Link href="/seeker/roadmap" className="button button-primary">
-                Open Roadmap <ArrowRight size={14} />
-              </Link>
-            </div>
-            <div className="goal-card" style={{ padding: 0 }}>
-              <div>
-                <h3>Upload Certifications & Projects</h3>
-                <p>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
+
+              <div className="goal-card" style={{ padding: 16, background: 'rgba(8, 14, 26, 0.5)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <h3 style={{ fontSize: 14, color: '#ffffff', margin: '0 0 4px' }}>Upload Certifications & Projects</h3>
+                  <p style={{ color: '#94a3b8', fontSize: 12, margin: 0 }}>Add cryptographic credentials or GitHub repos to boost skill verification confidence.</p>
+                </div>
+                <Link href="/seeker/profile/upload" className="button button-secondary">
+                  Upload Proof <ArrowRight size={14} />
+                </Link>
               </div>
-              <Link href="/seeker/profile/upload" className="button button-secondary">
-                Upload Proof <ArrowRight size={14} />
-              </Link>
             </div>
           </section>
 
           {/* Evidence Stats */}
-          <section className="card section-card" style={{ marginTop: 18 }}>
+          <section className="card section-card">
             <div className="section-title">
               <h2>Evidence at a Glance</h2>
-              <Link href="/seeker/credentials" className="button button-ghost">
-                View Credentials
+              <Link href="/seeker/credentials" className="button button-ghost" style={{ fontSize: 11 }}>
+                View Credentials <ChevronRight size={12} />
               </Link>
             </div>
             <div className="stat-grid" style={{ margin: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
               <div>
-                <div className="eyebrow">Skills</div>
+                <div className="eyebrow" style={{ color: '#94a3b8' }}>Skills</div>
                 <div className="stat-value">{learner.skills.length}</div>
               </div>
               <div>
-                <div className="eyebrow">Verified</div>
-                <div className="stat-value" style={{ color: '#28776c' }}>{verifiedCount}</div>
+                <div className="eyebrow" style={{ color: '#43c1aa' }}>Verified</div>
+                <div className="stat-value" style={{ color: '#43c1aa' }}>{verifiedCount}</div>
               </div>
               <div>
-                <div className="eyebrow">Projects</div>
+                <div className="eyebrow" style={{ color: '#38bdf8' }}>Projects</div>
                 <div className="stat-value">{learner.projects.length}</div>
               </div>
             </div>
@@ -844,20 +863,20 @@ function SeekerDashboard() {
         <section className="card section-card">
           <div className="section-title">
             <h2>Recommended Open Roles ({recommendedJobs.length})</h2>
-            <span>Transparent scoring</span>
+            <span style={{ color: '#94a3b8', fontSize: 11 }}>Transparent scoring</span>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             {recommendedJobs.slice(0, 4).map(({ job, score }) => (
-              <div key={job.id} className="job-row">
+              <div key={job.id} className="job-row" style={{ padding: '14px 0' }}>
                 <div>
-                  <strong style={{ fontSize: 13, color: 'hsl(var(--foreground))' }}>{job.title}</strong>
-                  <div className="job-meta">
+                  <strong style={{ fontSize: 13.5, color: '#ffffff' }}>{job.title}</strong>
+                  <div className="job-meta" style={{ color: '#94a3b8' }}>
                     {job.company} · {job.location} · {job.workMode}
                   </div>
                 </div>
                 <div className="row-right">
-                  <div className="score">{score.total}%</div>
-                  <div className="score-caption">
+                  <div className="score" style={{ color: '#43c1aa' }}>{score.total}%</div>
+                  <div className="score-caption" style={{ color: '#94a3b8' }}>
                     {(score.aiSemanticBonus ?? 0) > 0 ? `+${score.aiSemanticBonus} AI` : 'match'}
                   </div>
                 </div>
@@ -867,14 +886,14 @@ function SeekerDashboard() {
           <Link
             href="/seeker/roadmap"
             className="button button-secondary"
-            style={{ marginTop: 20, width: '100%' }}
+            style={{ marginTop: 22, width: '100%', justifyContent: 'center' }}
           >
             Level Up with AI Roadmap <ArrowRight size={14} />
           </Link>
         </section>
       </div>
 
-      {/* Real Live Adzuna Market Jobs Explorer */}
+      {/* 3. Real Live Adzuna Market Jobs Explorer */}
       <AdzunaLiveJobsExplorer candidate={learner} />
     </div>
   );
@@ -1538,18 +1557,22 @@ function SeekerRoadmapPage() {
         }
       />
 
-      {/* Hero Overview Bar */}
-      <div className="learner-hero">
-        <div>
-          <div className="eyebrow" style={{ color: '#a9bac9' }}>Target Track</div>
-          <h1>{selectedRole}</h1>
-          <p>
-            {roadmap.masteredCount} of {roadmap.totalSkillsCount} competencies verified on your profile.
-          </p>
-        </div>
-        <div className="hero-score">
-          <strong>{roadmap.overallReadiness}%</strong>
-          <span>Role Readiness</span>
+      {/* Target Track Overview Box (Apple Frosted Glass) */}
+      <div className="card section-card" style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+          <div>
+            <div className="eyebrow" style={{ color: '#38bdf8', marginBottom: 6 }}>Target Track</div>
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', margin: '0 0 6px', letterSpacing: '-0.03em' }}>{selectedRole}</h1>
+            <p style={{ color: '#94a3b8', fontSize: 13, margin: 0 }}>
+              {roadmap.masteredCount} of {roadmap.totalSkillsCount} core competencies verified on your profile.
+            </p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontFamily: 'var(--app-font-mono)', fontSize: 44, fontWeight: 800, color: 'hsl(var(--accent))', lineHeight: 1 }}>
+              {roadmap.overallReadiness}%
+            </div>
+            <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, marginTop: 4 }}>Role Readiness</div>
+          </div>
         </div>
       </div>
 
@@ -1557,12 +1580,12 @@ function SeekerRoadmapPage() {
       <div className="card section-card" style={{ marginBottom: 24, borderLeft: '4px solid hsl(var(--accent))' }}>
         <div className="section-title">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Bot size={18} color="#28776c" />
+            <Bot size={18} color="#43c1aa" />
             <h2>AI Learning Advisor Insight</h2>
           </div>
           <span className="pill pill-green">Deterministic Graph + LLM Layer</span>
         </div>
-        <p className="bio" style={{ fontSize: 14, color: '#2d3748', lineHeight: 1.6 }}>
+        <p className="bio" style={{ fontSize: 13.5, color: '#cbd5e1', lineHeight: 1.65 }}>
           {roadmap.narrative}
         </p>
       </div>
