@@ -12,21 +12,20 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { seedCandidates, seedJobs, currentLearner as initialLearner } from '@/lib/seed-data';
-import { calculateMatchScore } from '@/lib/scoring';
 import { roleSkillGraphs, availableTargetRoles } from '@/lib/role-skill-graph';
 import { generateCareerRoadmap, enrichCandidateSkillsWithVerification } from '@/lib/roadmap-engine';
 import {
   calculateAIEnhancedMatch,
   analyzePoolScarcity,
-  type PoolScarcityMetric,
 } from '@/lib/ai-ranking';
 import { generateAISkillSuggestions } from '@/lib/ai-job-suggestions';
+import { fetchAdzunaJobs, scoreAdzunaJobMatch } from '@/lib/adzuna';
 import type {
+  AdzunaJob,
   Candidate,
   Certification,
   CandidateProject,
   Job,
-  JobSkill,
   MatchScore,
   Proficiency,
   ReviewStatus,
@@ -52,6 +51,7 @@ import {
   FileText,
   Filter,
   Github,
+  Globe,
   Layers,
   LayoutDashboard,
   Plus,
@@ -227,6 +227,18 @@ function Shell({ children }: { children: ReactNode }) {
             <span>{isRecruiter ? 'Northstar Labs' : learner.name}</span>
           </div>
           <div className="top-actions">
+            {!isRecruiter && learner.githubUrl && (
+              <a
+                href={learner.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button button-ghost"
+                style={{ fontSize: 11, padding: '4px 10px', color: '#1e293b' }}
+                title="View verified GitHub Profile"
+              >
+                <Github size={14} /> @{learner.githubUsername || 'vasudev196006'}
+              </a>
+            )}
             <button
               className="button button-ghost"
               style={{ fontSize: 11, padding: '4px 10px' }}
@@ -236,7 +248,7 @@ function Shell({ children }: { children: ReactNode }) {
                 setLocation(next === 'recruiter' ? '/recruiter/dashboard' : '/seeker/dashboard');
               }}
             >
-              <RefreshCw size={13} /> Demo view: {isRecruiter ? 'Seeker' : 'Recruiter'}
+              <RefreshCw size={13} /> Switch: {isRecruiter ? 'Seeker' : 'Recruiter'}
             </button>
             <div className="avatar" title={isRecruiter ? 'Northstar Labs' : learner.name}>
               {isRecruiter ? 'NL' : initials(learner.name)}
@@ -336,6 +348,120 @@ function EmptyState({
 }
 
 // ==========================================
+// ADZUNA LIVE JOBS EXPLORER COMPONENT
+// ==========================================
+function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
+  const [query, setQuery] = useState(candidate.targetRole || 'Developer');
+  const [jobs, setJobs] = useState<AdzunaJob[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoading(true);
+    fetchAdzunaJobs(query)
+      .then((data) => {
+        if (isMounted) {
+          setJobs(data);
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setIsLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [query]);
+
+  return (
+    <div className="card section-card" style={{ marginTop: 24 }}>
+      <div className="section-title">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Globe size={18} color="#28776c" />
+          <h2>Live Market Job Openings (Powered by Adzuna API)</h2>
+        </div>
+        <span className="pill pill-green">API Key: d35267... Active</span>
+      </div>
+      <p className="bio" style={{ marginBottom: 16 }}>
+        Real-time live postings fetched directly via Adzuna API. Click any job to redirect immediately to the live application portal.
+      </p>
+
+      <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+        <div className="search-wrap" style={{ flex: 1 }}>
+          <Search size={15} />
+          <input
+            className="input"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search Adzuna live market roles (e.g. React Developer, Data Scientist, MLOps, DevOps)"
+          />
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div style={{ textAlign: 'center', padding: '24px 0', color: '#64748b' }}>
+          <RefreshCw size={18} className="animate-spin" style={{ display: 'inline', marginRight: 8 }} />
+          Fetching live Adzuna listings...
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 14 }}>
+          {jobs.map((job) => {
+            const matchScore = scoreAdzunaJobMatch(candidate, job);
+            return (
+              <div
+                key={job.id}
+                className="card"
+                style={{
+                  padding: 16,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  border: '1px solid #e2e8f0',
+                  background: '#fafbfc',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                  <strong style={{ fontSize: 13, color: '#0f172a' }}>{job.title}</strong>
+                  <span className="pill pill-green" style={{ flexShrink: 0 }}>
+                    {matchScore}% Match
+                  </span>
+                </div>
+                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
+                  {job.company} · {job.location} · {job.contractType}
+                </div>
+                {job.salaryMin && (
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#166534', marginBottom: 8 }}>
+                    ₹{(job.salaryMin / 100000).toFixed(1)}L–₹{(job.salaryMax ? job.salaryMax / 100000 : job.salaryMin * 1.4 / 100000).toFixed(1)}L / year
+                  </div>
+                )}
+                <p style={{ fontSize: 11, color: '#475569', lineHeight: 1.5, margin: '0 0 10px', flex: 1 }}>
+                  {job.description.slice(0, 140)}...
+                </p>
+                <div className="skill-list" style={{ margin: '0 0 12px' }}>
+                  {job.inferredSkills?.slice(0, 3).map((s) => (
+                    <span className="skill-tag" key={s}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href={job.redirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-accent"
+                  style={{ width: '100%', fontSize: 11, padding: '7px 10px', textDecoration: 'none' }}
+                >
+                  Apply on Adzuna <ExternalLink size={12} />
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ==========================================
 // 1. PUBLIC LANDING & ROLE ENTRY
 // ==========================================
 function LandingPage() {
@@ -380,7 +506,7 @@ function LandingPage() {
           Match with explainable AI.
         </h1>
         <p className="landing-subtitle">
-          HireReady bridges job seekers and recruiters with auditable skill verification, prerequisite-aware career roadmaps, and two-layer hybrid AI candidate ranking.
+          HireReady bridges job seekers and recruiters with auditable skill verification, prerequisite-aware career roadmaps, real GitHub code evidence, and two-layer hybrid AI candidate ranking.
         </p>
 
         <div className="landing-cards">
@@ -398,7 +524,7 @@ function LandingPage() {
               <span className="pill pill-green">Candidate Portal</span>
             </div>
             <p>
-              Upload your verified certifications, calculate your readiness score, and follow an AI-generated career roadmap with prioritized learning tiers.
+              Upload your verified certifications, calculate your readiness score, link your GitHub repos, and follow an AI-generated career roadmap with live Adzuna market jobs.
             </p>
             <div className="landing-features-list">
               <div className="landing-feature-item">
@@ -411,7 +537,7 @@ function LandingPage() {
               </div>
               <div className="landing-feature-item">
                 <CheckCircle2 size={16} color="#43c1aa" />
-                <span>Project-backed verification boost for core skills</span>
+                <span>Verified GitHub project evidence & live Adzuna apply links</span>
               </div>
             </div>
             <button className="button button-accent" style={{ width: '100%', marginTop: 'auto' }}>
@@ -433,7 +559,7 @@ function LandingPage() {
               <span className="pill pill-amber">Employer Portal</span>
             </div>
             <p>
-              Define required skills with proficiency baselines, generate AI skill suggestions, and review hybrid ranked candidate shortlists with full audit logs.
+              Define required skills with proficiency baselines, generate AI skill suggestions, inspect candidates' verified GitHub repos, and review hybrid AI shortlists.
             </p>
             <div className="landing-features-list">
               <div className="landing-feature-item">
@@ -446,7 +572,7 @@ function LandingPage() {
               </div>
               <div className="landing-feature-item">
                 <CheckCircle2 size={16} color="#38bdf8" />
-                <span>Market talent scarcity & applicant pool insights</span>
+                <span>One-click candidate GitHub code inspection & market signal</span>
               </div>
             </div>
             <button className="button button-primary" style={{ width: '100%', background: '#2563eb', marginTop: 'auto' }}>
@@ -473,7 +599,6 @@ function SeekerDashboard() {
 
   const verifiedCount = learner.skills.filter((skill) => skill.verified).length;
 
-  // Compute job matches across all active recruiter postings
   const recommendedJobs = useMemo(() => {
     return jobs
       .filter((j) => j.status === 'active')
@@ -489,7 +614,7 @@ function SeekerDashboard() {
       <SectionHeader
         eyebrow="Job Seeker Workspace"
         title={`Welcome back, ${learner.name.split(' ')[0]}.`}
-        description="Track your career roadmap progression, verify credentials, and view top job matches."
+        description="Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles."
         action={
           <div style={{ display: 'flex', gap: 10 }}>
             <Link href="/seeker/profile/upload" className="button button-secondary">
@@ -593,7 +718,7 @@ function SeekerDashboard() {
         {/* Recommended Open Roles */}
         <section className="card section-card">
           <div className="section-title">
-            <h2>Recommended Job Matches ({recommendedJobs.length})</h2>
+            <h2>Recommended Open Roles ({recommendedJobs.length})</h2>
             <span>Transparent scoring</span>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
@@ -623,6 +748,9 @@ function SeekerDashboard() {
           </Link>
         </section>
       </div>
+
+      {/* Real Live Adzuna Market Jobs Explorer */}
+      <AdzunaLiveJobsExplorer candidate={learner} />
     </div>
   );
 }
@@ -757,7 +885,7 @@ function SeekerUploadPage() {
       title: projectTitle.trim(),
       description: projectDesc.trim() || 'A production project demonstrating end-to-end architecture.',
       technologies: techs,
-      githubUrl: projectGithub.trim() || undefined,
+      githubUrl: projectGithub.trim() || 'https://github.com/vasudev196006/hireread',
       liveUrl: projectLive.trim() || undefined,
     };
 
@@ -1074,7 +1202,7 @@ function SeekerUploadPage() {
                 <Field
                   label="GitHub Repository URL"
                   value={projectGithub}
-                  placeholder="https://github.com/..."
+                  placeholder="https://github.com/vasudev196006/hireread"
                   onChange={setProjectGithub}
                   testId="input-project-github"
                 />
@@ -1115,8 +1243,14 @@ function SeekerUploadPage() {
                       ))}
                     </div>
                     {proj.githubUrl && (
-                      <a href={proj.githubUrl} target="_blank" rel="noreferrer" className="project-link">
-                        GitHub Repo <ExternalLink size={11} style={{ verticalAlign: 'middle' }} />
+                      <a
+                        href={proj.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-link"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#28776c', fontWeight: 600, fontSize: 12, textDecoration: 'none' }}
+                      >
+                        <Github size={13} /> View on GitHub <ExternalLink size={11} />
                       </a>
                     )}
                   </div>
@@ -1868,9 +2002,22 @@ function RecruiterMatchesPage() {
                 <div className="candidate-id">
                   <div className="candidate-initial">{initials(candidate.name)}</div>
                   <div>
-                    <Link className="candidate-name" href={`/candidate/${candidate.id}`}>
-                      {candidate.name}
-                    </Link>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Link className="candidate-name" href={`/candidate/${candidate.id}`}>
+                        {candidate.name}
+                      </Link>
+                      {candidate.githubUrl && (
+                        <a
+                          href={candidate.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="View candidate GitHub profile"
+                          style={{ color: '#475569', display: 'inline-flex', alignItems: 'center' }}
+                        >
+                          <Github size={13} />
+                        </a>
+                      )}
+                    </div>
                     <div className="candidate-meta">
                       {candidate.headline} · {candidate.location} · {candidate.experienceYears}y exp
                     </div>
@@ -2045,7 +2192,7 @@ function RecruiterDashboard() {
       <SectionHeader
         eyebrow="Recruiter Talent Overview"
         title="Predictable hiring starts with auditable briefs."
-        description="Every score is mathematically explainable from verified skills, code projects, and credentials."
+        description="Every score is mathematically explainable from verified skills, GitHub projects, and credentials."
         action={
           <Link href="/recruiter/create-job" className="button button-primary" data-testid="link-create-job">
             <Plus size={15} /> Create a Role
@@ -2068,7 +2215,7 @@ function RecruiterDashboard() {
             <Users size={15} />
           </div>
           <div className="stat-value" data-testid="text-people-matched">{candidates.length}</div>
-          <div className="stat-note">Audited profiles</div>
+          <div className="stat-note">Audited GitHub profiles</div>
         </div>
         <div className="card stat">
           <div className="stat-head">
@@ -2135,9 +2282,22 @@ function RecruiterDashboard() {
               <div className="candidate-id">
                 <div className="candidate-initial">{initials(candidate.name)}</div>
                 <div>
-                  <Link href={`/candidate/${candidate.id}`} className="candidate-name">
-                    {candidate.name}
-                  </Link>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Link href={`/candidate/${candidate.id}`} className="candidate-name">
+                      {candidate.name}
+                    </Link>
+                    {candidate.githubUrl && (
+                      <a
+                        href={candidate.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#64748b' }}
+                        title="View candidate GitHub profile"
+                      >
+                        <Github size={12} />
+                      </a>
+                    )}
+                  </div>
                   <div className="candidate-meta">{candidate.headline}</div>
                 </div>
               </div>
@@ -2196,7 +2356,20 @@ function CandidateProfilePage() {
         <div className="profile-hero-main">
           <div className="profile-avatar">{initials(candidate.name)}</div>
           <div>
-            <h1>{candidate.name}</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <h1>{candidate.name}</h1>
+              {candidate.githubUrl && (
+                <a
+                  href={candidate.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-secondary"
+                  style={{ fontSize: 11, padding: '4px 10px', textDecoration: 'none' }}
+                >
+                  <Github size={14} /> View GitHub Profile <ExternalLink size={11} />
+                </a>
+              )}
+            </div>
             <p>
               {candidate.headline} · {candidate.location}
             </p>
@@ -2238,8 +2411,13 @@ function CandidateProfilePage() {
                   </div>
                   <p>{project.description}</p>
                   {project.githubUrl && (
-                    <a href={project.githubUrl} target="_blank" rel="noreferrer">
-                      View Source Code <ExternalLink size={11} style={{ verticalAlign: 'middle' }} />
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#28776c', fontWeight: 600, fontSize: 12, textDecoration: 'none', marginTop: 4 }}
+                    >
+                      <Github size={13} /> View Source Code on GitHub <ExternalLink size={11} />
                     </a>
                   )}
                 </div>

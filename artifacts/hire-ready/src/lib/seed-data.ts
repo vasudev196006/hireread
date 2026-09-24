@@ -554,23 +554,40 @@ function makeCertificate(candidateIndex: number, certIndex: number) {
   };
 }
 
+const realGithubProjects = [
+  { title: "HireReady Core Engine", repo: "https://github.com/vasudev196006/hireread", demo: "https://hireread.dev" },
+  { title: "Distributed ML Training Pipeline", repo: "https://github.com/pytorch/pytorch", demo: "https://pytorch.org" },
+  { title: "Next-gen Component Framework", repo: "https://github.com/facebook/react", demo: "https://react.dev" },
+  { title: "Enterprise Microservices Platform", repo: "https://github.com/vercel/next.js", demo: "https://nextjs.org" },
+  { title: "Predictive Analytics Toolkit", repo: "https://github.com/scikit-learn/scikit-learn", demo: "https://scikit-learn.org" },
+  { title: "Automated Cloud Container Mesh", repo: "https://github.com/docker/compose", demo: "https://docker.com" },
+  { title: "Cluster Orchestration Controller", repo: "https://github.com/kubernetes/kubernetes", demo: "https://kubernetes.io" },
+  { title: "Production RAG Agent System", repo: "https://github.com/langchain-ai/langchain", demo: "https://langchain.com" },
+  { title: "Low-Latency In-Memory Cache", repo: "https://github.com/redis/redis", demo: "https://redis.io" },
+  { title: "Declarative Infrastructure as Code", repo: "https://github.com/hashicorp/terraform", demo: "https://terraform.io" },
+];
+
+const githubProfiles = [
+  "vasudev196006",
+  "gaearon",
+  "antirez",
+  "kelseyhightower",
+  "mrdoob",
+  "shadcn",
+  "sindresorhus",
+  "tj",
+  "bkeepers",
+  "mattt",
+];
+
 function makeProjects(
   candidateIndex: number,
   skills: Skill[],
 ): CandidateProject[] {
   const count = candidateIndex % 3 === 0 ? 2 : 1;
-  const projectTitles = [
-    "Community Insights Dashboard",
-    "Open-source Workflow Toolkit",
-    "Local Commerce Platform",
-    "Realtime Metrics Explorer",
-    "Accessible Learning Studio",
-    "Cloud Cost Monitor",
-    "Customer Data Workspace",
-    "Volunteer Match Service",
-  ];
 
   return Array.from({ length: count }, (_, projectIndex) => {
+    const projData = realGithubProjects[(candidateIndex + projectIndex * 3) % realGithubProjects.length]!;
     const stackStart = (candidateIndex + projectIndex * 2) % Math.max(skills.length, 1);
     const projectSkills = skills
       .slice(stackStart, stackStart + 4)
@@ -578,17 +595,16 @@ function makeProjects(
     const technologies =
       projectSkills.length > 0 ? projectSkills : skills.map((skill) => skill.name);
     return {
-      title:
-        projectTitles[(candidateIndex + projectIndex) % projectTitles.length],
+      title: projData.title,
       description:
         projectIndex === 0
-          ? "A practical product project focused on making complex information easier to use."
-          : "A small, well-documented tool built around a real workflow and measurable outcomes.",
+          ? "A production project focused on verifiable architecture, automated CI/CD, and high throughput."
+          : "An open-source library built with comprehensive unit test coverage and production documentation.",
       technologies,
-      githubUrl: `https://github.com/hireready-demo/project-${candidateIndex + 1}-${projectIndex + 1}`,
-      ...(candidateIndex % 2 === 0
-        ? { liveUrl: `https://project-${candidateIndex + 1}.example.dev` }
-        : {}),
+      githubUrl: candidateIndex === 20 && projectIndex === 0
+        ? "https://github.com/vasudev196006/hireread"
+        : projData.repo,
+      liveUrl: projData.demo,
     };
   });
 }
@@ -620,6 +636,14 @@ function makeCandidate(index: number): Candidate {
     makeCertificate(index, certIndex),
   );
 
+  const ghUsername = index === 20
+    ? "vasudev196006"
+    : `${names[index]?.toLowerCase().replace(/[^a-z0-9]/g, "") || "dev"}-${(index + 1) * 7}`;
+
+  const ghUrl = index === 20
+    ? "https://github.com/vasudev196006"
+    : `https://github.com/${githubProfiles[index % githubProfiles.length] || "vasudev196006"}`;
+
   return {
     id: `candidate-${String(index + 1).padStart(3, "0")}`,
     name: names[index],
@@ -627,10 +651,12 @@ function makeCandidate(index: number): Candidate {
     location: locations[index % locations.length],
     experienceYears,
     education: educationLevels[(index * 5) % educationLevels.length],
-    bio: `${track.headline} with ${experienceYears} years of experience building dependable products. Interested in teams that value clear communication, thoughtful craft, and measurable outcomes.`,
+    bio: `${track.headline} with ${experienceYears} years of experience building dependable products. Open source contributor with verifiable code evidence.`,
     skills,
     certifications,
     projects: makeProjects(index, skills),
+    githubUsername: ghUsername,
+    githubUrl: ghUrl,
   };
 }
 

@@ -56,6 +56,24 @@ export interface Candidate {
   certifications: Certification[];
   projects: CandidateProject[];
   targetRole?: string;
+  githubUrl?: string;
+  githubUsername?: string;
+}
+
+export interface AdzunaJob {
+  id: string;
+  title: string;
+  company: string;
+  description: string;
+  location: string;
+  redirectUrl: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  contractType?: string;
+  created?: string;
+  category?: string;
+  inferredSkills?: string[];
+  matchScore?: number;
 }
 
 export interface JobSkill {
