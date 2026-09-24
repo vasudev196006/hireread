@@ -7,25 +7,32 @@
 
 :root {
   /* =========================================================
-     APPLE DESIGN SYSTEM COLOR PALETTE & TOKENS
+     APPLE DESIGN SYSTEM COLOR PALETTE (EMERALD MINT ACCENT)
      ========================================================= */
   --apple-bg: #000000;
   --apple-surface: #1C1C1E;
   --apple-glass: rgba(28, 28, 30, 0.65);
+  --apple-glass-light: rgba(255, 255, 255, 0.6);
   --apple-glass-elevated: rgba(44, 44, 46, 0.75);
   --apple-primary-text: #F5F5F7;
   --apple-secondary-text: #98989D;
   --apple-separator: rgba(84, 84, 88, 0.65);
   --apple-border: rgba(255, 255, 255, 0.12);
-  --apple-accent: #0A84FF;
-  --apple-accent-hover: #0071e3;
+  --apple-specular-top: rgba(255, 255, 255, 0.4);
+  
+  /* Vibrant Apple Emerald / Mint Accent (Replaced Blue) */
+  --apple-accent: #30D158;
+  --apple-accent-hover: #28b84d;
+  --apple-accent-subtle: rgba(48, 209, 88, 0.16);
+  --apple-accent-border: rgba(48, 209, 88, 0.35);
+  
   --apple-success: #30D158;
   --apple-warning: #FF9F0A;
   --apple-danger: #FF453A;
   
   --app-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --app-font-mono: 'Space Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --radius: 1.125rem;
+  --radius: 16px;
   --spacing: .25rem;
 }
 
@@ -46,7 +53,7 @@
   * {
     box-sizing: border-box;
     border-color: var(--apple-border);
-    text-shadow: none !important; /* Strictly remove all AI blur & glowing halos */
+    text-shadow: none !important; /* Strictly no blur or glowing halos on text */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -78,6 +85,69 @@
 }
 
 /* =========================================================
+   USER SPECIFIED FROSTED GLASS-SURFACE
+   ========================================================= */
+.glass-surface {
+  background: var(--apple-glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top); /* light catching the material */
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); /* bigger surface = deeper shadow */
+  color: var(--apple-primary-text);
+}
+
+/* Vibrancy: text over glass needs contrast + weight, not flat gray */
+.glass-surface .label,
+.glass-surface label {
+  color: var(--apple-primary-text);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: none !important;
+}
+
+/* Materialize on enter: blur + scale together, not a plain fade */
+.glass-surface.entering,
+.card,
+.section-card {
+  animation: materialize 240ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+@keyframes materialize {
+  from {
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transform: scale(0.97);
+    opacity: 0;
+  }
+  to {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Accessibility: frostier/solid instead of blurred when requested */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-surface,
+  .card,
+  .section-card,
+  .form-card,
+  .detail-card,
+  .match-card,
+  .stat,
+  .dynamic-island {
+    background: rgba(20, 20, 22, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* =========================================================
    APPLE MICRO-INTERACTIONS & SPRING HAPTICS
    ========================================================= */
 @layer utilities {
@@ -86,7 +156,7 @@
   }
   .hover-elevate:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
   }
   .active-elevate:active, button:active, a.button:active, .tab-btn:active, .card-interactive:active {
     transform: scale(0.975);
@@ -133,11 +203,14 @@
   display: flex;
   flex-direction: column;
   background: var(--apple-glass);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
-  border: 1px solid var(--apple-border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   box-shadow:
-    0 16px 38px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   transition:
@@ -154,7 +227,7 @@
 .dynamic-island.is-expanded {
   border-radius: 24px;
   background: var(--apple-glass-elevated);
-  border-color: rgba(10, 132, 255, 0.35);
+  border-color: var(--apple-accent-border);
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
@@ -191,13 +264,13 @@
   height: 26px;
   border-radius: 8px;
   background: var(--apple-accent);
-  color: #ffffff;
+  color: #000000;
   display: grid;
   place-items: center;
   font-family: var(--app-font-mono);
   font-size: 12px;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(10, 132, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(48, 209, 88, 0.4);
 }
 
 /* Role Indicator Capsule */
@@ -218,8 +291,8 @@
   transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .island-role-badge:hover {
-  background: rgba(10, 132, 255, 0.16);
-  border-color: rgba(10, 132, 255, 0.35);
+  background: var(--apple-accent-subtle);
+  border-color: var(--apple-accent-border);
   color: var(--apple-accent);
 }
 
@@ -303,7 +376,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--apple-success);
+  background: var(--apple-accent);
   box-shadow: 0 0 8px rgba(48, 209, 88, 0.6);
   animation: pulseDot 2s infinite ease-in-out;
 }
@@ -360,9 +433,9 @@
   gap: 8px;
 }
 
-/* =========================================================
+/* ==========================================
    PAGE CONTAINER & TOP HERO GREETING
-   ========================================================= */
+   ========================================== */
 .page {
   padding: 24px 36px 80px;
   max-width: 1380px;
@@ -385,11 +458,13 @@
   line-height: 1.08;
   font-weight: 800;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 .page-head p {
   color: var(--apple-secondary-text);
   margin: 0;
   font-size: 14px;
+  text-shadow: none !important;
 }
 
 .eyebrow {
@@ -399,10 +474,11 @@
   letter-spacing: 0.14em;
   color: var(--apple-accent);
   font-weight: 700;
+  text-shadow: none !important;
 }
 
 /* =========================================================
-   AUTHENTIC APPLE FROSTED GLASS CARDS & BOXES
+   ALL BOXES USE APPLE FROSTED GLASS SPEC
    ========================================================= */
 .card,
 .section-card,
@@ -412,13 +488,14 @@
 .credential-card,
 .match-card {
   background: var(--apple-glass);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--apple-border);
-  border-radius: var(--radius);
-  box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   color: var(--apple-primary-text);
   transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.28s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.28s;
 }
@@ -428,7 +505,7 @@
 .section-card:hover,
 .detail-card:hover {
   box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.5),
+    0 16px 36px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
@@ -441,11 +518,14 @@
 .stat {
   padding: 20px 22px;
   background: var(--apple-glass);
-  border: 1px solid var(--apple-border);
-  border-radius: 18px;
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 .stat-head {
   display: flex;
@@ -460,10 +540,11 @@
   font-weight: 800;
   margin-top: 10px;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 .stat-note {
   font-size: 11px;
-  color: var(--apple-success);
+  color: var(--apple-accent);
   font-weight: 700;
   margin-top: 6px;
 }
@@ -490,6 +571,7 @@
   font-weight: 700;
   color: var(--apple-primary-text);
   margin: 0;
+  text-shadow: none !important;
 }
 .section-title span {
   color: var(--apple-secondary-text);
@@ -523,7 +605,7 @@
   color: var(--apple-primary-text);
 }
 .step.done {
-  color: var(--apple-success);
+  color: var(--apple-accent);
 }
 .step-num {
   border: 1px solid var(--apple-border);
@@ -539,14 +621,14 @@
 }
 .step.active .step-num {
   background: var(--apple-accent);
-  color: #ffffff;
+  color: #000000;
   border-color: var(--apple-accent);
   font-weight: 800;
-  box-shadow: 0 0 12px rgba(10, 132, 255, 0.4);
+  box-shadow: 0 0 12px rgba(48, 209, 88, 0.4);
 }
 .step.done .step-num {
   background: rgba(48, 209, 88, 0.2);
-  color: var(--apple-success);
+  color: var(--apple-accent);
   border-color: rgba(48, 209, 88, 0.45);
 }
 .step-line {
@@ -565,6 +647,7 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 .form-card > p {
   margin: 0 0 28px;
@@ -625,7 +708,7 @@
 .input:focus, .select:focus, .textarea:focus {
   border-color: var(--apple-accent);
   box-shadow:
-    0 0 0 3.5px rgba(10, 132, 255, 0.25),
+    0 0 0 3.5px rgba(48, 209, 88, 0.25),
     inset 0 1px 2px rgba(0, 0, 0, 0.3);
   background: rgba(0, 0, 0, 0.7);
 }
@@ -662,7 +745,10 @@
 
 /* Skill Editor Matrix Box */
 .skill-editor {
-  border: 1px solid var(--apple-border);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(16px);
   border-radius: 16px;
@@ -716,23 +802,26 @@
 
 .button-accent {
   background: var(--apple-accent);
-  color: #ffffff;
+  color: #000000;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(48, 209, 88, 0.35);
 }
 .button-accent:hover {
   background: var(--apple-accent-hover);
-  box-shadow: 0 6px 20px rgba(10, 132, 255, 0.45);
+  box-shadow: 0 6px 20px rgba(48, 209, 88, 0.45);
 }
 
 .button-secondary {
   background: rgba(255, 255, 255, 0.08);
-  border-color: var(--apple-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   color: var(--apple-primary-text);
 }
 .button-secondary:hover {
   background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .button-ghost {
@@ -778,11 +867,13 @@
   font-size: 14px;
   color: var(--apple-primary-text);
   text-decoration: none;
+  text-shadow: none !important;
 }
 .job-meta, .candidate-meta {
   color: var(--apple-secondary-text);
   font-size: 11px;
   margin-top: 4px;
+  text-shadow: none !important;
 }
 .row-right {
   text-align: right;
@@ -793,11 +884,13 @@
   font-family: var(--app-font-mono);
   font-size: 20px;
   font-weight: 800;
-  color: var(--apple-success);
+  color: var(--apple-accent);
+  text-shadow: none !important;
 }
 .score-caption {
   font-size: 10px;
   color: var(--apple-secondary-text);
+  text-shadow: none !important;
 }
 
 .pill {
@@ -809,7 +902,7 @@
   font-size: 11px;
   font-weight: 700;
 }
-.pill-green { background: rgba(48, 209, 88, 0.18); color: var(--apple-success); border: 1px solid rgba(48, 209, 88, 0.35); }
+.pill-green { background: rgba(48, 209, 88, 0.18); color: var(--apple-accent); border: 1px solid rgba(48, 209, 88, 0.35); }
 .pill-amber { background: rgba(255, 159, 10, 0.18); color: var(--apple-warning); border: 1px solid rgba(255, 159, 10, 0.35); }
 .pill-slate { background: rgba(255, 255, 255, 0.08); color: var(--apple-secondary-text); border: 1px solid var(--apple-border); }
 
@@ -831,15 +924,15 @@
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(10, 132, 255, 0.18);
+  background: rgba(48, 209, 88, 0.18);
   color: var(--apple-accent);
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: 15px;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.2);
-  border: 1px solid rgba(10, 132, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(48, 209, 88, 0.2);
+  border: 1px solid rgba(48, 209, 88, 0.3);
 }
 .skill-list {
   display: flex;
@@ -887,10 +980,12 @@
   font-size: 16px;
   font-weight: 800;
   color: var(--apple-accent);
+  text-shadow: none !important;
 }
 .score-label {
   font-size: 11px;
   color: var(--apple-secondary-text);
+  text-shadow: none !important;
 }
 
 .match-actions {
@@ -928,19 +1023,22 @@
 .breakdown-row label {
   color: var(--apple-primary-text);
   font-weight: 600;
+  text-shadow: none !important;
 }
 .breakdown-score {
   font-family: var(--app-font-mono);
   font-size: 11px;
   text-align: right;
-  color: var(--apple-success);
+  color: var(--apple-accent);
   font-weight: 700;
+  text-shadow: none !important;
 }
 .breakdown-detail {
   grid-column: 2 / 4;
   color: var(--apple-secondary-text);
   font-size: 11px;
   margin-top: -6px;
+  text-shadow: none !important;
 }
 
 /* =========================================================
@@ -949,19 +1047,22 @@
 .tier-section { margin-bottom: 28px; }
 .tier-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .tier-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 8px; }
-.tier-1-tag { background: rgba(10, 132, 255, 0.2); color: #70b4ff; border: 1px solid rgba(10, 132, 255, 0.35); }
-.tier-2-tag { background: rgba(48, 209, 88, 0.2); color: #72e48e; border: 1px solid rgba(48, 209, 88, 0.35); }
+.tier-1-tag { background: rgba(48, 209, 88, 0.2); color: #86efac; border: 1px solid rgba(48, 209, 88, 0.35); }
+.tier-2-tag { background: rgba(0, 199, 190, 0.2); color: #5eead4; border: 1px solid rgba(0, 199, 190, 0.35); }
 .tier-3-tag { background: rgba(175, 82, 222, 0.2); color: #da8fff; border: 1px solid rgba(175, 82, 222, 0.35); }
 .tier-4-tag { background: rgba(255, 159, 10, 0.2); color: #ffbf66; border: 1px solid rgba(255, 159, 10, 0.35); }
 
 .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
 .roadmap-card {
-  border: 1px solid var(--apple-border);
-  border-radius: 18px;
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 16px;
   padding: 20px;
   background: var(--apple-glass);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);
   position: relative;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -971,7 +1072,7 @@
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
 }
 .roadmap-card.status-mastered { border-color: rgba(48, 209, 88, 0.45); background: rgba(48, 209, 88, 0.12); }
-.roadmap-card.status-in_progress { border-color: rgba(10, 132, 255, 0.45); background: rgba(10, 132, 255, 0.12); }
+.roadmap-card.status-in_progress { border-color: rgba(0, 199, 190, 0.45); background: rgba(0, 199, 190, 0.12); }
 .roadmap-card.status-gap { border-color: var(--apple-border); }
 .roadmap-card.status-locked { border-color: rgba(255, 255, 255, 0.06); background: rgba(0, 0, 0, 0.45); opacity: 0.65; }
 
@@ -993,7 +1094,10 @@
   color: var(--apple-secondary-text);
   border-radius: 999px;
   cursor: pointer;
-  border: 1px solid var(--apple-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   transition: all 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   display: flex;
   align-items: center;
@@ -1004,11 +1108,11 @@
   background: rgba(255, 255, 255, 0.12);
 }
 .tab-btn.active {
-  color: #ffffff;
+  color: #000000;
   background: var(--apple-accent);
   border-color: var(--apple-accent);
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(48, 209, 88, 0.35);
 }
 
 /* AI Justification Pill */
@@ -1016,9 +1120,9 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(10, 132, 255, 0.18);
-  color: #70b4ff;
-  border: 1px solid rgba(10, 132, 255, 0.35);
+  background: rgba(48, 209, 88, 0.18);
+  color: var(--apple-accent);
+  border: 1px solid rgba(48, 209, 88, 0.35);
   border-radius: 999px;
   padding: 2px 8px;
   font-size: 10px;
@@ -1028,7 +1132,7 @@
 /* Upload & Dropzone */
 .dropzone {
   border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 36px 24px;
   text-align: center;
   background: rgba(0, 0, 0, 0.4);
@@ -1038,13 +1142,13 @@
 }
 .dropzone:hover, .dropzone.dragover {
   border-color: var(--apple-accent);
-  background: rgba(10, 132, 255, 0.08);
+  background: var(--apple-accent-subtle);
 }
 .dropzone-icon {
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: rgba(10, 132, 255, 0.18);
+  background: var(--apple-accent-subtle);
   color: var(--apple-accent);
   display: grid;
   place-items: center;
@@ -1065,7 +1169,10 @@
 }
 .verify-banner {
   background: rgba(48, 209, 88, 0.15);
-  border: 1px solid rgba(48, 209, 88, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(48, 209, 88, 0.35);
+  border-right: 1px solid rgba(48, 209, 88, 0.35);
+  border-bottom: 1px solid rgba(48, 209, 88, 0.35);
   border-radius: 14px;
   padding: 18px;
   display: flex;
@@ -1078,17 +1185,24 @@
   color: var(--apple-primary-text);
   font-size: 14px;
   margin-bottom: 4px;
+  text-shadow: none !important;
 }
 .verify-banner p {
   color: var(--apple-secondary-text);
   font-size: 12px;
   margin: 0;
+  text-shadow: none !important;
 }
 
 /* Scarcity Bar */
 .scarcity-container {
   background: var(--apple-glass);
-  border: 1px solid var(--apple-border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
   border-radius: 16px;
   padding: 18px 22px;
   margin-bottom: 22px;
@@ -1134,28 +1248,31 @@
   display: grid;
   place-items: center;
   border-radius: 18px;
-  background: rgba(10, 132, 255, 0.18);
+  background: var(--apple-accent-subtle);
   color: var(--apple-accent);
   font-weight: 800;
   font-size: 22px;
-  border: 1px solid rgba(10, 132, 255, 0.35);
+  border: 1px solid var(--apple-accent-border);
 }
 .profile-hero h1 {
   margin: 0;
   font-size: 28px;
   letter-spacing: -0.04em;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 .profile-hero p {
   margin: 6px 0 0;
   color: var(--apple-secondary-text);
   font-size: 13px;
+  text-shadow: none !important;
 }
 .bio {
   color: var(--apple-secondary-text);
   font-size: 13.5px;
   line-height: 1.7;
   margin: 0;
+  text-shadow: none !important;
 }
 .project {
   padding: 16px 0;
@@ -1171,12 +1288,14 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 .project p {
   color: var(--apple-secondary-text);
   font-size: 12.5px;
   line-height: 1.6;
   margin: 8px 0;
+  text-shadow: none !important;
 }
 .project a {
   color: var(--apple-accent);
@@ -1200,9 +1319,13 @@
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
   background: var(--apple-glass-elevated);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-  border-radius: 22px;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 16px;
   width: 100%;
   max-width: 640px;
   max-height: 90vh;
@@ -1210,7 +1333,6 @@
   box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7);
   padding: 30px;
   position: relative;
-  border: 1px solid var(--apple-border);
 }
 .modal-header {
   display: flex;
@@ -1224,6 +1346,7 @@
   margin: 0;
   letter-spacing: -0.03em;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 
 /* Empty State */
@@ -1241,11 +1364,13 @@
   margin: 0 0 8px;
   font-size: 17px;
   font-weight: 700;
+  text-shadow: none !important;
 }
 .empty p {
   font-size: 13px;
   margin: 0 0 20px;
   color: var(--apple-secondary-text);
+  text-shadow: none !important;
 }
 
 /* Toast */
@@ -1255,7 +1380,7 @@
   bottom: 25px;
   z-index: 200;
   background: var(--apple-glass-elevated);
-  backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   color: var(--apple-primary-text);
   padding: 14px 20px;
   border-radius: 14px;
@@ -1307,9 +1432,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(10, 132, 255, 0.16);
+  background: var(--apple-accent-subtle);
   color: var(--apple-accent);
-  border: 1px solid rgba(10, 132, 255, 0.35);
+  border: 1px solid var(--apple-accent-border);
   border-radius: 999px;
   padding: 6px 18px;
   font-size: 12px;
@@ -1327,6 +1452,7 @@
   line-height: 1.08;
   margin: 0 0 22px;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 
 .landing-subtitle {
@@ -1335,6 +1461,7 @@
   max-width: 740px;
   margin: 0 auto 52px;
   line-height: 1.65;
+  text-shadow: none !important;
 }
 
 .landing-cards {
@@ -1348,8 +1475,13 @@
 
 .landing-role-card {
   background: var(--apple-glass);
-  border: 1px solid var(--apple-border);
-  border-radius: 24px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-border);
+  border-radius: 20px;
   padding: 38px;
   transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
   cursor: pointer;
@@ -1357,8 +1489,6 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
@@ -1373,7 +1503,7 @@
   width: 54px;
   height: 54px;
   border-radius: 16px;
-  background: rgba(10, 132, 255, 0.18);
+  background: var(--apple-accent-subtle);
   color: var(--apple-accent);
   display: grid;
   place-items: center;
@@ -1386,6 +1516,7 @@
   margin: 0 0 10px;
   color: var(--apple-primary-text);
   letter-spacing: -0.02em;
+  text-shadow: none !important;
 }
 
 .landing-role-card p {
@@ -1394,6 +1525,7 @@
   line-height: 1.6;
   margin: 0 0 24px;
   flex: 1;
+  text-shadow: none !important;
 }
 
 .landing-features-list {
@@ -1407,6 +1539,7 @@
   gap: 10px;
   font-size: 13px;
   color: var(--apple-primary-text);
+  text-shadow: none !important;
 }
 
 /* =========================================================
