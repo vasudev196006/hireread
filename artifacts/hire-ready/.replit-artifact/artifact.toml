@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "HireReady"
+description = "A workforce intelligence and competency-matching app for recruiters and learners. Rank candidates with a transparent, deterministic score; explore skill gaps; and verify credentials."
+version = "1.0.0"
+id = "artifacts/hire-ready"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25803
+
+[services.development]
+run = "pnpm --filter @workspace/hire-ready run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/hire-ready", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/hire-ready/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25803"
+BASE_PATH = "/"
