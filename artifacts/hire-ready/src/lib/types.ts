@@ -58,6 +58,10 @@ export interface Candidate {
   targetRole?: string;
   githubUrl?: string;
   githubUsername?: string;
+  avatarUrl?: string;
+  publicRepos?: number;
+  followers?: number;
+  company?: string;
 }
 
 export interface AdzunaJob {

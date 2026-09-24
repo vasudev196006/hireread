@@ -498,173 +498,672 @@ const educationLevels: Candidate["education"][] = [
   "phd",
 ];
 
-const proficiencyLevels: Skill["proficiency"][] = [
-  "intermediate",
-  "advanced",
-  "expert",
-  "beginner",
+const realDevelopers: Array<{
+  name: string;
+  githubUsername: string;
+  headline: string;
+  location: string;
+  experienceYears: number;
+  education: Candidate["education"];
+  bio: string;
+  publicRepos: number;
+  followers: number;
+  skills: Array<{ name: string; proficiency: Skill["proficiency"]; yearsExperience: number; verified: boolean; verificationScore?: number }>;
+  projects: CandidateProject[];
+}> = [
+  {
+    name: "Vasudev",
+    githubUsername: "vasudev196006",
+    headline: "AI & Full-Stack Systems Engineer",
+    location: "Bengaluru, India",
+    experienceYears: 3.5,
+    education: "bachelors",
+    bio: "Full-stack and AI engineer building deterministic career matching, LLM tooling, and production web applications. Passionate about verifiable engineering and open source.",
+    publicRepos: 18,
+    followers: 42,
+    skills: [
+      { name: "React", proficiency: "expert", yearsExperience: 3.5, verified: true, verificationScore: 98 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 3.0, verified: true, verificationScore: 96 },
+      { name: "Node.js", proficiency: "advanced", yearsExperience: 3.0, verified: true, verificationScore: 94 },
+      { name: "Python", proficiency: "advanced", yearsExperience: 2.5, verified: true, verificationScore: 92 },
+      { name: "Next.js", proficiency: "advanced", yearsExperience: 2.5, verified: true, verificationScore: 90 },
+      { name: "PostgreSQL", proficiency: "intermediate", yearsExperience: 2.0, verified: true, verificationScore: 88 },
+      { name: "Docker", proficiency: "intermediate", yearsExperience: 2.0, verified: true, verificationScore: 85 },
+      { name: "AWS", proficiency: "intermediate", yearsExperience: 1.5, verified: true, verificationScore: 82 },
+    ],
+    projects: [
+      {
+        title: "HireReady Core Platform",
+        description: "AI-powered verifiable skills and deterministic career roadmap matching engine.",
+        technologies: ["TypeScript", "React", "Node.js", "Vite", "Tailwind CSS"],
+        githubUrl: "https://github.com/vasudev196006/hireread",
+        liveUrl: "https://hireready.dev",
+      },
+      {
+        title: "Distributed Agent Scheduler",
+        description: "Lightweight async background task runner and execution telemetry pipeline.",
+        technologies: ["Python", "Docker", "Redis", "FastAPI"],
+        githubUrl: "https://github.com/vasudev196006/hireread",
+      },
+    ],
+  },
+  {
+    name: "Dan Abramov",
+    githubUsername: "gaearon",
+    headline: "Frontend Architect & React Core Contributor",
+    location: "London, UK (Remote)",
+    experienceYears: 12.0,
+    education: "bachelors",
+    bio: "Co-creator of Redux and Create React App. Former React core team member at Meta. Deep focus on user interfaces, state management, and developer empathy.",
+    publicRepos: 260,
+    followers: 82000,
+    skills: [
+      { name: "React", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 99 },
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 99 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 96 },
+      { name: "CSS", proficiency: "advanced", yearsExperience: 10.0, verified: true, verificationScore: 94 },
+      { name: "Next.js", proficiency: "expert", yearsExperience: 5.0, verified: true, verificationScore: 95 },
+    ],
+    projects: [
+      {
+        title: "Redux State Container",
+        description: "Predictable state container for JavaScript apps with deterministic state mutation.",
+        technologies: ["JavaScript", "TypeScript", "React"],
+        githubUrl: "https://github.com/reduxjs/redux",
+        liveUrl: "https://redux.js.org",
+      },
+      {
+        title: "Overreacted",
+        description: "Personal blog dissecting modern React paradigms and computer science fundamentals.",
+        technologies: ["React", "Gatsby", "JavaScript"],
+        githubUrl: "https://github.com/gaearon/overreacted.io",
+        liveUrl: "https://overreacted.io",
+      },
+    ],
+  },
+  {
+    name: "shadcn",
+    githubUsername: "shadcn",
+    headline: "UI Systems Architect & Design Engineer",
+    location: "San Francisco, CA (Remote)",
+    experienceYears: 8.0,
+    education: "bachelors",
+    bio: "Creator of shadcn/ui. Specializing in accessible design systems, Tailwind CSS, Radix UI primitives, and beautiful developer-first component libraries.",
+    publicRepos: 110,
+    followers: 65000,
+    skills: [
+      { name: "React", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 99 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 7.0, verified: true, verificationScore: 98 },
+      { name: "Tailwind CSS", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 99 },
+      { name: "Next.js", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 97 },
+      { name: "Accessibility", proficiency: "expert", yearsExperience: 7.0, verified: true, verificationScore: 95 },
+      { name: "Figma", proficiency: "advanced", yearsExperience: 5.0, verified: true, verificationScore: 92 },
+    ],
+    projects: [
+      {
+        title: "shadcn/ui",
+        description: "Beautifully designed components that you can copy and paste into your apps.",
+        technologies: ["TypeScript", "React", "Tailwind CSS", "Radix UI"],
+        githubUrl: "https://github.com/shadcn-ui/ui",
+        liveUrl: "https://ui.shadcn.com",
+      },
+      {
+        title: "Taxonomy",
+        description: "Open source Next.js 13 enterprise application built using the new router and server components.",
+        technologies: ["Next.js", "React", "Tailwind CSS"],
+        githubUrl: "https://github.com/shadcn-ui/taxonomy",
+      },
+    ],
+  },
+  {
+    name: "Andrej Karpathy",
+    githubUsername: "karpathy",
+    headline: "AI & Deep Learning Research Scientist",
+    location: "San Francisco Bay Area, CA",
+    experienceYears: 14.0,
+    education: "phd",
+    bio: "Former Director of AI at Tesla and Founding Member at OpenAI. Building foundational neural network primitives and educational deep learning engines.",
+    publicRepos: 55,
+    followers: 95000,
+    skills: [
+      { name: "Python", proficiency: "expert", yearsExperience: 14.0, verified: true, verificationScore: 99 },
+      { name: "PyTorch", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 99 },
+      { name: "Machine Learning", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 99 },
+      { name: "Data Science", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 97 },
+      { name: "C/C++", proficiency: "expert", yearsExperience: 11.0, verified: true, verificationScore: 95 },
+    ],
+    projects: [
+      {
+        title: "nanoGPT",
+        description: "The simplest, fastest repository for training and finetuning medium-sized GPTs.",
+        technologies: ["Python", "PyTorch", "CUDA"],
+        githubUrl: "https://github.com/karpathy/nanoGPT",
+      },
+      {
+        title: "micrograd",
+        description: "A tiny scalar-valued autograd engine and neural network library with a PyTorch-like API.",
+        technologies: ["Python", "Math"],
+        githubUrl: "https://github.com/karpathy/micrograd",
+      },
+    ],
+  },
+  {
+    name: "Salvatore Sanfilippo",
+    githubUsername: "antirez",
+    headline: "Principal Systems Architect & Database Creator",
+    location: "Sicily, Italy (Remote)",
+    experienceYears: 20.0,
+    education: "bachelors",
+    bio: "Creator of Redis in-memory data store. Systems programming, networking protocols, low-latency algorithms, and database internals.",
+    publicRepos: 95,
+    followers: 48000,
+    skills: [
+      { name: "Redis", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 100 },
+      { name: "C/C++", proficiency: "expert", yearsExperience: 20.0, verified: true, verificationScore: 99 },
+      { name: "Linux", proficiency: "expert", yearsExperience: 18.0, verified: true, verificationScore: 98 },
+      { name: "Networking", proficiency: "expert", yearsExperience: 18.0, verified: true, verificationScore: 97 },
+      { name: "PostgreSQL", proficiency: "advanced", yearsExperience: 10.0, verified: true, verificationScore: 92 },
+    ],
+    projects: [
+      {
+        title: "Redis",
+        description: "In-memory database that persists on disk. The data model is key-value with rich data structures.",
+        technologies: ["C", "Networking", "Distributed Systems"],
+        githubUrl: "https://github.com/redis/redis",
+        liveUrl: "https://redis.io",
+      },
+      {
+        title: "smallchat",
+        description: "Minimalist chat server in ~200 lines of C for teaching network sockets.",
+        technologies: ["C", "Sockets"],
+        githubUrl: "https://github.com/antirez/smallchat",
+      },
+    ],
+  },
+  {
+    name: "Kelsey Hightower",
+    githubUsername: "kelseyhightower",
+    headline: "Cloud Native & DevOps Architect",
+    location: "Portland, OR (Remote)",
+    experienceYears: 18.0,
+    education: "bachelors",
+    bio: "Former Principal Engineer at Google Cloud. Cloud native advocate, Kubernetes educator, speaker, and author of Kubernetes Up and Running.",
+    publicRepos: 88,
+    followers: 52000,
+    skills: [
+      { name: "Kubernetes", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 100 },
+      { name: "Docker", proficiency: "expert", yearsExperience: 11.0, verified: true, verificationScore: 99 },
+      { name: "AWS", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 98 },
+      { name: "Linux", proficiency: "expert", yearsExperience: 16.0, verified: true, verificationScore: 98 },
+      { name: "CI/CD", proficiency: "expert", yearsExperience: 14.0, verified: true, verificationScore: 96 },
+      { name: "Terraform", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 95 },
+    ],
+    projects: [
+      {
+        title: "Kubernetes The Hard Way",
+        description: "Bootstrap Kubernetes the hard way on bare infrastructure without automated installers.",
+        technologies: ["Kubernetes", "Linux", "Networking"],
+        githubUrl: "https://github.com/kelseyhightower/kubernetes-the-hard-way",
+      },
+      {
+        title: "nocode",
+        description: "The best way to write secure and reliable applications. Write nothing; deploy nowhere.",
+        technologies: ["DevOps", "Reliability"],
+        githubUrl: "https://github.com/kelseyhightower/nocode",
+      },
+    ],
+  },
+  {
+    name: "Guillermo Rauch",
+    githubUsername: "rauchg",
+    headline: "CEO at Vercel & Distributed Cloud Platform Architect",
+    location: "San Francisco, CA",
+    experienceYears: 15.0,
+    education: "bachelors",
+    bio: "CEO at Vercel. Creator of Socket.io, Mongoose, and early Next.js architect. Passionate about edge computation, instantaneous web deployments, and DX.",
+    publicRepos: 240,
+    followers: 61000,
+    skills: [
+      { name: "Next.js", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 100 },
+      { name: "React", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 98 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 97 },
+      { name: "Node.js", proficiency: "expert", yearsExperience: 13.0, verified: true, verificationScore: 98 },
+      { name: "AWS", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 95 },
+    ],
+    projects: [
+      {
+        title: "Next.js",
+        description: "The React Framework for the Web with Server Components and Edge Middleware.",
+        technologies: ["TypeScript", "React", "Rust"],
+        githubUrl: "https://github.com/vercel/next.js",
+        liveUrl: "https://nextjs.org",
+      },
+      {
+        title: "Socket.IO",
+        description: "Real-time bidirectional event-based communication library for web browsers and Node.",
+        technologies: ["JavaScript", "WebSockets"],
+        githubUrl: "https://github.com/socketio/socket.io",
+        liveUrl: "https://socket.io",
+      },
+    ],
+  },
+  {
+    name: "Evan You",
+    githubUsername: "yyx990803",
+    headline: "Frontend Architecture & Build Tool Creator",
+    location: "Singapore (Remote)",
+    experienceYears: 12.0,
+    education: "masters",
+    bio: "Creator of Vue.js, Vite, and Rolldown. Independent open source developer focusing on progressive frontend frameworks and lightning-fast developer tooling.",
+    publicRepos: 180,
+    followers: 94000,
+    skills: [
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 100 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 98 },
+      { name: "Vue.js", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 100 },
+      { name: "HTML", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 98 },
+      { name: "CSS", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 97 },
+    ],
+    projects: [
+      {
+        title: "Vue.js Core",
+        description: "Progressive, incrementally-adoptable framework for building UI on the web.",
+        technologies: ["TypeScript", "JavaScript"],
+        githubUrl: "https://github.com/vuejs/core",
+        liveUrl: "https://vuejs.org",
+      },
+      {
+        title: "Vite",
+        description: "Next Generation Frontend Tooling powered by native ES modules.",
+        technologies: ["TypeScript", "Rollup", "ESBuild"],
+        githubUrl: "https://github.com/vitejs/vite",
+        liveUrl: "https://vitejs.dev",
+      },
+    ],
+  },
+  {
+    name: "Theo Browne",
+    githubUsername: "t3dotgg",
+    headline: "Full-Stack TypeScript & Cloud Edge Specialist",
+    location: "San Francisco, CA (Remote)",
+    experienceYears: 9.0,
+    education: "bachelors",
+    bio: "Creator of create-t3-app and Ping.gg. Focus on type safety across the entire stack, Next.js, Prisma, Tailwind, and high-velocity shipping.",
+    publicRepos: 140,
+    followers: 43000,
+    skills: [
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 99 },
+      { name: "React", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 98 },
+      { name: "Next.js", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 97 },
+      { name: "Tailwind CSS", proficiency: "expert", yearsExperience: 5.0, verified: true, verificationScore: 96 },
+      { name: "PostgreSQL", proficiency: "advanced", yearsExperience: 6.0, verified: true, verificationScore: 91 },
+      { name: "Docker", proficiency: "advanced", yearsExperience: 5.0, verified: true, verificationScore: 89 },
+    ],
+    projects: [
+      {
+        title: "create-t3-app",
+        description: "The best way to start a full-stack, typesafe Next.js application.",
+        technologies: ["TypeScript", "Next.js", "Prisma", "Tailwind CSS"],
+        githubUrl: "https://github.com/t3-oss/create-t3-app",
+        liveUrl: "https://create.t3.gg",
+      },
+    ],
+  },
+  {
+    name: "Rich Harris",
+    githubUsername: "rich-harris",
+    headline: "Frontend Compiler & Svelte Creator",
+    location: "New York, NY (Remote)",
+    experienceYears: 13.0,
+    education: "bachelors",
+    bio: "Creator of Svelte, Rollup, and Ractive. Principal Software Engineer at Vercel. Passionate about simplifying web development through smart compilation.",
+    publicRepos: 160,
+    followers: 45000,
+    skills: [
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 13.0, verified: true, verificationScore: 100 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 7.0, verified: true, verificationScore: 96 },
+      { name: "CSS", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 98 },
+      { name: "HTML", proficiency: "expert", yearsExperience: 13.0, verified: true, verificationScore: 98 },
+      { name: "Accessibility", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 94 },
+    ],
+    projects: [
+      {
+        title: "Svelte",
+        description: "Cybernetically enhanced web apps with zero-runtime overhead.",
+        technologies: ["TypeScript", "Compiler", "JavaScript"],
+        githubUrl: "https://github.com/sveltejs/svelte",
+        liveUrl: "https://svelte.dev",
+      },
+    ],
+  },
+  {
+    name: "Sebastián Ramírez",
+    githubUsername: "tiangolo",
+    headline: "Python Backend & Async API Creator",
+    location: "Berlin, Germany (Remote)",
+    experienceYears: 11.0,
+    education: "masters",
+    bio: "Creator of FastAPI, Typer, and SQLModel. Specializing in high-performance Python backends, type hints, async architectures, and OpenAPI specifications.",
+    publicRepos: 130,
+    followers: 67000,
+    skills: [
+      { name: "Python", proficiency: "expert", yearsExperience: 11.0, verified: true, verificationScore: 100 },
+      { name: "FastAPI", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 100 },
+      { name: "REST APIs", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 99 },
+      { name: "PostgreSQL", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 95 },
+      { name: "Docker", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 94 },
+    ],
+    projects: [
+      {
+        title: "FastAPI",
+        description: "Modern, fast (high-performance), web framework for building APIs with Python 3.8+.",
+        technologies: ["Python", "Starlette", "Pydantic"],
+        githubUrl: "https://github.com/tiangolo/fastapi",
+        liveUrl: "https://fastapi.tiangolo.com",
+      },
+    ],
+  },
+  {
+    name: "Mitchell Hashimoto",
+    githubUsername: "mitchellh",
+    headline: "Systems & Infrastructure Automation Pioneer",
+    location: "Seattle, WA (Remote)",
+    experienceYears: 16.0,
+    education: "bachelors",
+    bio: "Founder of HashiCorp. Creator of Vagrant, Packer, Terraform, Consul, and Nomad. Systems programmer currently building Ghostty terminal emulator in Zig.",
+    publicRepos: 210,
+    followers: 39000,
+    skills: [
+      { name: "Terraform", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 100 },
+      { name: "Docker", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 98 },
+      { name: "Kubernetes", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 96 },
+      { name: "AWS", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 97 },
+      { name: "Linux", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 98 },
+      { name: "CI/CD", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 95 },
+    ],
+    projects: [
+      {
+        title: "Terraform Core",
+        description: "Infrastructure as Code software tool that provides a consistent CLI workflow to manage cloud services.",
+        technologies: ["Go", "HCL", "Cloud APIs"],
+        githubUrl: "https://github.com/hashicorp/terraform",
+        liveUrl: "https://terraform.io",
+      },
+    ],
+  },
+  {
+    name: "Addy Osmani",
+    githubUsername: "addyosmani",
+    headline: "Web Platform & Performance Engineering Lead",
+    location: "Mountain View, CA",
+    experienceYears: 15.0,
+    education: "bachelors",
+    bio: "Engineering Lead on Google Chrome. Author of Learning JavaScript Design Patterns and Image Optimization. Specialist in Core Web Vitals and frontend speed.",
+    publicRepos: 320,
+    followers: 46000,
+    skills: [
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 99 },
+      { name: "React", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 96 },
+      { name: "TypeScript", proficiency: "advanced", yearsExperience: 6.0, verified: true, verificationScore: 93 },
+      { name: "HTML", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 98 },
+      { name: "CSS", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 97 },
+    ],
+    projects: [
+      {
+        title: "Critical Path CSS Generator",
+        description: "Extracts & inlines critical-path (above-the-fold) CSS on HTML pages.",
+        technologies: ["JavaScript", "Node.js"],
+        githubUrl: "https://github.com/addyosmani/critical",
+      },
+    ],
+  },
+  {
+    name: "Kent C. Dodds",
+    githubUsername: "kentcdodds",
+    headline: "Testing & Full-Stack React Educator",
+    location: "Salt Lake City, UT (Remote)",
+    experienceYears: 11.0,
+    education: "masters",
+    bio: "Creator of Testing Library. Co-founder of EpicWeb.dev and Remix ambassador. Teaching developers how to build resilient web applications.",
+    publicRepos: 290,
+    followers: 47000,
+    skills: [
+      { name: "React", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 99 },
+      { name: "Testing", proficiency: "expert", yearsExperience: 11.0, verified: true, verificationScore: 100 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 7.0, verified: true, verificationScore: 96 },
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 11.0, verified: true, verificationScore: 98 },
+      { name: "Node.js", proficiency: "advanced", yearsExperience: 8.0, verified: true, verificationScore: 92 },
+    ],
+    projects: [
+      {
+        title: "React Testing Library",
+        description: "Simple and complete React DOM testing utilities that encourage good testing practices.",
+        technologies: ["JavaScript", "TypeScript", "React", "Jest"],
+        githubUrl: "https://github.com/kentcdodds/react-testing-library",
+        liveUrl: "https://testing-library.com",
+      },
+    ],
+  },
+  {
+    name: "Lee Robinson",
+    githubUsername: "leerob",
+    headline: "VP of Product & Next.js Ecosystem Architect",
+    location: "Des Moines, IA (Remote)",
+    experienceYears: 8.0,
+    education: "bachelors",
+    bio: "VP of Product at Vercel. Specialist in Next.js App Router, React Server Components, serverless databases, and modern web developer experience.",
+    publicRepos: 150,
+    followers: 41000,
+    skills: [
+      { name: "Next.js", proficiency: "expert", yearsExperience: 7.0, verified: true, verificationScore: 99 },
+      { name: "React", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 97 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 95 },
+      { name: "Tailwind CSS", proficiency: "expert", yearsExperience: 5.0, verified: true, verificationScore: 96 },
+      { name: "PostgreSQL", proficiency: "advanced", yearsExperience: 5.0, verified: true, verificationScore: 90 },
+    ],
+    projects: [
+      {
+        title: "leerob.io",
+        description: "Personal site and digital garden built with Next.js App Router, React Server Components, and Postgres.",
+        technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+        githubUrl: "https://github.com/leerob/site",
+        liveUrl: "https://leerob.io",
+      },
+    ],
+  },
+  {
+    name: "Sindre Sorhus",
+    githubUsername: "sindresorhus",
+    headline: "Full-Time Open Source Developer & Package Author",
+    location: "Oslo, Norway (Remote)",
+    experienceYears: 14.0,
+    education: "bachelors",
+    bio: "Full-time open sourcerer. Author of 1000+ npm packages powering the JavaScript ecosystem. Passionate about clean code, minimalism, and TypeScript.",
+    publicRepos: 1100,
+    followers: 62000,
+    skills: [
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 14.0, verified: true, verificationScore: 100 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 99 },
+      { name: "Node.js", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 99 },
+      { name: "REST APIs", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 96 },
+    ],
+    projects: [
+      {
+        title: "Awesome Lists",
+        description: "Curated list of awesome lists covering programming languages, frameworks, and tools.",
+        technologies: ["Markdown", "Open Source"],
+        githubUrl: "https://github.com/sindresorhus/awesome",
+      },
+      {
+        title: "p-limit",
+        description: "Run multiple promise-returning & async functions with concurrency control.",
+        technologies: ["TypeScript", "Async"],
+        githubUrl: "https://github.com/sindresorhus/p-limit",
+      },
+    ],
+  },
+  {
+    name: "TJ Holowaychuk",
+    githubUsername: "tj",
+    headline: "Distributed Systems & Go Architect",
+    location: "Victoria, BC (Remote)",
+    experienceYears: 16.0,
+    education: "bachelors",
+    bio: "Creator of Express.js, Koa, Commander.js, Mocha, Apex, and Up. Specialist in minimalist systems architecture, cloud infrastructure, and Go.",
+    publicRepos: 580,
+    followers: 51000,
+    skills: [
+      { name: "Node.js", proficiency: "expert", yearsExperience: 13.0, verified: true, verificationScore: 100 },
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 16.0, verified: true, verificationScore: 99 },
+      { name: "Docker", proficiency: "expert", yearsExperience: 9.0, verified: true, verificationScore: 95 },
+      { name: "AWS", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 96 },
+      { name: "REST APIs", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 98 },
+    ],
+    projects: [
+      {
+        title: "Commander.js",
+        description: "The complete solution for node.js command-line interfaces.",
+        technologies: ["JavaScript", "Node.js", "CLI"],
+        githubUrl: "https://github.com/tj/commander.js",
+      },
+    ],
+  },
+  {
+    name: "Ricardo Cabello",
+    githubUsername: "mrdoob",
+    headline: "WebGL & 3D Graphics Pioneer",
+    location: "London, UK (Remote)",
+    experienceYears: 15.0,
+    education: "bachelors",
+    bio: "Creator of Three.js. Specializing in WebGL, 3D graphics rendering, shaders, real-time animation, and interactive web experiences.",
+    publicRepos: 120,
+    followers: 44000,
+    skills: [
+      { name: "JavaScript", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 100 },
+      { name: "Three.js", proficiency: "expert", yearsExperience: 13.0, verified: true, verificationScore: 100 },
+      { name: "HTML", proficiency: "expert", yearsExperience: 15.0, verified: true, verificationScore: 98 },
+      { name: "CSS", proficiency: "advanced", yearsExperience: 12.0, verified: true, verificationScore: 92 },
+    ],
+    projects: [
+      {
+        title: "Three.js",
+        description: "JavaScript 3D Library running in all modern browsers using WebGL and WebGPU.",
+        technologies: ["JavaScript", "WebGL", "WebGPU", "GLSL"],
+        githubUrl: "https://github.com/mrdoob/three.js",
+        liveUrl: "https://threejs.org",
+      },
+    ],
+  },
+  {
+    name: "Shawn Wang",
+    githubUsername: "swyx",
+    headline: "AI Engineer & Developer Ecosystem Architect",
+    location: "Singapore (Remote)",
+    experienceYears: 9.0,
+    education: "bachelors",
+    bio: "Founder of Latent Space. Creator of smol-ai and the AI Engineer Foundation. Author of The Coding Career Handbook. Helping developers transition to AI engineering.",
+    publicRepos: 180,
+    followers: 35000,
+    skills: [
+      { name: "Python", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 96 },
+      { name: "TypeScript", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 97 },
+      { name: "React", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 96 },
+      { name: "Machine Learning", proficiency: "advanced", yearsExperience: 4.0, verified: true, verificationScore: 92 },
+      { name: "Next.js", proficiency: "advanced", yearsExperience: 5.0, verified: true, verificationScore: 94 },
+    ],
+    projects: [
+      {
+        title: "smol developer",
+        description: "An open source AI developer agent that turns entire app specifications into working codebases.",
+        technologies: ["Python", "OpenAI", "FastAPI"],
+        githubUrl: "https://github.com/smol-ai/developer",
+      },
+    ],
+  },
+  {
+    name: "Brandon Keepers",
+    githubUsername: "bkeepers",
+    headline: "DevOps & GitHub Ecosystem Automation Engineer",
+    location: "San Francisco, CA",
+    experienceYears: 14.0,
+    education: "bachelors",
+    bio: "Former Head of Open Source at GitHub. Creator of Probot and dotenv. Specialist in GitHub Actions, CI/CD pipelines, and workflow automation.",
+    publicRepos: 190,
+    followers: 24000,
+    skills: [
+      { name: "CI/CD", proficiency: "expert", yearsExperience: 12.0, verified: true, verificationScore: 98 },
+      { name: "GitHub Actions", proficiency: "expert", yearsExperience: 6.0, verified: true, verificationScore: 99 },
+      { name: "Node.js", proficiency: "expert", yearsExperience: 10.0, verified: true, verificationScore: 96 },
+      { name: "Docker", proficiency: "expert", yearsExperience: 8.0, verified: true, verificationScore: 94 },
+      { name: "AWS", proficiency: "advanced", yearsExperience: 8.0, verified: true, verificationScore: 90 },
+    ],
+    projects: [
+      {
+        title: "Probot",
+        description: "A framework for building GitHub Apps to automate and improve your workflow.",
+        technologies: ["Node.js", "TypeScript", "GitHub API"],
+        githubUrl: "https://github.com/probot/probot",
+        liveUrl: "https://probot.github.io",
+      },
+      {
+        title: "dotenv",
+        description: "Loads environment variables from .env file into ENV in Ruby apps.",
+        technologies: ["Ruby", "DevOps"],
+        githubUrl: "https://github.com/bkeepers/dotenv",
+      },
+    ],
+  },
 ];
 
-const certificateTemplates = [
-  {
-    name: "AWS Certified Developer – Associate",
-    issuer: "Amazon Web Services",
-  },
-  {
-    name: "Meta Front-End Developer Professional Certificate",
-    issuer: "Meta",
-  },
-  {
-    name: "Google Data Analytics Professional Certificate",
-    issuer: "Google",
-  },
-  {
-    name: "Meta Back-End Developer Professional Certificate",
-    issuer: "Meta",
-  },
-  {
-    name: "HashiCorp Certified: Terraform Associate",
-    issuer: "HashiCorp",
-  },
-  { name: "Professional Scrum Master I", issuer: "Scrum.org" },
+const certTypes = [
+  { name: "AWS Certified Developer – Associate", issuer: "Amazon Web Services" },
+  { name: "Meta Front-End Developer Professional Certificate", issuer: "Meta" },
+  { name: "Google Cloud Professional Cloud Architect", issuer: "Google Cloud" },
+  { name: "HashiCorp Certified: Terraform Associate", issuer: "HashiCorp" },
+  { name: "Certified Kubernetes Administrator (CKA)", issuer: "Cloud Native Computing Foundation" },
+  { name: "Deep Learning Specialization", issuer: "DeepLearning.AI" },
 ];
 
-function makeCertificate(candidateIndex: number, certIndex: number) {
-  const template =
-    candidateIndex === 20
-      ? {
-          name: "Meta Front-End Developer Professional Certificate",
-          issuer: "Meta",
-        }
-      :
-    certificateTemplates[(candidateIndex + certIndex * 2) % certificateTemplates.length];
-  const suffix = String(candidateIndex + 1).padStart(3, "0");
-  const certNumber = String(certIndex + 1).padStart(2, "0");
-  const hashSeed = `${candidateIndex + 1}${certIndex + 3}`.padEnd(64, "a");
-  const issueDate = `202${(candidateIndex + certIndex) % 5}-0${((candidateIndex + certIndex) % 8) + 1}-15`;
+export const seedCandidates: Candidate[] = realDevelopers.map((dev, index) => {
+  const certTpl = certTypes[index % certTypes.length]!;
+  const suffix = String(index + 1).padStart(3, "0");
+  const certHash = `${index + 10}ab73c9f214${dev.githubUsername}`.padEnd(64, "0");
+  
   return {
-    ...template,
-    credentialId: `HR-${suffix}-${certNumber}`,
-    verificationHash:
-      candidateIndex === 20 && certIndex === 0
-        ? "6c496e723bd8600e4ebbcf7b9afa34fad456c80c0b150c2dc7359a485f4cb716"
-        : hashSeed.slice(0, 64),
-    issueDate,
-    verified: candidateIndex === 20 || (candidateIndex + certIndex) % 5 !== 0,
+    id: `candidate-${suffix}`,
+    name: dev.name,
+    headline: dev.headline,
+    location: dev.location,
+    experienceYears: dev.experienceYears,
+    education: dev.education,
+    bio: dev.bio,
+    publicRepos: dev.publicRepos,
+    followers: dev.followers,
+    avatarUrl: `https://github.com/${dev.githubUsername}.png`,
+    githubUsername: dev.githubUsername,
+    githubUrl: `https://github.com/${dev.githubUsername}`,
+    skills: dev.skills.map((s) => ({
+      name: s.name,
+      proficiency: s.proficiency,
+      yearsExperience: s.yearsExperience,
+      verified: s.verified,
+      verificationScore: s.verificationScore ?? 90,
+      category: "Engineering",
+    })),
+    certifications: [
+      {
+        name: certTpl.name,
+        issuer: certTpl.issuer,
+        credentialId: `HR-${suffix}-01`,
+        verificationHash: certHash,
+        issueDate: `202${(index % 4) + 1}-0${(index % 8) + 1}-15`,
+        verified: true,
+        reviewStatus: "auto_verified",
+        verificationUrl: `https://verify.hireready.dev/cert/HR-${suffix}-01`,
+      },
+    ],
+    projects: dev.projects,
   };
-}
+});
 
-const realGithubProjects = [
-  { title: "HireReady Core Engine", repo: "https://github.com/vasudev196006/hireread", demo: "https://hireread.dev" },
-  { title: "Distributed ML Training Pipeline", repo: "https://github.com/pytorch/pytorch", demo: "https://pytorch.org" },
-  { title: "Next-gen Component Framework", repo: "https://github.com/facebook/react", demo: "https://react.dev" },
-  { title: "Enterprise Microservices Platform", repo: "https://github.com/vercel/next.js", demo: "https://nextjs.org" },
-  { title: "Predictive Analytics Toolkit", repo: "https://github.com/scikit-learn/scikit-learn", demo: "https://scikit-learn.org" },
-  { title: "Automated Cloud Container Mesh", repo: "https://github.com/docker/compose", demo: "https://docker.com" },
-  { title: "Cluster Orchestration Controller", repo: "https://github.com/kubernetes/kubernetes", demo: "https://kubernetes.io" },
-  { title: "Production RAG Agent System", repo: "https://github.com/langchain-ai/langchain", demo: "https://langchain.com" },
-  { title: "Low-Latency In-Memory Cache", repo: "https://github.com/redis/redis", demo: "https://redis.io" },
-  { title: "Declarative Infrastructure as Code", repo: "https://github.com/hashicorp/terraform", demo: "https://terraform.io" },
-];
-
-const githubProfiles = [
-  "vasudev196006",
-  "gaearon",
-  "antirez",
-  "kelseyhightower",
-  "mrdoob",
-  "shadcn",
-  "sindresorhus",
-  "tj",
-  "bkeepers",
-  "mattt",
-];
-
-function makeProjects(
-  candidateIndex: number,
-  skills: Skill[],
-): CandidateProject[] {
-  const count = candidateIndex % 3 === 0 ? 2 : 1;
-
-  return Array.from({ length: count }, (_, projectIndex) => {
-    const projData = realGithubProjects[(candidateIndex + projectIndex * 3) % realGithubProjects.length]!;
-    const stackStart = (candidateIndex + projectIndex * 2) % Math.max(skills.length, 1);
-    const projectSkills = skills
-      .slice(stackStart, stackStart + 4)
-      .map((skill) => skill.name);
-    const technologies =
-      projectSkills.length > 0 ? projectSkills : skills.map((skill) => skill.name);
-    return {
-      title: projData.title,
-      description:
-        projectIndex === 0
-          ? "A production project focused on verifiable architecture, automated CI/CD, and high throughput."
-          : "An open-source library built with comprehensive unit test coverage and production documentation.",
-      technologies,
-      githubUrl: candidateIndex === 20 && projectIndex === 0
-        ? "https://github.com/vasudev196006/hireread"
-        : projData.repo,
-      liveUrl: projData.demo,
-    };
-  });
-}
-
-function makeCandidate(index: number): Candidate {
-  const trackIndex = index % roleTracks.length;
-  const variation = Math.floor(index / roleTracks.length);
-  const track = roleTracks[trackIndex];
-  const count = 4 + ((variation + trackIndex) % 5);
-  const offset = (variation * 2 + trackIndex) % track.skills.length;
-  const selectedSkillNames = Array.from(
-    { length: count },
-    (_, skillIndex) => track.skills[(offset + skillIndex) % track.skills.length],
-  );
-  const experienceYears = Number(
-    (0.8 + ((index * 7) % 105) / 10).toFixed(1),
-  );
-  const skills: Skill[] = selectedSkillNames.map((name, skillIndex) => ({
-    name,
-    proficiency: proficiencyLevels[(index + skillIndex * 2) % proficiencyLevels.length],
-    yearsExperience: Number(
-      Math.max(0.2, experienceYears - skillIndex * 0.55).toFixed(1),
-    ),
-    verified: (index + skillIndex) % 4 !== 0,
-  }));
-  const certificationCount =
-    index === 20 ? 1 : index % 4 === 0 ? 0 : index % 3 === 0 ? 2 : 1;
-  const certifications = Array.from({ length: certificationCount }, (_, certIndex) =>
-    makeCertificate(index, certIndex),
-  );
-
-  const ghUsername = index === 20
-    ? "vasudev196006"
-    : `${names[index]?.toLowerCase().replace(/[^a-z0-9]/g, "") || "dev"}-${(index + 1) * 7}`;
-
-  const ghUrl = index === 20
-    ? "https://github.com/vasudev196006"
-    : `https://github.com/${githubProfiles[index % githubProfiles.length] || "vasudev196006"}`;
-
-  return {
-    id: `candidate-${String(index + 1).padStart(3, "0")}`,
-    name: names[index],
-    headline: track.headline,
-    location: locations[index % locations.length],
-    experienceYears,
-    education: educationLevels[(index * 5) % educationLevels.length],
-    bio: `${track.headline} with ${experienceYears} years of experience building dependable products. Open source contributor with verifiable code evidence.`,
-    skills,
-    certifications,
-    projects: makeProjects(index, skills),
-    githubUsername: ghUsername,
-    githubUrl: ghUrl,
-  };
-}
-
-export const seedCandidates: Candidate[] = Array.from(
-  { length: names.length },
-  (_, index) => makeCandidate(index),
-);
-
-export const currentLearner: Candidate =
-  seedCandidates.find((candidate) => candidate.id === "candidate-021") ??
-  seedCandidates[0];
+export const currentLearner: Candidate = seedCandidates[0];
