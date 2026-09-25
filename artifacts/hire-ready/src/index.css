@@ -1787,9 +1787,26 @@
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.chatbot-icon-btn:hover {
+.chatbot-icon-btn:hover,
+.chatbot-icon-btn.active {
   background: rgba(255, 255, 255, 0.12);
   color: var(--apple-primary-text);
+  border-color: var(--apple-accent);
+}
+
+/* API Key Settings Drawer */
+.chatbot-settings-drawer {
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--apple-border);
+  padding: 12px 14px;
+  animation: fadeIn 0.18s ease-out;
+}
+.chatbot-settings-drawer code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--apple-accent);
 }
 
 /* Chat Messages Body */

@@ -17,16 +17,22 @@ import {
   Maximize2,
   ChevronRight,
   UserCheck,
+  Key,
+  Settings2,
+  Check,
+  Zap,
 } from 'lucide-react';
 import type { Candidate, Job, UserRole } from '@/lib/types';
 import { roleSkillGraphs, availableTargetRoles } from '@/lib/role-skill-graph';
 import { generateCareerRoadmap } from '@/lib/roadmap-engine';
+import { askGeminiAssistant } from '@/lib/gemini-chatbot';
 
 export interface ChatMessage {
   id: string;
   sender: 'bot' | 'user';
   text: string;
   timestamp: string;
+  isAIModel?: boolean;
   actions?: Array<{
     label: string;
     href?: string;
@@ -49,9 +55,16 @@ interface AIChatbotProps {
 export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [location, setLocation] = useLocation();
+
+  // API Key management (Environment or LocalStorage)
+  const envKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || '';
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('hireready_gemini_api_key') || envKey);
+  const [keyInput, setKeyInput] = useState(apiKey);
+  const [savedSuccess, setSavedSuccess] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -76,6 +89,17 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
     }
   }, [messages, isOpen, isMinimized, isTyping]);
 
+  const handleSaveApiKey = () => {
+    const trimmed = keyInput.trim();
+    setApiKey(trimmed);
+    localStorage.setItem('hireready_gemini_api_key', trimmed);
+    setSavedSuccess(true);
+    setTimeout(() => {
+      setSavedSuccess(false);
+      setShowSettings(false);
+    }, 1200);
+  };
+
   const quickPrompts = [
     'What jobs are currently open?',
     'What skills do I need for Machine Learning Engineer?',
@@ -84,7 +108,7 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
     'Who are the top ranked candidates?',
   ];
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || input).trim();
     if (!query) return;
 
@@ -99,6 +123,36 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
     if (!textToSend) setInput('');
     setIsTyping(true);
 
+    if (apiKey) {
+      try {
+        const aiResult = await askGeminiAssistant(apiKey, query, messages, {
+          jobs,
+          candidates,
+          learner,
+          role,
+        });
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            sender: 'bot',
+            text: aiResult.text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            actions: aiResult.actions,
+            dataSnippet: aiResult.dataSnippet,
+            isAIModel: true,
+          },
+        ]);
+        setIsTyping(false);
+        return;
+      } catch (err: any) {
+        console.warn('Gemini API query failed, falling back to domain engine:', err);
+        // Fall back gracefully below
+      }
+    }
+
+    // Built-in Deterministic Domain Engine Fallback
     setTimeout(() => {
       const botResponse = generateBotResponse(query, { jobs, candidates, learner, role, setLocation });
       setMessages((prev) => [...prev, botResponse]);
@@ -126,7 +180,8 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
             <div className="chatbot-trigger-info">
               <span className="chatbot-trigger-title">HireReady AI</span>
               <span className="chatbot-trigger-status">
-                <span className="radar-pulse-dot" style={{ width: 6, height: 6 }} /> Online & Ready
+                <span className="radar-pulse-dot" style={{ width: 6, height: 6 }} />{' '}
+                {apiKey ? 'Gemini 1.5 Flash' : 'Domain Engine'}
               </span>
             </div>
             <Sparkles size={14} className="chatbot-trigger-sparkle" />
@@ -145,7 +200,13 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
               </div>
               <div>
                 <div className="chatbot-header-name">
-                  HireReady AI <span className="pill pill-green" style={{ fontSize: 9, padding: '1px 6px' }}>GPT Engine</span>
+                  HireReady AI{' '}
+                  <span
+                    className={`pill ${apiKey ? 'pill-blue' : 'pill-green'}`}
+                    style={{ fontSize: 9, padding: '1px 6px' }}
+                  >
+                    {apiKey ? 'Gemini 1.5' : 'Domain Engine'}
+                  </span>
                 </div>
                 <div className="chatbot-header-sub">
                   Platform Knowledge · Career Roadmaps · Live Jobs
@@ -154,6 +215,13 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
             </div>
 
             <div className="chatbot-header-actions">
+              <button
+                className={`chatbot-icon-btn ${showSettings ? 'active' : ''}`}
+                onClick={() => setShowSettings(!showSettings)}
+                title="API Key Configuration"
+              >
+                <Key size={13} color={apiKey ? 'var(--apple-accent)' : 'var(--apple-secondary-text)'} />
+              </button>
               <button
                 className="chatbot-icon-btn"
                 onClick={() => setIsMinimized(!isMinimized)}
@@ -170,6 +238,45 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
               </button>
             </div>
           </div>
+
+          {/* API Key Settings Drawer */}
+          {showSettings && !isMinimized && (
+            <div className="chatbot-settings-drawer">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--apple-primary-text)' }}>
+                  Google Gemini API Key
+                </span>
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 11, color: 'var(--apple-accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3 }}
+                >
+                  Get free key <ExternalLink size={10} />
+                </a>
+              </div>
+              <p style={{ fontSize: 11, color: 'var(--apple-secondary-text)', margin: '0 0 8px', lineHeight: 1.4 }}>
+                Get a free key from Google AI Studio and paste it below, or add <code>VITE_GEMINI_API_KEY</code> to your environment.
+              </p>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <input
+                  type="password"
+                  className="chatbot-input"
+                  style={{ height: 32, fontSize: 11.5 }}
+                  placeholder="AIzaSy..."
+                  value={keyInput}
+                  onChange={(e) => setKeyInput(e.target.value)}
+                />
+                <button
+                  className="button button-primary"
+                  style={{ height: 32, padding: '0 12px', fontSize: 11 }}
+                  onClick={handleSaveApiKey}
+                >
+                  {savedSuccess ? <Check size={12} /> : 'Save'}
+                </button>
+              </div>
+            </div>
+          )}
 
           {!isMinimized && (
             <>
