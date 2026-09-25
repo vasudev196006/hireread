@@ -139,11 +139,13 @@ function DynamicIslandNav() {
     { href: '/recruiter/dashboard', label: 'Overview', icon: LayoutDashboard },
     { href: '/recruiter/matches', label: 'AI Matches & Ranking', icon: Radar },
     { href: '/recruiter/create-job', label: 'Post a Role', icon: Plus },
+    { href: '/careercope', label: 'Market Scope', icon: Globe },
   ];
 
   const seekerLinks = [
     { href: '/seeker/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/seeker/roadmap', label: 'AI Roadmap', icon: Target },
+    { href: '/careercope', label: 'Market Scope', icon: Globe },
     { href: '/seeker/profile/upload', label: 'Upload Proof', icon: UploadCloud },
     { href: '/seeker/credentials', label: 'Verified Credentials', icon: Award },
   ];
@@ -2928,6 +2930,58 @@ function SelectField({
 }
 
 // ==========================================
+// 6. CAREERCOPE AI - MARKET INTELLIGENCE PORTAL
+// ==========================================
+function CareercopePage() {
+  return (
+    <div className="page" style={{ paddingBottom: 40 }}>
+      <SectionHeader
+        eyebrow="Multi-Source Real-Time Market Telemetry"
+        title="CAREERCOPE AI — Career Market Intelligence"
+        description="Evidence-based job data aggregation across Adzuna, The Muse, and Remotive with Leaflet geographic demand mapping and AI horizon forecasting."
+        action={
+          <a
+            href="/careercope/index.html"
+            target="_blank"
+            rel="noreferrer"
+            className="button button-secondary"
+            style={{ fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            Launch Fullscreen Portal <ExternalLink size={12} />
+          </a>
+        }
+      />
+
+      {/* Embedded High-Fidelity Careercope Portal */}
+      <div
+        className="card"
+        style={{
+          padding: 0,
+          overflow: 'hidden',
+          borderRadius: 20,
+          border: '1px solid var(--apple-border)',
+          borderTop: '1px solid var(--apple-specular-top)',
+          background: 'var(--apple-glass-elevated)',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+          minHeight: '85vh',
+        }}
+      >
+        <iframe
+          src="/careercope/index.html"
+          title="Careercope AI Market Intelligence"
+          style={{
+            width: '100%',
+            height: '85vh',
+            border: 'none',
+            display: 'block',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
 // ROUTER & ROUTE GUARDS
 // ==========================================
 function Router() {
@@ -2938,6 +2992,11 @@ function Router() {
       <Switch>
         {/* Public Landing & Login */}
         <Route path="/" component={LandingPage} />
+
+        {/* Market Intelligence / Careercope Routes */}
+        <Route path="/careercope" component={CareercopePage} />
+        <Route path="/market-intelligence" component={CareercopePage} />
+        <Route path="/scope" component={CareercopePage} />
 
         {/* Recruiter Routes */}
         <Route path="/recruiter/dashboard" component={RecruiterDashboard} />

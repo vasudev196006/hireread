@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAREERCOPE AI — Understand Where Your Career Is Heading</title>
+  <meta name="description" content="Evidence-based career intelligence platform analyzing real-time job market data across Adzuna, The Muse, and Remotive with Gemini AI.">
+
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- Hero Search Section -->
+    <section class="hero-section" id="heroSection">
+      <h1 class="hero-title">
+        Understand Where Your <span class="gradient-text">Career Is Heading</span>
+      </h1>
+      <p class="hero-subtitle">
+        Real job-market evidence aggregated from Adzuna, The Muse, and Remotive, powered by Gemini AI synthesis.
+      </p>
+
+      <!-- Search Controls -->
+      <form class="search-box-wrapper" id="searchForm">
+        <div class="search-input-group">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input 
+            type="text" 
+            id="careerInput" 
+            class="search-input" 
+            placeholder="Search a career or job title (e.g. Software Engineer, Data Scientist)..."
+            required
+            autocomplete="off"
+            value="Software Engineer"
+          />
+        </div>
+
+        <div class="country-select-group">
+          <i class="fa-solid fa-globe country-icon"></i>
+          <select id="countrySelect" class="country-select">
+            <option value="in" selected>India (IN)</option>
+            <option value="us">United States (US)</option>
+            <option value="gb">United Kingdom (GB)</option>
+            <option value="ca">Canada (CA)</option>
+            <option value="au">Australia (AU)</option>
+            <option value="de">Germany (DE)</option>
+            <option value="global">Global / Remote</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-analyze" id="analyzeBtn">
+          <span class="btn-text">Analyze Career</span>
+          <i class="fa-solid fa-arrow-trend-up"></i>
+        </button>
+      </form>
+
+      <!-- Popular Searches Chips -->
+      <div class="popular-chips-container">
+        <span class="chips-label">Popular Searches:</span>
+        <div class="chips-list">
+          <button type="button" class="search-chip" data-career="Software Engineer">Software Engineer</button>
+          <button type="button" class="search-chip" data-career="Data Scientist">Data Scientist</button>
+          <button type="button" class="search-chip" data-career="Cybersecurity Analyst">Cybersecurity Analyst</button>
+          <button type="button" class="search-chip" data-career="Cloud Engineer">Cloud Engineer</button>
+          <button type="button" class="search-chip" data-career="DevOps Engineer">DevOps Engineer</button>
+          <button type="button" class="search-chip" data-career="UI/UX Designer">UI/UX Designer</button>
+          <button type="button" class="search-chip" data-career="Doctor">Doctor</button>
+          <button type="button" class="search-chip" data-career="Nurse">Nurse</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Animated Loading Experience -->
+    <section class="loading-section" id="loadingSection" style="display: none;">
+      <div class="loading-card glass-panel">
+        <div class="radar-spinner">
+          <div class="radar-circle"></div>
+          <div class="radar-sweep"></div>
+          <i class="fa-solid fa-atom center-icon"></i>
+        </div>
+        <h3 class="loading-title">Analyzing Career Landscape...</h3>
+        <p class="loading-subtitle" id="loadingCareerText">Gathering real-time market evidence</p>
+
+        <!-- Progress Steps Checklist -->
+        <ul class="progress-checklist" id="progressChecklist">
+          <li class="check-item" id="stepAdzuna"><i class="fa-regular fa-circle"></i> Collecting Adzuna job data</li>
+          <li class="check-item" id="stepMuse"><i class="fa-regular fa-circle"></i> Collecting The Muse job data</li>
+          <li class="check-item" id="stepRemotive"><i class="fa-regular fa-circle"></i> Collecting Remotive job data</li>
+          <li class="check-item" id="stepCombine"><i class="fa-regular fa-circle"></i> Combining job-market evidence & deduplicating</li>
+          <li class="check-item" id="stepSkills"><i class="fa-regular fa-circle"></i> Extracting verified skills & salary metrics</li>
+          <li class="check-item" id="stepAI"><i class="fa-regular fa-circle"></i> Generating AI career outlook</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Error Banner -->
+    <section class="error-banner" id="errorBanner" style="display: none;">
+      <div class="error-content">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="error-text">
+          <h4 id="errorTitle">Search Notice</h4>
+          <p id="errorMessage">An unexpected issue occurred while analyzing the career.</p>
+        </div>
+        <button type="button" class="btn-close-error" id="closeErrorBtn">&times;</button>
+      </div>
+    </section>
+
+    <!-- Results Dashboard Section -->
+    <section class="dashboard-section" id="dashboardSection" style="display: none;">
+
+      <!-- Dashboard Header & Top Stats -->
+      <div class="dashboard-header glass-panel">
+        <div class="header-main-info">
+          <div class="classification-badge">
+            <span class="badge-tag observed-tag">OBSERVED DATA</span>
+            <span class="badge-country" id="dashCountryBadge">India (IN)</span>
+            <span class="badge-cached" id="dashCacheBadge" style="display: none;"><i class="fa-solid fa-bolt"></i> Cached</span>
+          </div>
+          <h2 class="dash-career-title" id="dashCareerTitle">Software Engineer</h2>
+          <p class="dash-subtitle" id="dashMarketSummary">Market summary loading...</p>
+        </div>
+
+        <div class="market-signal-box" id="signalBox">
+          <span class="signal-caption">CURRENT MARKET SIGNAL</span>
+          <div class="signal-indicator" id="signalBadge">
+            <span class="signal-dot"></span>
+            <span class="signal-text" id="signalLabel">HIGH</span>
+          </div>
+          <span class="signal-subtext" id="signalExplanation">Strong volume across connected sources</span>
+        </div>
+      </div>
+
+      <!-- Quick Stats Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card glass-panel">
+          <div class="metric-icon blue"><i class="fa-solid fa-briefcase"></i></div>
+          <div class="metric-details">
+            <span class="metric-label">TOTAL JOBS ANALYZED</span>
+            <span class="metric-value" id="metricTotalJobs">0</span>
+            <span class="metric-meta">Deduplicated from 3 APIs</span>
+          </div>
+        </div>
+
+        <div class="metric-card glass-panel">
+          <div class="metric-icon purple"><i class="fa-solid fa-layer-group"></i></div>
+          <div class="metric-details">
+            <span class="metric-label">SOURCE BREAKDOWN</span>
+            <div class="sources-mini-counts" id="miniSourceCounts">
+              <span>Adzuna: <strong id="cntAdzuna">0</strong></span>
+              <span>Muse: <strong id="cntMuse">0</strong></span>
+              <span>Remotive: <strong id="cntRemotive">0</strong></span>
+            </div>
+            <span class="metric-meta">Real API responses</span>
+          </div>
+        </div>
+
+        <div class="metric-card glass-panel">
+          <div class="metric-icon emerald"><i class="fa-solid fa-money-bill-wave"></i></div>
+          <div class="metric-details">
+            <span class="metric-label">SALARY BENCHMARK</span>
+            <span class="metric-value" id="metricSalaryAvg">N/A</span>
+            <span class="metric-meta" id="metricSalaryMeta">Disclosed in 0 jobs</span>
+          </div>
+        </div>
+
+        <div class="metric-card glass-panel">
+          <div class="metric-icon amber"><i class="fa-solid fa-fire"></i></div>
+          <div class="metric-details">
+            <span class="metric-label">TOP DEMANDED SKILL</span>
+            <span class="metric-value" id="metricTopSkill">None</span>
+            <span class="metric-meta" id="metricTopSkillPct">0% appearance rate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Charts Grid -->
+      <div class="charts-grid">
+        <!-- Top Skills Chart -->
+        <div class="chart-card glass-panel">
+          <div class="section-title-bar">
+            <div class="title-with-badge">
+              <h4 class="chart-title"><i class="fa-solid fa-code"></i> Top Verified Skills</h4>
+              <span class="badge-tag calculated-tag">CALCULATED</span>
+            </div>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="skillsChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Jobs by Source Chart -->
+        <div class="chart-card glass-panel">
+          <div class="section-title-bar">
+            <div class="title-with-badge">
+              <h4 class="chart-title"><i class="fa-solid fa-chart-pie"></i> Jobs by API Source</h4>
+              <span class="badge-tag observed-tag">OBSERVED</span>
+            </div>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="sourcesChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Hiring Companies Chart -->
+        <div class="chart-card glass-panel">
+          <div class="section-title-bar">
+            <div class="title-with-badge">
+              <h4 class="chart-title"><i class="fa-solid fa-building"></i> Top Hiring Companies</h4>
+              <span class="badge-tag observed-tag">OBSERVED</span>
+            </div>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="companiesChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Job Types & Work Mode Chart -->
+        <div class="chart-card glass-panel">
+          <div class="section-title-bar">
+            <div class="title-with-badge">
+              <h4 class="chart-title"><i class="fa-solid fa-id-badge"></i> Job Types & Work Formats</h4>
+              <span class="badge-tag calculated-tag">CALCULATED</span>
+            </div>
+          </div>
+          <div class="chart-canvas-container">
+            <canvas id="jobTypesChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: AI Career Market Analysis & Signals -->
+      <div class="card-section glass-panel">
+        <div class="section-title-bar">
+          <div class="title-with-badge">
+            <h3 class="section-title"><i class="fa-solid fa-brain"></i> AI Career Intelligence & Signals</h3>
+            <span class="badge-tag ai-tag">AI INTERPRETATION</span>
+          </div>
+          <span class="section-hint">Synthesized by Gemini from verified market evidence</span>
+        </div>
+
+        <div class="ai-signals-grid">
+          <div class="ai-box observed-signals-box">
+            <h5 class="box-heading"><i class="fa-solid fa-radar"></i> Observed Market Signals</h5>
+            <ul class="signal-list" id="observedSignalsList">
+              <li>No signals loaded</li>
+            </ul>
+          </div>
+
+          <div class="ai-box opportunities-box">
+            <h5 class="box-heading"><i class="fa-solid fa-circle-check"></i> Market Opportunities</h5>
+            <ul class="opportunity-list" id="opportunitiesList">
+              <li>No opportunities loaded</li>
+            </ul>
+          </div>
+
+          <div class="ai-box uncertainties-box">
+            <h5 class="box-heading"><i class="fa-solid fa-triangle-exclamation"></i> Risks & Uncertainties</h5>
+            <ul class="uncertainty-list" id="uncertaintiesList">
+              <li>No uncertainties loaded</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Future Career Outlook -->
+      <div class="card-section glass-panel outlook-container">
+        <div class="section-title-bar">
+          <div class="title-with-badge">
+            <h3 class="section-title"><i class="fa-solid fa-chart-line"></i> Future Career Outlook</h3>
+            <span class="badge-tag uncertainty-tag">UNCERTAINTY</span>
+          </div>
+          <div class="confidence-badge" id="confidenceBadge">
+            Confidence: <strong id="confidenceVal">Moderate</strong>
+          </div>
+        </div>
+
+        <!-- Strict Non-Prediction Disclaimer Banner -->
+        <div class="disclaimer-banner">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div class="disclaimer-text">
+            <strong>EVIDENCE-BASED OUTLOOK NOTICE:</strong>
+            AI-generated outlook based on currently available market data. Not a guaranteed prediction or market certainty. The system does not invent future numbers.
+          </div>
+        </div>
+
+        <!-- 1, 5, 10 Year Outlook Grid -->
+        <div class="outlook-grid">
+          <div class="outlook-card">
+            <div class="outlook-header">
+              <span class="timeline-pill">1 YEAR</span>
+              <h4 class="outlook-term">Short-Term Horizon</h4>
+            </div>
+            <p class="outlook-body" id="outlookOneYear">Analysis loading...</p>
+            <span class="outlook-meta"><i class="fa-regular fa-clock"></i> Immediate skillset trends</span>
+          </div>
+
+          <div class="outlook-card">
+            <div class="outlook-header">
+              <span class="timeline-pill">5 YEAR</span>
+              <h4 class="outlook-term">Mid-Term Evolution</h4>
+            </div>
+            <p class="outlook-body" id="outlookFiveYear">Analysis loading...</p>
+            <span class="outlook-meta"><i class="fa-regular fa-clock"></i> Automation & tool transformation</span>
+          </div>
+
+          <div class="outlook-card">
+            <div class="outlook-header">
+              <span class="timeline-pill">10 YEAR</span>
+              <h4 class="outlook-term">Long-Term Trajectory</h4>
+            </div>
+            <p class="outlook-body" id="outlookTenYear">Analysis loading...</p>
+            <span class="outlook-meta"><i class="fa-regular fa-clock"></i> Structural domain changes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Data Limitations & Attribution -->
+      <div class="card-section glass-panel limitations-container">
+        <div class="section-title-bar">
+          <div class="title-with-badge">
+            <h3 class="section-title"><i class="fa-solid fa-circle-info"></i> Data Limitations & Transparency</h3>
+            <span class="badge-tag limitation-tag">DATA LIMITATIONS</span>
+          </div>
+        </div>
+        <div class="limitations-grid">
+          <ul class="limitations-list" id="limitationsList">
+            <li>Sample reflects only listings aggregated from connected APIs (Adzuna, The Muse, Remotive).</li>
+            <li>Compensation data is derived exclusively from positions disclosing compensation bands.</li>
+            <li>Market signals represent a snapshot of active hiring cycles and vary dynamically.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section: Real Job Listings Directory -->
+      <div class="card-section glass-panel">
+        <div class="section-title-bar listings-bar">
+          <div class="title-with-badge">
+            <h3 class="section-title"><i class="fa-solid fa-list-check"></i> Verified Job Listings</h3>
+            <span class="badge-tag observed-tag">OBSERVED</span>
+            <span class="listings-counter" id="listingsCount">0 listings</span>
+          </div>
+
+          <!-- Listings Filter controls -->
+          <div class="listings-filter-controls">
+            <input 
+              type="text" 
+              id="filterKeyword" 
+              class="filter-input" 
+              placeholder="Filter by title, company, skill..."
+            />
+            <select id="filterSource" class="filter-select">
+              <option value="all">All Sources</option>
+              <option value="adzuna">Adzuna</option>
+              <option value="muse">The Muse</option>
+              <option value="remotive">Remotive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Listings Grid Container -->
+        <div class="job-cards-grid" id="jobCardsGrid">
+          <!-- Dynamically populated job cards -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Scripts: Chart.js & Leaflet.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Application Modules -->
+  <script src="./js/api.js"></script>
+  <script src="./js/charts.js"></script>
+  <script src="./js/map.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>
