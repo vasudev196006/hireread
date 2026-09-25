@@ -1,3 +1,8 @@
+import type { Candidate, AdzunaJob } from './types';
+
+export type { AdzunaJob };
+
+
 const ADZUNA_APP_KEY_DEFAULT = (import.meta.env.VITE_ADZUNA_APP_KEY as string) || "d35267de72c23620cc7c5bdac12dc6d2";
 const ADZUNA_APP_ID_DEFAULT = (import.meta.env.VITE_ADZUNA_APP_ID as string) || "acc9c7cf";
 

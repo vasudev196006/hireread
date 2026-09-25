@@ -70,7 +70,7 @@ export function CareercopeMarketIntelligence() {
     try {
       // 1. Fetch live jobs
       const [adzunaRes, museRes] = await Promise.allSettled([
-        searchAdzunaJobs(targetCareer, 1, country === 'global' ? 'us' : country),
+        searchAdzunaJobs(targetCareer, country === 'global' ? 'us' : country, 1),
         fetchMuseJobs(targetCareer, 1),
       ]);
 
@@ -88,7 +88,7 @@ export function CareercopeMarketIntelligence() {
             job_type: j.contractType,
             description: j.description,
             url: j.redirectUrl,
-            created: j.created,
+            created: j.created || new Date().toISOString(),
             skills: j.inferredSkills || ['Engineering', 'System Architecture'],
           });
         });

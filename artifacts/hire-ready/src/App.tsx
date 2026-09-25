@@ -175,7 +175,7 @@ function DynamicIslandNav() {
     try {
       const data = await fetchLiveGitHubProfile(learner.githubUsername);
       if (data) {
-        notify(`Synced ${data.public_repos} public repos from GitHub (@${learner.githubUsername})`);
+        notify(`Synced ${data.profile.public_repos} public repos from GitHub (@${learner.githubUsername})`);
       } else {
         notify('GitHub API rate limited or profile unreachable');
       }

@@ -327,24 +327,29 @@
   box-shadow:
     0 16px 36px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
+  border-radius: 26px;
   transition:
-    all 0.38s cubic-bezier(0.32, 0.72, 0, 1),
-    max-height 0.38s cubic-bezier(0.32, 0.72, 0, 1),
-    border-radius 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    background 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    max-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    backdrop-filter 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   max-width: 96vw;
   min-width: 680px;
 }
 
-/* Dynamic Island Hover / Expanded Revealing Effect */
+/* Dynamic Island Hover / Expanded Motion Blur & Revealing Effect */
 .dynamic-island:hover,
 .dynamic-island.is-expanded {
-  border-radius: 24px;
+  border-radius: 26px;
   background: var(--apple-glass-elevated);
+  backdrop-filter: blur(28px) saturate(210%);
+  -webkit-backdrop-filter: blur(28px) saturate(210%);
   border-color: rgba(255, 255, 255, 0.25);
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.65),
+    0 0 24px rgba(10, 132, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
