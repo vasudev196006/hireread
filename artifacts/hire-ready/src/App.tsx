@@ -273,6 +273,21 @@ function DynamicIslandNav() {
                 </span>
               </a>
             )}
+
+            <button
+              className="island-pill-btn"
+              onClick={() => setIsExpanded(!isExpanded)}
+              title="Expand dynamic quick controls shelf"
+              aria-label="Toggle Island Drawer"
+            >
+              <ChevronRight
+                size={13}
+                style={{
+                  transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.25s ease',
+                }}
+              />
+            </button>
           </div>
         </div>
 

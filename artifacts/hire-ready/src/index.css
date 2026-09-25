@@ -72,8 +72,8 @@
     margin: 0;
     min-height: 100vh;
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.12), rgba(255, 255, 255, 0)),
-      #09090b;
+      radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.9) 100%),
+      url('/hero.jpg') center top / cover no-repeat fixed;
     color: var(--apple-primary-text);
     font-family: var(--app-font-sans);
   }
@@ -1456,8 +1456,8 @@
 .landing-wrap {
   min-height: 100vh;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15), rgba(255, 255, 255, 0)),
-    #09090b;
+    radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.9) 100%),
+    url('/hero.jpg') center top / cover no-repeat fixed;
   color: var(--apple-primary-text);
   display: flex;
   flex-direction: column;
