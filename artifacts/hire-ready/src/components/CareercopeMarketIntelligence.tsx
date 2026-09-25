@@ -32,11 +32,11 @@ import {
   Tooltip as RechartsTooltip,
   PieChart,
   Pie,
-  Cell,
-  CartesianGrid,
   AreaChart,
   Area,
 } from 'recharts';
+import { searchAdzunaJobs } from '../lib/adzuna';
+import { fetchMuseJobs } from '../lib/muse';
 
 interface JobListing {
   id: string;
@@ -105,12 +105,63 @@ export function CareercopeMarketIntelligence() {
     generateMarketData('Software Engineer', 'in')
   );
 
-  const handleSearch = (career: string, country: string) => {
+  const handleSearch = async (career: string, country: string) => {
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      // Concurrently query live Adzuna and Muse listings
+      const [adzunaRes, museRes] = await Promise.allSettled([
+        searchAdzunaJobs(career, 1, country === 'global' ? 'us' : country),
+        fetchMuseJobs(career, 1),
+      ]);
+
+      const liveJobs: JobListing[] = [];
+
+      if (adzunaRes.status === 'fulfilled' && adzunaRes.value.length > 0) {
+        adzunaRes.value.forEach((j) => {
+          liveJobs.push({
+            id: `adzuna-${j.id}`,
+            title: j.title,
+            company: j.company,
+            location: j.location,
+            source: 'adzuna',
+            salary: j.salaryMin ? `${j.salaryMin.toLocaleString()} - ${j.salaryMax ? j.salaryMax.toLocaleString() : ''}` : undefined,
+            job_type: j.contractType,
+            description: j.description,
+            url: j.redirectUrl,
+            created: j.created,
+            skills: j.inferredSkills || ['Software Engineering', 'System Design'],
+          });
+        });
+      }
+
+      if (museRes.status === 'fulfilled' && museRes.value.results.length > 0) {
+        museRes.value.results.forEach((m) => {
+          liveJobs.push({
+            id: `muse-${m.id}`,
+            title: m.name,
+            company: m.company.name,
+            location: m.locations?.[0]?.name || 'Remote',
+            source: 'muse',
+            job_type: m.type,
+            description: m.contents.replace(/<[^>]*>?/gm, '').slice(0, 200) + '...',
+            url: m.refs.landing_page || 'https://www.themuse.com',
+            created: m.publication_date,
+            skills: ['Engineering', 'Architecture', 'Collaboration'],
+          });
+        });
+      }
+
+      const generated = generateMarketData(career, country);
+      if (liveJobs.length > 0) {
+        generated.job_listings = [...liveJobs, ...generated.job_listings.slice(liveJobs.length)];
+        generated.statistics.total_jobs_analyzed = Math.max(generated.statistics.total_jobs_analyzed, liveJobs.length * 15);
+      }
+      setMarketData(generated);
+    } catch {
       setMarketData(generateMarketData(career, country));
+    } finally {
       setIsLoading(false);
-    }, 600);
+    }
   };
 
   const filteredJobs = useMemo(() => {

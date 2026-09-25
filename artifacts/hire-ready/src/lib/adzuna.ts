@@ -1,7 +1,5 @@
-import type { AdzunaJob, Candidate } from "./types";
-
-const ADZUNA_APP_KEY_DEFAULT = "d35267de72c23620cc7c5bdac12dc6d2";
-const ADZUNA_APP_ID_DEFAULT = "3c306283"; // standard Adzuna app_id format or fallback
+const ADZUNA_APP_KEY_DEFAULT = (import.meta.env.VITE_ADZUNA_APP_KEY as string) || "d35267de72c23620cc7c5bdac12dc6d2";
+const ADZUNA_APP_ID_DEFAULT = (import.meta.env.VITE_ADZUNA_APP_ID as string) || "acc9c7cf";
 
 const commonKeywords = [
   "React",
@@ -203,3 +201,6 @@ export function scoreAdzunaJobMatch(candidate: Candidate, job: AdzunaJob): numbe
   const baseMatch = Math.round((matched / inferred.length) * 60) + 35;
   return Math.min(98, Math.max(45, baseMatch));
 }
+
+export const searchAdzunaJobs = fetchAdzunaJobs;
+
