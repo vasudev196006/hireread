@@ -21,6 +21,7 @@ import {
 import { generateAISkillSuggestions } from '@/lib/ai-job-suggestions';
 import { fetchAdzunaJobs, scoreAdzunaJobMatch } from '@/lib/adzuna';
 import { fetchLiveGitHubProfile } from '@/lib/github';
+import { AIChatbot } from '@/components/AIChatbot';
 import type {
   AdzunaJob,
   Candidate,
@@ -3085,6 +3086,7 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, '') || ''}>
             <Router />
+            <AIChatbot jobs={jobs} candidates={candidates} learner={learner} role={role} />
           </WouterRouter>
           <Toaster />
           {notice && (

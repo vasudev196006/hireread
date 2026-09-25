@@ -222,6 +222,10 @@ importers:
         version: 3.1.0
 
   artifacts/hire-ready:
+    dependencies:
+      bot-avatars:
+        specifier: ^0.1.1
+        version: 0.1.1(react@19.1.0)
     devDependencies:
       '@esbuild/win32-x64':
         specifier: ^0.28.2
@@ -1778,6 +1782,11 @@ packages:
   body-parser@2.3.0:
     resolution: {integrity: sha512-2cGmJupaNgg+QUwVLAucDuWuoMZ6EX9iHDRswZ5lsNYEmwPaRknMPCLZz07yTzVq/83p4o/wzbDZbBrTvGGTIw==}
     engines: {node: '>=18'}
+
+  bot-avatars@0.1.1:
+    resolution: {integrity: sha512-J1gamb44dLXWViX6N+qz8wQyMmVUEtv9GrrHXo+xP3GlzbVzPTO4g+bWme0F9OXpX31nyDXSnUG9/mctUi7t3w==}
+    peerDependencies:
+      react: '>=18.0.0'
 
   brace-expansion@5.0.9:
     resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
@@ -4432,6 +4441,10 @@ snapshots:
       type-is: 2.1.0
     transitivePeerDependencies:
       - supports-color
+
+  bot-avatars@0.1.1(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   brace-expansion@5.0.9:
     dependencies:
