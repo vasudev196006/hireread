@@ -123,41 +123,34 @@ export function AIChatbot({ jobs, candidates, learner, role }: AIChatbotProps) {
     if (!textToSend) setInput('');
     setIsTyping(true);
 
-    if (apiKey) {
-      try {
-        const aiResult = await askGeminiAssistant(apiKey, query, messages, {
-          jobs,
-          candidates,
-          learner,
-          role,
-        });
+    try {
+      const aiResult = await askGeminiAssistant(apiKey, query, messages, {
+        jobs,
+        candidates,
+        learner,
+        role,
+      });
 
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `bot-${Date.now()}`,
-            sender: 'bot',
-            text: aiResult.text,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            actions: aiResult.actions,
-            dataSnippet: aiResult.dataSnippet,
-            isAIModel: true,
-          },
-        ]);
-        setIsTyping(false);
-        return;
-      } catch (err: any) {
-        console.warn('Gemini API query failed, falling back to domain engine:', err);
-        // Fall back gracefully below
-      }
-    }
-
-    // Built-in Deterministic Domain Engine Fallback
-    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: aiResult.text,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          actions: aiResult.actions,
+          dataSnippet: aiResult.dataSnippet,
+          isAIModel: true,
+        },
+      ]);
+      setIsTyping(false);
+      return;
+    } catch (err: any) {
+      console.warn('AI query failed, generating domain response:', err);
       const botResponse = generateBotResponse(query, { jobs, candidates, learner, role, setLocation });
       setMessages((prev) => [...prev, botResponse]);
       setIsTyping(false);
-    }, 450);
+    }
   };
 
   return (
