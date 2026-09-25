@@ -737,8 +737,8 @@ function SeekerDashboard() {
       {/* Clean Apple Hero Header */}
       <div className="page-head">
         <div>
-          <div className="eyebrow">Candidate Workspace</div>
-          <h1>Welcome back, {learner.name.split(' ')[0]}.</h1>
+          <div className="eyebrow">Overview</div>
+          <h1>Candidate Workspace</h1>
           <p>
             Track your career roadmap progression, inspect verified GitHub code evidence, and apply to live Adzuna market roles.
           </p>
