@@ -1,0 +1,1 @@
+# CAREERCOPE AI backend package
