@@ -2081,3 +2081,181 @@
   color: rgba(255, 255, 255, 0.3);
   cursor: not-allowed;
 }
+
+/* =========================================================
+   CAREERCOPE AI - MARKET INTELLIGENCE (Impeccable Design)
+   ========================================================= */
+.careercope-container {
+  width: 100%;
+}
+
+.glass-surface-hero {
+  background: var(--apple-glass-elevated);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--apple-border);
+  border-top: 1px solid var(--apple-specular-top);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.scope-search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.scope-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 0 14px;
+  height: 44px;
+  flex: 1;
+  min-width: 280px;
+  transition: border-color 0.2s ease;
+}
+.scope-search-input-wrap:focus-within {
+  border-color: var(--apple-accent);
+}
+
+.scope-search-icon {
+  color: var(--apple-secondary-text);
+}
+
+.scope-search-input {
+  background: transparent;
+  border: none;
+  color: var(--apple-primary-text);
+  font-size: 13.5px;
+  width: 100%;
+  outline: none;
+}
+.scope-search-input::placeholder {
+  color: var(--apple-secondary-text);
+}
+
+.scope-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 0 12px;
+  height: 44px;
+}
+
+.scope-select {
+  background: transparent;
+  border: none;
+  color: var(--apple-primary-text);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+.scope-select option {
+  background: #1C1C1E;
+  color: #fff;
+}
+
+.scope-submit-btn {
+  height: 44px;
+  padding: 0 18px;
+  font-size: 13.5px;
+  border-radius: 14px;
+}
+
+.scope-chips-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.scope-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--apple-border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11.5px;
+  color: var(--apple-secondary-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.scope-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--apple-primary-text);
+}
+.scope-chip.active {
+  background: var(--apple-accent);
+  color: #fff;
+  border-color: var(--apple-accent);
+}
+
+/* Telemetry Bar */
+.scope-telemetry-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.scope-telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 11px;
+  color: var(--apple-secondary-text);
+}
+.scope-telemetry-item strong {
+  color: var(--apple-success);
+}
+
+/* Tabs Bar */
+.scope-tabs-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--apple-border);
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+
+.scope-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--apple-secondary-text);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+.scope-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--apple-primary-text);
+}
+.scope-tab-btn.active {
+  background: rgba(10, 132, 255, 0.15);
+  border-color: var(--apple-accent);
+  color: var(--apple-accent);
+}

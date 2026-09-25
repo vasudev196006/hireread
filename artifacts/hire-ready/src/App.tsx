@@ -22,6 +22,7 @@ import { generateAISkillSuggestions } from '@/lib/ai-job-suggestions';
 import { fetchAdzunaJobs, scoreAdzunaJobMatch } from '@/lib/adzuna';
 import { fetchLiveGitHubProfile } from '@/lib/github';
 import { AIChatbot } from '@/components/AIChatbot';
+import { CareercopeMarketIntelligence } from '@/components/CareercopeMarketIntelligence';
 import type {
   AdzunaJob,
   Candidate,
@@ -2935,48 +2936,7 @@ function SelectField({
 function CareercopePage() {
   return (
     <div className="page" style={{ paddingBottom: 40 }}>
-      <SectionHeader
-        eyebrow="Multi-Source Real-Time Market Telemetry"
-        title="CAREERCOPE AI — Career Market Intelligence"
-        description="Evidence-based job data aggregation across Adzuna, The Muse, and Remotive with Leaflet geographic demand mapping and AI horizon forecasting."
-        action={
-          <a
-            href="/careercope/index.html"
-            target="_blank"
-            rel="noreferrer"
-            className="button button-secondary"
-            style={{ fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}
-          >
-            Launch Fullscreen Portal <ExternalLink size={12} />
-          </a>
-        }
-      />
-
-      {/* Embedded High-Fidelity Careercope Portal */}
-      <div
-        className="card"
-        style={{
-          padding: 0,
-          overflow: 'hidden',
-          borderRadius: 20,
-          border: '1px solid var(--apple-border)',
-          borderTop: '1px solid var(--apple-specular-top)',
-          background: 'var(--apple-glass-elevated)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-          minHeight: '85vh',
-        }}
-      >
-        <iframe
-          src="/careercope/index.html"
-          title="Careercope AI Market Intelligence"
-          style={{
-            width: '100%',
-            height: '85vh',
-            border: 'none',
-            display: 'block',
-          }}
-        />
-      </div>
+      <CareercopeMarketIntelligence />
     </div>
   );
 }
