@@ -15,6 +15,7 @@ export async function askGeminiAssistant(
   context: GeminiContext
 ): Promise<{ text: string; actions?: ChatMessage['actions']; dataSnippet?: ChatMessage['dataSnippet'] }> {
   const { jobs, candidates, learner, role } = context;
+  const key = apiKey.trim();
 
   // Build condensed website grounding context
   const jobsSummary = jobs
@@ -35,70 +36,123 @@ export async function askGeminiAssistant(
 
   const learnerSummary = `Logged-in User: ${learner.name} (${learner.headline}, target role: ${learner.targetRole || 'Full-Stack Developer'}). Verified skills: ${learner.skills.filter((s) => s.verified).map((s) => s.name).join(', ')}. Certifications: ${learner.certifications.map((c) => `${c.name} (${c.issuer})`).join(', ')}.`;
 
-  const systemInstruction = `You are HireReady AI, the intelligent recruitment, career guidance, and verification assistant for the HireReady platform.
-HireReady is a verified talent intelligence platform featuring:
-1. Cryptographic SHA-256 certificate verification (no self-reported fluff, audited against issuers & live GitHub repos).
+  const systemInstruction = `You are HireReady AI, a smart, friendly, and natural conversational assistant for HireReady.
+HireReady is a verified talent intelligence platform with:
+1. Cryptographic SHA-256 certificate verification (audited against issuers & live GitHub repos).
 2. Two-Layer AI Candidate Matching (Deterministic Base Score 0-100 + Bounded AI Semantic Transferability score).
 3. Topological Career Roadmaps with milestone sequencing and skill readiness metrics.
-4. Two distinct role portals: Job Seeker Portal (roadmaps, uploads, job search) and Recruiter Portal (talent scarcity radar, match matrix, job posting).
+4. Two distinct role portals: Job Seeker Portal and Recruiter Portal.
 
-Current Platform State:
+Current Context:
 - Active User Role: ${role || 'Job Seeker'}
 - ${learnerSummary}
-
-Current Live Jobs in System:
+- Live Jobs in System:
 ${jobsSummary}
-
-Top Verified Candidates:
+- Top Verified Candidates:
 ${candidatesSummary}
 
-Guidelines:
-- Give concise, helpful, friendly, and highly factual answers directly grounded in HireReady data.
-- If the user asks about jobs, recommend matching active positions from the system.
-- If asked about career growth or skills, reference the learning roadmap and verification system.
-- If asked about cryptographic proofs, explain the SHA-256 verification hash and live code analysis.
-- Use markdown formatting with bullet points where appropriate. Keep answers crisp (2-4 paragraphs max).`;
+Tone & Rules:
+- Respond naturally, warmly, and concisely like a real tech career & recruiting advisor.
+- If the user greets you (e.g. "hi", "hello"), greet them warmly back and mention 2-3 specific things you can help with (like exploring open roles, checking skill gaps, or cryptographic verification).
+- Do NOT sound robotic. Keep replies under 3 short paragraphs.`;
 
-  // Format past history for Gemini
-  const contents = history
-    .filter((m) => m.id !== 'welcome-1')
-    .slice(-6)
-    .map((m) => ({
-      role: m.sender === 'user' ? 'user' : 'model',
-      parts: [{ text: m.text }],
-    }));
+  // Format messages for OpenAI / OpenRouter style
+  const openAiMessages = [
+    { role: 'system', content: systemInstruction },
+    ...history
+      .filter((m) => m.id !== 'welcome-1')
+      .slice(-6)
+      .map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      })),
+    { role: 'user', content: userQuery },
+  ];
 
-  contents.push({
-    role: 'user',
-    parts: [{ text: `${systemInstruction}\n\nUser Question: ${userQuery}` }],
-  });
+  let textResult = '';
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey.trim()}`;
+  // Case A: If key starts with AIzaSy (Google Gemini AI Studio API key)
+  if (key.startsWith('AIzaSy')) {
+    const contents = history
+      .filter((m) => m.id !== 'welcome-1')
+      .slice(-6)
+      .map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: m.text }],
+      }));
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 600,
-      },
-    }),
-  });
+    contents.push({
+      role: 'user',
+      parts: [{ text: `${systemInstruction}\n\nUser Question: ${userQuery}` }],
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const message = errorData?.error?.message || `HTTP ${response.status} ${response.statusText}`;
-    throw new Error(message);
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents,
+        generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    }
   }
 
-  const data = await response.json();
-  const text =
-    data.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "I processed your query with Gemini, but didn't receive a valid response. Please try again.";
+  // Case B: If not Gemini key or if Gemini failed, try OpenRouter / OpenAI compatible endpoint
+  if (!textResult) {
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${key}`,
+          'HTTP-Referer': 'https://hireready.app',
+          'X-Title': 'HireReady AI',
+        },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.1-8b-instruct:free',
+          messages: openAiMessages,
+          temperature: 0.7,
+          max_tokens: 500,
+        }),
+      });
 
-  // Generate dynamic contextual actions
+      if (response.ok) {
+        const data = await response.json();
+        textResult = data.choices?.[0]?.message?.content || '';
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // Case C: If still no result, attempt direct Gemini with key anyway
+  if (!textResult) {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          { role: 'user', parts: [{ text: `${systemInstruction}\n\nUser: ${userQuery}` }] },
+        ],
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      textResult = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } else {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err?.error?.message || 'API key could not authenticate with AI providers.');
+    }
+  }
+
+  // Contextual actions
   const actions: ChatMessage['actions'] = [];
   const qLower = userQuery.toLowerCase();
 
@@ -116,10 +170,14 @@ Guidelines:
   }
 
   return {
-    text,
-    actions: actions.length > 0 ? actions : [
-      { label: 'Explore Roadmap', href: '/seeker/roadmap', icon: 'target' },
-      { label: 'Browse Jobs', href: '/seeker/dashboard', icon: 'job' }
-    ],
+    text: textResult,
+    actions:
+      actions.length > 0
+        ? actions
+        : [
+            { label: 'Explore Roadmap', href: '/seeker/roadmap', icon: 'target' },
+            { label: 'Browse Jobs', href: '/seeker/dashboard', icon: 'job' },
+          ],
   };
 }
+

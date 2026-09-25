@@ -446,12 +446,55 @@ function generateBotResponse(
     setLocation: (path: string) => void;
   }
 ): ChatMessage {
-  const q = query.toLowerCase();
+  const q = query.trim().toLowerCase();
   const { jobs, candidates, learner, setLocation } = context;
   const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  // 0. Greetings & Casual Conversation
+  if (
+    q === 'hi' ||
+    q === 'hello' ||
+    q === 'hey' ||
+    q === 'yo' ||
+    q === 'sup' ||
+    q.startsWith('hi ') ||
+    q.startsWith('hello ') ||
+    q.startsWith('hey ') ||
+    q.includes('good morning') ||
+    q.includes('good afternoon') ||
+    q.includes('good evening') ||
+    q.includes('how are you') ||
+    q.includes('who are you')
+  ) {
+    return {
+      id: `bot-${Date.now()}`,
+      sender: 'bot',
+      text: `Hello! Great to connect with you. I'm your HireReady AI Assistant.\n\nI can help you explore active job postings, check your skill readiness for target roles like Full-Stack or Data Science, explain our cryptographic SHA-256 verification system, or find top-ranked candidates. How can I assist you today?`,
+      timestamp: time,
+      actions: [
+        { label: 'Browse Open Jobs', href: '/seeker/dashboard', icon: 'job' },
+        { label: 'Check Career Roadmap', href: '/seeker/roadmap', icon: 'target' },
+        { label: 'Cryptographic Proofs', href: '/seeker/credentials', icon: 'shield' },
+      ],
+    };
+  }
+
+  // 0.1 Gratitude & Politeness
+  if (q.includes('thank') || q.includes('awesome') || q.includes('great') || q.includes('cool') || q.includes('perfect')) {
+    return {
+      id: `bot-${Date.now()}`,
+      sender: 'bot',
+      text: `You're very welcome! Let me know if you need anything else regarding career roadmaps, job matches, or verification proof.`,
+      timestamp: time,
+      actions: [
+        { label: 'Explore Career Tracks', href: '/seeker/roadmap', icon: 'target' },
+        { label: 'View Dashboard', href: '/seeker/dashboard', icon: 'job' },
+      ],
+    };
+  }
+
   // 1. Job queries
-  if (q.includes('job') || q.includes('opening') || q.includes('hiring') || q.includes('role') || q.includes('vacancy') || q.includes('position')) {
+  if (q.includes('job') || q.includes('opening') || q.includes('hiring') || q.includes('role') || q.includes('vacancy') || q.includes('position') || q.includes('work') || q.includes('salary')) {
     const activeJobs = jobs.filter((j) => j.status === 'active');
     
     // Check if searching for a specific role keyword
@@ -467,7 +510,7 @@ function generateBotResponse(
     return {
       id: `bot-${Date.now()}`,
       sender: 'bot',
-      text: `We currently have ${activeJobs.length} active roles on HireReady plus live Adzuna market listings. Here are top recommended openings:`,
+      text: `We currently have **${activeJobs.length} active roles** on HireReady alongside live Adzuna market listings. Here are top recommended openings:`,
       timestamp: time,
       dataSnippet: {
         type: 'jobs',
@@ -590,11 +633,11 @@ function generateBotResponse(
     };
   }
 
-  // Default Fallback
+  // Default Natural Conversational Fallback
   return {
     id: `bot-${Date.now()}`,
     sender: 'bot',
-    text: `I searched HireReady for "${query}". You can explore active job opportunities, inspect verified cryptographic credentials, or view topological skill roadmaps. What would you like to explore?`,
+    text: `I'm here to assist you with anything on HireReady!\n\nYou can ask about active job openings, skill roadmap milestones for roles like Full-Stack or Data Science, cryptographic SHA-256 certificate verification, or recruiter candidate rankings. What would you like to explore?`,
     timestamp: time,
     actions: [
       { label: 'Browse Jobs', href: '/seeker/dashboard', icon: 'job' },
