@@ -672,13 +672,13 @@
 }
 
 /* =========================================================
-   APPLE SCROLL MOTION BLUR & REVEAL SYSTEM
+   CARD-SPECIFIC SCROLL MOTION BLUR REVEAL
    ========================================================= */
-@keyframes scrollMotionBlurIn {
+@keyframes scrollBoxMotionBlur {
   0% {
-    opacity: 0.15;
-    filter: blur(8px);
-    transform: translateY(28px) scale(0.975);
+    opacity: 0.1;
+    filter: blur(6px);
+    transform: translateY(22px) scale(0.98);
   }
   100% {
     opacity: 1;
@@ -687,7 +687,7 @@
   }
 }
 
-/* Native Scroll Timeline Reveal (Chrome 115+, Edge, Safari 18+) */
+/* Native Scroll Timeline Reveal exclusively applied to individual cards */
 @supports (animation-timeline: view()) {
   .card,
   .section-card,
@@ -696,21 +696,10 @@
   .goal-card,
   .match-card,
   .credential-card {
-    animation: scrollMotionBlurIn linear both;
+    animation: scrollBoxMotionBlur cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-timeline: view();
     animation-range: entry 5% cover 25%;
   }
-}
-
-/* Fast-Scroll Physics Velocity Motion Blur */
-body.is-scrolling-fast .card,
-body.is-scrolling-fast .section-card,
-body.is-scrolling-fast .detail-card,
-body.is-scrolling-fast .match-card,
-body.is-scrolling-fast .stat {
-  filter: blur(1.5px) !important;
-  transform: scale(0.992) !important;
-  transition: filter 0.14s ease-out, transform 0.14s ease-out;
 }
 
 /* =========================================================
