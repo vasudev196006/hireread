@@ -672,6 +672,48 @@
 }
 
 /* =========================================================
+   APPLE SCROLL MOTION BLUR & REVEAL SYSTEM
+   ========================================================= */
+@keyframes scrollMotionBlurIn {
+  0% {
+    opacity: 0.15;
+    filter: blur(8px);
+    transform: translateY(28px) scale(0.975);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Native Scroll Timeline Reveal (Chrome 115+, Edge, Safari 18+) */
+@supports (animation-timeline: view()) {
+  .card,
+  .section-card,
+  .detail-card,
+  .form-card,
+  .goal-card,
+  .match-card,
+  .credential-card {
+    animation: scrollMotionBlurIn linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 25%;
+  }
+}
+
+/* Fast-Scroll Physics Velocity Motion Blur */
+body.is-scrolling-fast .card,
+body.is-scrolling-fast .section-card,
+body.is-scrolling-fast .detail-card,
+body.is-scrolling-fast .match-card,
+body.is-scrolling-fast .stat {
+  filter: blur(1.5px) !important;
+  transform: scale(0.992) !important;
+  transition: filter 0.14s ease-out, transform 0.14s ease-out;
+}
+
+/* =========================================================
    ALL BOXES USE FROSTED GLASS SPEC & CLEAN RHYTHM
    ========================================================= */
 .card,

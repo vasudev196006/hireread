@@ -365,12 +365,41 @@ function DynamicIslandNav() {
   );
 }
 
+function useScrollMotionBlur() {
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let scrollTimeout: any = null;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const delta = Math.abs(currentScrollY - lastScrollY);
+      lastScrollY = currentScrollY;
+
+      if (delta > 22) {
+        document.body.classList.add('is-scrolling-fast');
+      }
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        document.body.classList.remove('is-scrolling-fast');
+      }, 100);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+}
+
 // ==========================================
 // SHELL & NAVIGATION
 // ==========================================
 function Shell({ children }: { children: ReactNode }) {
   const { role } = useApp();
   const [location] = useLocation();
+  useScrollMotionBlur();
 
   if (!role && location === '/') {
     return <>{children}</>;
