@@ -162,19 +162,120 @@
 }
 
 /* =========================================================
-   APPLE MICRO-INTERACTIONS & SPRING HAPTICS
+   APPLE MOTION SYSTEM, SPRINGS & MICRO-INTERACTIONS
    ========================================================= */
+@keyframes appleFadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes appleScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.008) translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes radarBreathe {
+  0% {
+    box-shadow: 0 0 0 0 rgba(10, 132, 255, 0.6);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(10, 132, 255, 0);
+    transform: scale(1.08);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(10, 132, 255, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmerGlow {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes floatSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Page & Section Entrance Choreography */
+.page {
+  animation: appleFadeSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-head {
+  animation: appleFadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stat-grid > .stat:nth-child(1) { animation: appleFadeSlideUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) both 0.04s; }
+.stat-grid > .stat:nth-child(2) { animation: appleFadeSlideUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) both 0.08s; }
+.stat-grid > .stat:nth-child(3) { animation: appleFadeSlideUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) both 0.12s; }
+.stat-grid > .stat:nth-child(4) { animation: appleFadeSlideUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) both 0.16s; }
+
+/* Interactive Spring Hover & Tactile Press */
 @layer utilities {
   .hover-elevate {
-    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.26s ease;
   }
   .hover-elevate:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+    transform: translateY(-2.5px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-  .active-elevate:active, button:active, a.button:active, .tab-btn:active, .card-interactive:active {
-    transform: scale(0.975);
-    transition: transform 0.08s cubic-bezier(0.32, 0.72, 0, 1);
+  .active-elevate:active, button:active, a.button:active, .tab-btn:active, .card-interactive:active, .island-pill-btn:active {
+    transform: scale(0.965);
+    transition: transform 0.06s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.radar-pulse-dot {
+  animation: radarBreathe 2.4s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.skill-tag {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.skill-tag:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.progress-line span, .stat-bar-fill, .readiness-bar-fill {
+  transition: width 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
