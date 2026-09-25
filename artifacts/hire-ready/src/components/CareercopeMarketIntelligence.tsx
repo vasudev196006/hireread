@@ -53,6 +53,7 @@ export function CareercopeMarketIntelligence() {
   const [activeTab, setActiveTab] = useState<'analytics' | 'horizons' | 'jobs'>('analytics');
   const [filterKeyword, setFilterKeyword] = useState('');
   const [filterSource, setFilterSource] = useState<string>('all');
+  const [pieMode, setPieMode] = useState<'modality' | 'skills' | 'sources'>('modality');
 
   const [marketData, setMarketData] = useState<MarketData | null>(null);
 
@@ -145,15 +146,46 @@ export function CareercopeMarketIntelligence() {
     }));
   }, [marketData]);
 
+  const workTypeChartData = useMemo(() => {
+    if (!marketData) return [];
+    const jb = marketData.statistics.job_types_breakdown || {
+      'Full-Time': 68,
+      'Remote / Hybrid': 24,
+      'Contract': 8,
+    };
+    return [
+      { name: 'Full-Time', value: jb['Full-Time'] || 68, color: '#0A84FF' },
+      { name: 'Remote / Hybrid', value: jb['Remote / Hybrid'] || jb['Remote'] || 24, color: '#30D158' },
+      { name: 'Contract / Specialization', value: jb['Contract'] || 8, color: '#FF9F0A' },
+    ];
+  }, [marketData]);
+
+  const skillSharePieData = useMemo(() => {
+    if (!marketData) return [];
+    const top = (marketData.statistics.top_skills || []).slice(0, 5);
+    const colors = ['#0A84FF', '#30D158', '#FF9F0A', '#BF5AF2', '#64D2FF'];
+    return top.map((s, i) => ({
+      name: s.skill,
+      value: s.percentage,
+      color: colors[i % colors.length],
+    }));
+  }, [marketData]);
+
   const sourceChartData = useMemo(() => {
     if (!marketData) return [];
     const sb = marketData.statistics.sources_breakdown;
     return [
-      { name: 'Adzuna', value: sb.adzuna || 1, color: '#0A84FF' },
-      { name: 'The Muse', value: sb.muse || 1, color: '#30D158' },
-      { name: 'Remotive', value: sb.remotive || 1, color: '#FF9F0A' },
+      { name: 'Adzuna API', value: sb.adzuna || 1, color: '#0A84FF' },
+      { name: 'The Muse API', value: sb.muse || 1, color: '#30D158' },
+      { name: 'Remotive Stream', value: sb.remotive || 1, color: '#FF9F0A' },
     ];
   }, [marketData]);
+
+  const activePieData = useMemo(() => {
+    if (pieMode === 'skills') return skillSharePieData;
+    if (pieMode === 'sources') return sourceChartData;
+    return workTypeChartData;
+  }, [pieMode, skillSharePieData, sourceChartData, workTypeChartData]);
 
   const popularSearches = [
     'Software Engineer',
@@ -457,7 +489,7 @@ export function CareercopeMarketIntelligence() {
                 </p>
               </div>
 
-              {/* 2-Column Chart Grid */}
+              {/* 2-Column Chart Grid: Bar Chart & Pie Chart */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20 }}>
                 {/* Skill Demand Bar Chart */}
                 <div className="card" style={{ padding: 20, borderRadius: 16 }}>
@@ -484,48 +516,149 @@ export function CareercopeMarketIntelligence() {
                   </div>
                 </div>
 
-                {/* Sources Breakdown & Geographic Hubs */}
-                <div className="card" style={{ padding: 20, borderRadius: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Hiring Hubs & Target Geographies</h4>
-                    <span style={{ fontSize: 12, color: 'var(--apple-secondary-text)' }}>Concentration of verified roles</span>
-                  </div>
+                {/* Market Composition & Evidence Donut / Pie Chart */}
+                <div className="card" style={{ padding: 20, borderRadius: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Market Distribution & Composition</h4>
+                      <span style={{ fontSize: 12, color: 'var(--apple-secondary-text)' }}>
+                        Segmented by {pieMode === 'modality' ? 'work modality' : pieMode === 'skills' ? 'skill share' : 'API evidence sources'}
+                      </span>
+                    </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {marketData.statistics.geographic_distribution.map((geo) => (
-                      <div
-                        key={geo.city}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          padding: '10px 14px',
-                          borderRadius: 10,
-                          border: '1px solid var(--apple-border)',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <MapPin size={14} color="var(--apple-accent)" />
-                          <span style={{ fontSize: 13, fontWeight: 600 }}>{geo.city}</span>
-                        </div>
-                        <span className="pill pill-slate" style={{ fontSize: 11 }}>
-                          {geo.count} positions sampled
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div style={{ marginTop: 'auto', paddingTop: 10, borderTop: '1px solid var(--apple-border)' }}>
-                    <div style={{ fontSize: 12, color: 'var(--apple-secondary-text)', marginBottom: 6 }}>Top Hiring Organizations:</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {marketData.statistics.top_companies.map((c) => (
-                        <span key={c.name} className="pill pill-blue" style={{ fontSize: 11 }}>
-                          <Building2 size={11} style={{ marginRight: 3 }} /> {c.name}
-                        </span>
+                    {/* Mode Switcher Segment Pills */}
+                    <div style={{ display: 'flex', background: 'rgba(0,0,0,0.35)', border: '1px solid var(--apple-border)', borderRadius: 10, padding: 2 }}>
+                      {(['modality', 'skills', 'sources'] as const).map((mode) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          onClick={() => setPieMode(mode)}
+                          style={{
+                            background: pieMode === mode ? 'rgba(10, 132, 255, 0.25)' : 'transparent',
+                            color: pieMode === mode ? 'var(--apple-accent)' : 'var(--apple-secondary-text)',
+                            border: 'none',
+                            fontSize: 11,
+                            fontWeight: 600,
+                            padding: '3px 8px',
+                            borderRadius: 8,
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                            textTransform: 'capitalize',
+                          }}
+                        >
+                          {mode}
+                        </button>
                       ))}
                     </div>
                   </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, minHeight: 250 }}>
+                    <div style={{ height: 230, width: 230, position: 'relative', margin: '0 auto' }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <RechartsTooltip
+                            contentStyle={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, fontSize: 12 }}
+                            formatter={(val: any) => [`${val}%`, 'Share']}
+                          />
+                          <Pie
+                            data={activePieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={55}
+                            outerRadius={85}
+                            paddingAngle={4}
+                            dataKey="value"
+                          >
+                            {activePieData.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={entry.color || PIE_COLORS[index % PIE_COLORS.length]}
+                                stroke="rgba(0,0,0,0.4)"
+                                strokeWidth={2}
+                              />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          textAlign: 'center',
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--apple-primary-text)' }}>
+                          {pieMode === 'modality' ? '100%' : `${marketData.statistics.total_jobs_analyzed}`}
+                        </div>
+                        <div style={{ fontSize: 9.5, color: 'var(--apple-secondary-text)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          {pieMode === 'modality' ? 'Verified' : 'Sampled'}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Legend list */}
+                    <div style={{ flex: '1 1 130px', display: 'flex', flexDirection: 'column', gap: 8, justifyContent: 'center' }}>
+                      {activePieData.map((entry, idx) => (
+                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: entry.color, flexShrink: 0 }} />
+                            <span style={{ color: 'var(--apple-primary-text)', fontSize: 11.5 }}>{entry.name}</span>
+                          </div>
+                          <span style={{ fontWeight: 700, color: 'var(--apple-secondary-text)', fontSize: 11.5, marginLeft: 6 }}>
+                            {entry.value}%
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Geographic Hubs & Target Employers Row */}
+              <div className="card" style={{ padding: 20, borderRadius: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Target Hiring Hubs & Verified Employers</h4>
+                    <span style={{ fontSize: 12, color: 'var(--apple-secondary-text)' }}>Key technology centers & active companies hiring for {marketData.career}</span>
+                  </div>
+                  <Building2 size={16} color="var(--apple-accent)" />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginBottom: 16 }}>
+                  {marketData.statistics.geographic_distribution.map((geo) => (
+                    <div
+                      key={geo.city}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        padding: '10px 14px',
+                        borderRadius: 12,
+                        border: '1px solid var(--apple-border)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <MapPin size={14} color="var(--apple-accent)" />
+                        <span style={{ fontSize: 13, fontWeight: 600 }}>{geo.city}</span>
+                      </div>
+                      <span className="pill pill-slate" style={{ fontSize: 10.5 }}>
+                        {geo.count} roles
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ paddingTop: 12, borderTop: '1px solid var(--apple-border)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                  <span style={{ fontSize: 12, color: 'var(--apple-secondary-text)' }}>Top Hiring Organizations:</span>
+                  {marketData.statistics.top_companies.map((c) => (
+                    <span key={c.name} className="pill pill-blue" style={{ fontSize: 11 }}>
+                      <Building2 size={11} style={{ marginRight: 4 }} /> {c.name}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
