@@ -215,7 +215,7 @@ export function CareercopeMarketIntelligence() {
               margin: '0 0 10px',
             }}
           >
-            Where Your Career Is <span style={{ color: 'var(--apple-accent)' }}>Heading</span>
+            Where Your Career Is <span className="apple-text-shimmer">Heading</span>
           </h1>
           <p style={{ color: 'var(--apple-secondary-text)', fontSize: 14.5, margin: '0 0 24px', lineHeight: 1.5, maxWidth: 640, marginLeft: 'auto', marginRight: 'auto' }}>
             Live job market evidence aggregated across <strong>Adzuna</strong> and <strong>The Muse</strong>, synthesized through <strong>Google Gemini AI</strong>.

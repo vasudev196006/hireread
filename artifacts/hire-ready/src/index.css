@@ -559,6 +559,60 @@
   z-index: 1;
 }
 
+/* =========================================================
+   APPLE TYPOGRAPHY & TEXT REVEAL MOTION
+   ========================================================= */
+@keyframes appleTitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(5px);
+    letter-spacing: -0.02em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    letter-spacing: -0.04em;
+  }
+}
+
+@keyframes appleEyebrowReveal {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.22em;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: 0.12em;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appleParagraphReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appleTextShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .page-head {
   display: flex;
   justify-content: space-between;
@@ -576,6 +630,7 @@
   color: var(--apple-primary-text);
   text-wrap: balance;
   text-shadow: none !important;
+  animation: appleTitleReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .page-head p {
   color: var(--apple-secondary-text);
@@ -584,6 +639,7 @@
   line-height: 1.6;
   max-width: 65ch;
   text-shadow: none !important;
+  animation: appleParagraphReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both 0.08s;
 }
 
 .eyebrow {
@@ -596,6 +652,23 @@
   display: inline-block;
   margin-bottom: 4px;
   text-shadow: none !important;
+  animation: appleEyebrowReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.apple-text-shimmer,
+.accent-shimmer {
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #64D2FF 30%,
+    #0A84FF 50%,
+    #BF5AF2 70%,
+    #FFFFFF 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: appleTextShimmer 6s ease infinite;
 }
 
 /* =========================================================
