@@ -7,19 +7,35 @@
 
 :root {
   /* =========================================================
-     UNDERSTATED COLD LUXURY & TITANIUM SLATE PALETTE
+     APPLE DESIGN - TRANSLUCENT MATERIALS & GLASSMORPHISM
      ========================================================= */
   --apple-bg: #000000;
   --apple-surface: #18181B;
-  --apple-glass: rgba(24, 24, 27, 0.65);
+  
+  /* Multi-layer frosted glass materials with internal refraction */
+  --apple-glass: rgba(22, 22, 26, 0.72);
+  --apple-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 20, 24, 0.72);
   --apple-glass-light: rgba(255, 255, 255, 0.6);
-  --apple-glass-elevated: rgba(39, 39, 42, 0.75);
+  --apple-glass-elevated: rgba(30, 30, 36, 0.84);
+  --apple-glass-elevated-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%), rgba(28, 28, 34, 0.84);
+  --apple-glass-interactive: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%), rgba(24, 24, 28, 0.76);
+  
   --apple-primary-text: #F4F4F5;
   --apple-secondary-text: #A1A1AA;
   --apple-tertiary-text: #71717A;
-  --apple-separator: rgba(255, 255, 255, 0.1);
+  --apple-separator: rgba(255, 255, 255, 0.08);
   --apple-border: rgba(255, 255, 255, 0.12);
-  --apple-specular-top: rgba(255, 255, 255, 0.35);
+  --apple-border-light: rgba(255, 255, 255, 0.24);
+  --apple-specular-top: rgba(255, 255, 255, 0.38);
+  
+  /* Apple Glass Multi-layer Shadows & Specular Inset Reflection */
+  --apple-glass-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --apple-glass-shadow-hover: 0 24px 50px -6px rgba(0, 0, 0, 0.65), 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --apple-glass-shadow-elevated: 0 28px 64px -8px rgba(0, 0, 0, 0.7), 0 12px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.36), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* Apple Fluid Motion Springs */
+  --apple-spring-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --apple-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   
   /* Understated Titanium Silver Accent */
   --apple-accent: #E4E4E7;
@@ -33,7 +49,7 @@
   
   --app-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --app-font-mono: 'Space Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --radius: 16px;
+  --radius: 18px;
   --spacing: .25rem;
 }
 
@@ -99,19 +115,36 @@
 }
 
 /* =========================================================
-   USER SPECIFIED FROSTED GLASS-SURFACE
+   APPLE SPECIFIED FROSTED GLASS-SURFACE & TRANSLUCENT MATERIALS
    ========================================================= */
 .glass-surface {
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-top: 1px solid var(--apple-specular-top); /* light catching the material */
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-top: 1px solid var(--apple-specular-top); /* light catching the top material */
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); /* bigger surface = deeper shadow */
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
+  box-shadow: var(--apple-glass-shadow);
   color: var(--apple-primary-text);
+  transition:
+    transform 0.28s var(--apple-spring-ease),
+    box-shadow 0.28s var(--apple-spring-ease),
+    border-color 0.28s ease,
+    background 0.28s ease;
+}
+
+.glass-surface:hover {
+  box-shadow: var(--apple-glass-shadow-hover);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: var(--apple-border-light);
+  border-right-color: var(--apple-border-light);
+}
+
+.glass-surface:active {
+  transform: scale(0.985);
+  transition: transform 0.08s var(--apple-spring-ease);
 }
 
 /* Vibrancy: text over glass needs contrast + weight, not flat gray */
@@ -123,24 +156,24 @@
   text-shadow: none !important;
 }
 
-/* Materialize on enter: blur + scale together, not a plain fade */
+/* Materialize on enter: blur + scale together, fluid Apple spring settle */
 .glass-surface.entering,
 .card,
 .section-card {
-  animation: materialize 240ms cubic-bezier(0.2, 0, 0, 1) forwards;
+  animation: materialize 280ms var(--apple-spring-ease) forwards;
 }
 
 @keyframes materialize {
   from {
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    transform: scale(0.97);
+    backdrop-filter: blur(0px) saturate(100%);
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    transform: translateY(8px) scale(0.98);
     opacity: 0;
   }
   to {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transform: scale(1);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
@@ -154,7 +187,11 @@
   .detail-card,
   .match-card,
   .stat,
-  .dynamic-island {
+  .dynamic-island,
+  .roadmap-card,
+  .landing-role-card,
+  .modal-content,
+  .chatbot-window {
     background: rgba(24, 24, 27, 0.96) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -317,26 +354,27 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-separator);
   box-shadow:
     0 16px 36px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   border-radius: 26px;
   transition:
-    background 0.36s cubic-bezier(0.16, 1, 0.3, 1),
-    max-height 0.42s cubic-bezier(0.16, 1, 0.3, 1),
-    max-width 0.42s cubic-bezier(0.16, 1, 0.3, 1),
-    min-width 0.42s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.42s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.36s cubic-bezier(0.16, 1, 0.3, 1),
-    backdrop-filter 0.36s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+    background 0.36s var(--apple-spring-ease),
+    max-height 0.42s var(--apple-spring-ease),
+    max-width 0.42s var(--apple-spring-ease),
+    min-width 0.42s var(--apple-spring-ease),
+    width 0.42s var(--apple-spring-ease),
+    box-shadow 0.36s var(--apple-spring-ease),
+    backdrop-filter 0.36s var(--apple-spring-ease),
+    border-color 0.36s var(--apple-spring-ease);
   overflow: hidden;
   max-width: 580px;
   min-width: 480px;
@@ -347,14 +385,17 @@
 .dynamic-island:hover,
 .dynamic-island.is-expanded {
   border-radius: 26px;
-  background: var(--apple-glass-elevated);
+  background: var(--apple-glass-elevated-gradient);
   backdrop-filter: blur(32px) saturate(220%);
   -webkit-backdrop-filter: blur(32px) saturate(220%);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.55);
+  border-left-color: var(--apple-border-light);
+  border-right-color: var(--apple-border-light);
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.65),
     0 0 28px rgba(10, 132, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   max-width: 980px;
   min-width: 820px;
 }
@@ -793,7 +834,7 @@
 }
 
 /* =========================================================
-   ALL BOXES USE FROSTED GLASS SPEC & CLEAN RHYTHM
+   ALL BOXES USE APPLE FROSTED GLASS SPEC & PHYSICAL MOTION
    ========================================================= */
 .card,
 .section-card,
@@ -802,26 +843,47 @@
 .goal-card,
 .credential-card,
 .match-card {
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
+  box-shadow: var(--apple-glass-shadow);
   color: var(--apple-primary-text);
-  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.28s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.28s;
+  transition:
+    transform 0.28s var(--apple-spring-ease),
+    box-shadow 0.28s var(--apple-spring-ease),
+    border-color 0.28s ease,
+    background 0.28s ease;
+  position: relative;
 }
 
 .card:hover,
 .form-card:hover,
 .section-card:hover,
-.detail-card:hover {
-  box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+.detail-card:hover,
+.goal-card:hover,
+.credential-card:hover,
+.match-card:hover {
+  transform: translateY(-2.5px);
+  box-shadow: var(--apple-glass-shadow-hover);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: var(--apple-border-light);
+  border-right-color: var(--apple-border-light);
+}
+
+.card:active,
+.form-card:active,
+.section-card:active,
+.detail-card:active,
+.goal-card:active,
+.credential-card:active,
+.match-card:active {
+  transform: scale(0.985);
+  transition: transform 0.08s var(--apple-spring-ease);
 }
 
 .stat-grid {
@@ -832,15 +894,30 @@
 }
 .stat {
   padding: 22px 24px;
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
+  box-shadow: var(--apple-glass-shadow);
+  transition:
+    transform 0.28s var(--apple-spring-ease),
+    box-shadow 0.28s var(--apple-spring-ease),
+    border-color 0.28s ease;
+}
+.stat:hover {
+  transform: translateY(-2.5px);
+  box-shadow: var(--apple-glass-shadow-hover);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: var(--apple-border-light);
+  border-right-color: var(--apple-border-light);
+}
+.stat:active {
+  transform: scale(0.985);
+  transition: transform 0.08s var(--apple-spring-ease);
 }
 .stat-head {
   display: flex;
@@ -1085,10 +1162,12 @@
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(16px);
-  border-radius: 16px;
+  border-bottom: 1px solid var(--apple-separator);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border-radius: 18px;
+  box-shadow: var(--apple-glass-shadow);
   padding: 18px;
   display: grid;
   gap: 12px;
@@ -1404,22 +1483,31 @@
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
   padding: 22px;
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  transition:
+    transform 0.28s var(--apple-spring-ease),
+    box-shadow 0.28s var(--apple-spring-ease),
+    border-color 0.28s ease,
+    background 0.28s ease;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--apple-glass-shadow);
 }
 .roadmap-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  transform: translateY(-3px);
+  box-shadow: var(--apple-glass-shadow-hover);
+  border-top-color: rgba(255, 255, 255, 0.55);
 }
-.roadmap-card.status-mastered { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.1); }
-.roadmap-card.status-in_progress { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.06); }
+.roadmap-card:active {
+  transform: scale(0.985);
+  transition: transform 0.08s var(--apple-spring-ease);
+}
+.roadmap-card.status-mastered { border-top-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.12); }
+.roadmap-card.status-in_progress { border-top-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.08); }
 .roadmap-card.status-gap { border-color: var(--apple-border); }
 .roadmap-card.status-locked { border-color: rgba(255, 255, 255, 0.06); background: rgba(0, 0, 0, 0.45); opacity: 0.65; }
 
@@ -1479,54 +1567,68 @@
 /* Upload & Dropzone */
 .dropzone {
   border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 36px 24px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(16px);
-  transition: all 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  box-shadow: var(--apple-glass-shadow);
+  transition: all 0.26s var(--apple-spring-ease);
   cursor: pointer;
   display: block;
 }
 .dropzone:hover, .dropzone.dragover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
+  background: var(--apple-glass-hover);
+  box-shadow: var(--apple-glass-shadow-hover);
+  transform: translateY(-2px);
+}
+.dropzone:active {
+  transform: scale(0.985);
 }
 .dropzone-icon {
   width: 52px;
   height: 52px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #FFFFFF;
   display: grid;
   place-items: center;
   margin: 0 auto 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 /* Hash & Verifications */
 .hash-box {
   background: rgba(0, 0, 0, 0.55);
   border: 1px solid var(--apple-border);
+  border-top: 1px solid var(--apple-specular-top);
   padding: 14px;
-  border-radius: 12px;
+  border-radius: 14px;
   color: var(--apple-secondary-text);
   font-family: var(--app-font-mono);
   font-size: 11px;
   line-height: 1.6;
   word-break: break-all;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 .verify-banner {
-  background: rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 14px;
-  padding: 18px;
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
+  padding: 18px 22px;
   display: flex;
   gap: 14px;
   color: #F4F4F5;
   margin-bottom: 24px;
+  box-shadow: var(--apple-glass-shadow);
 }
 .verify-banner strong {
   display: block;
@@ -1544,16 +1646,17 @@
 
 /* Scarcity Bar */
 .scarcity-container {
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
   padding: 20px 24px;
   margin-bottom: 24px;
+  box-shadow: var(--apple-glass-shadow);
 }
 .scarcity-grid {
   display: grid;
@@ -1564,12 +1667,18 @@
 .scarcity-item {
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--apple-border);
-  border-radius: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   color: var(--apple-primary-text);
+  transition: transform 0.22s var(--apple-spring-ease), border-color 0.22s ease;
+}
+.scarcity-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 .scarcity-item.alert-scarcity {
   border-color: rgba(217, 119, 6, 0.5);
@@ -1666,21 +1775,22 @@
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-content {
-  background: var(--apple-glass-elevated);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid var(--apple-specular-top);
-  border-left: 1px solid var(--apple-border);
-  border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 16px;
+  background: var(--apple-glass-elevated-gradient);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-left: 1px solid var(--apple-border-light);
+  border-right: 1px solid var(--apple-border-light);
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 20px;
   width: 100%;
   max-width: 640px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--apple-glass-shadow-elevated);
   padding: 32px;
   position: relative;
+  animation: materialize 280ms var(--apple-spring-ease) forwards;
 }
 .modal-header {
   display: flex;
@@ -1727,15 +1837,20 @@
   right: 25px;
   bottom: 25px;
   z-index: 200;
-  background: var(--apple-glass-elevated);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-elevated-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-separator);
   color: var(--apple-primary-text);
   padding: 14px 20px;
-  border-radius: 14px;
+  border-radius: 16px;
   font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--apple-border);
-  animation: rise 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: var(--apple-glass-shadow-elevated);
+  animation: rise 0.28s var(--apple-spring-ease);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1823,29 +1938,36 @@
 }
 
 .landing-role-card {
-  background: var(--apple-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
   border-left: 1px solid var(--apple-border);
   border-right: 1px solid var(--apple-border);
-  border-bottom: 1px solid var(--apple-border);
-  border-radius: 20px;
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 22px;
   padding: 38px;
-  transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: all 0.3s var(--apple-spring-ease);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--apple-glass-shadow);
 }
 
 .landing-role-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
-  background: var(--apple-glass-elevated);
+  border-top-color: rgba(255, 255, 255, 0.55);
+  border-left-color: var(--apple-border-light);
+  border-right-color: var(--apple-border-light);
+  box-shadow: var(--apple-glass-shadow-hover);
+  background: var(--apple-glass-elevated-gradient);
+}
+
+.landing-role-card:active {
+  transform: scale(0.985);
+  transition: transform 0.08s var(--apple-spring-ease);
 }
 
 .landing-role-icon {
@@ -1941,21 +2063,27 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--apple-glass-elevated);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--apple-border);
+  background: var(--apple-glass-elevated-gradient);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
+  border-left: 1px solid var(--apple-border-light);
+  border-right: 1px solid var(--apple-border-light);
+  border-bottom: 1px solid var(--apple-separator);
   border-radius: 30px;
   padding: 6px 16px 6px 8px;
   color: var(--apple-primary-text);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: var(--apple-glass-shadow-elevated);
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
+  transition: transform 0.24s var(--apple-spring-ease), box-shadow 0.24s var(--apple-spring-ease);
 }
 .chatbot-trigger:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 16px rgba(10, 132, 255, 0.25);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-top-color: rgba(255, 255, 255, 0.55);
+}
+.chatbot-trigger:active {
+  transform: scale(0.97);
 }
 .chatbot-trigger-avatar {
   width: 38px;
@@ -1963,7 +2091,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   border: 1px solid var(--apple-border);
   overflow: hidden;
@@ -2002,16 +2130,18 @@
   max-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
-  background: var(--apple-glass-elevated);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-  border: 1px solid var(--apple-border);
-  border-top: 1px solid var(--apple-specular-top);
+  background: var(--apple-glass-elevated-gradient);
+  backdrop-filter: blur(36px) saturate(210%);
+  -webkit-backdrop-filter: blur(36px) saturate(210%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-left: 1px solid var(--apple-border-light);
+  border-right: 1px solid var(--apple-border-light);
+  border-bottom: 1px solid var(--apple-separator);
   border-radius: 22px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  box-shadow: var(--apple-glass-shadow-elevated);
   z-index: 130;
   overflow: hidden;
-  animation: chatbotEnter 0.28s cubic-bezier(0.2, 0, 0, 1) forwards;
+  animation: chatbotEnter 0.28s var(--apple-spring-ease) forwards;
 }
 .chatbot-window.minimized {
   height: 60px;
@@ -2116,23 +2246,28 @@
 
 /* Welcome Card Hero with BotAvatar 96px */
 .chatbot-welcome-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--apple-border);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
   border-top: 1px solid var(--apple-specular-top);
-  border-radius: 16px;
-  padding: 16px 14px;
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 18px;
+  padding: 18px 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 6px;
+  box-shadow: var(--apple-glass-shadow);
 }
 .chatbot-welcome-avatar-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-  filter: drop-shadow(0 8px 18px rgba(10, 132, 255, 0.2));
+  filter: drop-shadow(0 8px 18px rgba(255, 255, 255, 0.2));
 }
 .chatbot-welcome-badge {
   display: inline-flex;
@@ -2140,8 +2275,9 @@
   gap: 5px;
   font-size: 10.5px;
   font-weight: 600;
-  color: var(--apple-accent);
-  background: rgba(10, 132, 255, 0.1);
+  color: var(--apple-primary-text);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 2px 8px;
   border-radius: 12px;
   margin-bottom: 6px;
@@ -2175,7 +2311,7 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--apple-border);
   display: flex;
   align-items: center;
@@ -2195,16 +2331,23 @@
   word-break: break-word;
 }
 .chatbot-bubble.user-bubble {
-  background: var(--apple-accent);
-  color: #ffffff;
+  background: #FFFFFF;
+  color: #000000;
+  font-weight: 500;
   border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
 }
 .chatbot-bubble.bot-bubble {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--apple-glass-gradient);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
   color: var(--apple-primary-text);
-  border: 1px solid var(--apple-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid var(--apple-border);
+  border-right: 1px solid var(--apple-border);
+  border-bottom: 1px solid var(--apple-separator);
   border-bottom-left-radius: 4px;
+  box-shadow: var(--apple-glass-shadow);
 }
 .chatbot-bubble-text {
   white-space: pre-wrap;
@@ -2217,7 +2360,7 @@
   opacity: 0.7;
 }
 .user-bubble .chatbot-time {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 /* Snippets Inside Bubble */
@@ -2227,9 +2370,10 @@
   margin-top: 8px;
 }
 .chatbot-snippet-card {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--apple-border);
-  border-radius: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
   padding: 8px 10px;
 }
 
@@ -2385,13 +2529,15 @@
 }
 
 .glass-surface-hero {
-  background: var(--apple-glass-elevated);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--apple-border);
-  border-top: 1px solid var(--apple-specular-top);
-  border-radius: 20px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  background: var(--apple-glass-elevated-gradient);
+  backdrop-filter: blur(32px) saturate(210%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-left: 1px solid var(--apple-border-light);
+  border-right: 1px solid var(--apple-border-light);
+  border-bottom: 1px solid var(--apple-separator);
+  border-radius: 22px;
+  box-shadow: var(--apple-glass-shadow-elevated);
 }
 
 .scope-search-form {
