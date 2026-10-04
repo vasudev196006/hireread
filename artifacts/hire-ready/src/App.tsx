@@ -23,6 +23,7 @@ import { fetchAdzunaJobs, scoreAdzunaJobMatch } from '@/lib/adzuna';
 import { fetchLiveGitHubProfile } from '@/lib/github';
 import { AIChatbot } from '@/components/AIChatbot';
 import { CareercopeMarketIntelligence } from '@/components/CareercopeMarketIntelligence';
+import { LandingHero } from '@/components/LandingHero';
 import type {
   AdzunaJob,
   Candidate,
@@ -369,10 +370,9 @@ function DynamicIslandNav() {
 // SHELL & NAVIGATION
 // ==========================================
 function Shell({ children }: { children: ReactNode }) {
-  const { role } = useApp();
   const [location] = useLocation();
 
-  if (!role && location === '/') {
+  if (location === '/') {
     return <>{children}</>;
   }
 
@@ -590,122 +590,12 @@ function AdzunaLiveJobsExplorer({ candidate }: { candidate: Candidate }) {
 // ==========================================
 function LandingPage() {
   const { setRole } = useApp();
-  const [, setLocation] = useLocation();
 
   const handleSelectRole = (role: UserRole) => {
     setRole(role);
-    setLocation(role === 'recruiter' ? '/recruiter/dashboard' : '/seeker/dashboard');
   };
 
-  return (
-    <div className="landing-wrap">
-      <header className="landing-nav">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 18 }}>
-          <span className="island-brand-mark">H</span>
-          <span>HireReady</span>
-        </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button
-            className="button button-ghost"
-            onClick={() => handleSelectRole('seeker')}
-          >
-            Job Seeker Demo
-          </button>
-          <button
-            className="button button-accent"
-            onClick={() => handleSelectRole('recruiter')}
-          >
-            Recruiter Demo
-          </button>
-        </div>
-      </header>
-
-      <section className="landing-hero">
-        <div className="landing-badge">
-          <Sparkles size={13} /> Transparent Talent Intelligence & Career Roadmaps
-        </div>
-        <h1 className="landing-title">
-          Verify skills cryptographically. <br />
-          Match with explainable AI.
-        </h1>
-        <p className="landing-subtitle">
-          HireReady bridges job seekers and recruiters with auditable skill verification, prerequisite-aware career roadmaps, real GitHub code evidence, and two-layer hybrid AI candidate ranking.
-        </p>
-
-        <div className="landing-cards">
-          {/* Card 1: Job Seeker */}
-          <div
-            className="landing-role-card"
-            onClick={() => handleSelectRole('seeker')}
-            data-testid="card-role-seeker"
-          >
-            <div className="landing-role-icon">
-              <Target size={26} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <h3>I'm a Job Seeker</h3>
-              <span className="pill pill-green">Candidate Portal</span>
-            </div>
-            <p>
-              Upload your verified certifications, calculate your readiness score, link your GitHub repos, and follow an AI-generated career roadmap with live Adzuna market jobs.
-            </p>
-            <div className="landing-features-list">
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>Upload certs with SHA-256 validation & file review</span>
-              </div>
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>AI Career Roadmap with topological gap analysis</span>
-              </div>
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>Verified GitHub project evidence & live Adzuna apply links</span>
-              </div>
-            </div>
-            <button className="button button-accent" style={{ width: '100%', marginTop: 'auto' }}>
-              Enter as Job Seeker <ArrowRight size={15} />
-            </button>
-          </div>
-
-          {/* Card 2: Recruiter */}
-          <div
-            className="landing-role-card"
-            onClick={() => handleSelectRole('recruiter')}
-            data-testid="card-role-recruiter"
-          >
-            <div className="landing-role-icon">
-              <Radar size={26} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <h3>I'm a Recruiter</h3>
-              <span className="pill pill-amber">Employer Portal</span>
-            </div>
-            <p>
-              Define required skills with proficiency baselines, generate AI skill suggestions, inspect candidates' verified GitHub repos, and review hybrid AI shortlists.
-            </p>
-            <div className="landing-features-list">
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>Job wizard with AI skill matrices & proficiency floors</span>
-              </div>
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>Deterministic base score + bounded AI semantic layer</span>
-              </div>
-              <div className="landing-feature-item">
-                <CheckCircle2 size={16} color="var(--apple-accent)" />
-                <span>One-click candidate GitHub code inspection & market signal</span>
-              </div>
-            </div>
-            <button className="button button-primary" style={{ width: '100%', marginTop: 'auto' }}>
-              Enter as Recruiter <ArrowRight size={15} />
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+  return <LandingHero onSelectRole={handleSelectRole} />;
 }
 
 // ==========================================
